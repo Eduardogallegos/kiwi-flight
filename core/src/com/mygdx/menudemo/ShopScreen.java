@@ -5,7 +5,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
-class LevelsScreen extends ScreenAdapter {
+class ShopScreen extends ScreenAdapter {
 
     private final Game game;
     private static final float WORLD_WIDTH = 1280;
@@ -13,7 +13,7 @@ class LevelsScreen extends ScreenAdapter {
 
     private Stage stage;
 
-    public LevelsScreen(Game game) {
+    public ShopScreen(Game game) {
         this.game=game;
     }
 }

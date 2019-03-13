@@ -46,7 +46,7 @@ public class TransitionScreen extends ScreenAdapter {
 
        background.addAction(sequence(delay(2), fadeOut(2)));
 
-       logo.addAction(sequence(delay(4), fadeIn(1),delay(1), fadeOut(1), run(new Runnable() {
+       logo.addAction(sequence(delay(4), fadeIn(1),delay(2), fadeOut(1), run(new Runnable() {
            @Override
            public void run() {
                game.setScreen(new StartScreen(game));
