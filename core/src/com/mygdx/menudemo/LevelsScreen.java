@@ -51,15 +51,15 @@ class LevelsScreen extends ScreenAdapter {
         stage = new Stage(new FitViewport(WORLD_WIDTH, WORLD_HEIGHT));
         Gdx.input.setInputProcessor(stage);
 
-        backgroundTexture = new Texture(Gdx.files.internal("MenuBackground.png"));
+        backgroundTexture = new Texture(Gdx.files.internal("levels/fondo.png"));
         Image background = new Image(backgroundTexture);
         stage.addActor(background);
 
-        titleTexture = new Texture(Gdx.files.internal("MenuLogo.png"));
-        Image title = new Image(titleTexture);
+        //titleTexture = new Texture(Gdx.files.internal("MenuLogo.png"));
+        //Image title = new Image(titleTexture);
 
-        returnTexture = new Texture(Gdx.files.internal("closet.png"));
-        returnPressTexture = new Texture(Gdx.files.internal("closetPress.png"));
+        returnTexture = new Texture(Gdx.files.internal("levels/return.png"));
+        returnPressTexture = new Texture(Gdx.files.internal("levels/returnPress.png"));
         ImageButton retur = new ImageButton(new TextureRegionDrawable(new TextureRegion(returnTexture)), new TextureRegionDrawable(new TextureRegion(returnPressTexture)));
         retur.addListener(new ActorGestureListener() {
             @Override
@@ -70,8 +70,8 @@ class LevelsScreen extends ScreenAdapter {
             }
         });
 
-        levelOneTexture = new Texture(Gdx.files.internal("shop.png"));
-        levelOnePressTexture = new Texture(Gdx.files.internal("shopPress.png"));
+        levelOneTexture = new Texture(Gdx.files.internal("levels/1.png"));
+        levelOnePressTexture = new Texture(Gdx.files.internal("levels/1Press.png"));
         ImageButton levelOne = new ImageButton(new TextureRegionDrawable(new TextureRegion(levelOneTexture)), new TextureRegionDrawable(new TextureRegion(levelOnePressTexture)));
         levelOne.addListener(new ActorGestureListener() {
             @Override
@@ -82,8 +82,8 @@ class LevelsScreen extends ScreenAdapter {
             }
         });
 
-        levelTwoTexture = new Texture(Gdx.files.internal("closet.png"));
-        levelTwoPressTexture = new Texture(Gdx.files.internal("closetPress.png"));
+        levelTwoTexture = new Texture(Gdx.files.internal("levels/2.png"));
+        levelTwoPressTexture = new Texture(Gdx.files.internal("levels/2Press.png"));
         ImageButton level2 = new ImageButton(new TextureRegionDrawable(new TextureRegion(levelTwoTexture)), new TextureRegionDrawable(new TextureRegion(levelTwoPressTexture)));
         level2.addListener(new ActorGestureListener() {
             @Override
@@ -94,8 +94,8 @@ class LevelsScreen extends ScreenAdapter {
             }
         });
 
-        levelThreeTexture = new Texture(Gdx.files.internal("closet.png"));
-        levelThreePressTexture = new Texture(Gdx.files.internal("closetPress.png"));
+        levelThreeTexture = new Texture(Gdx.files.internal("levels/3.png"));
+        levelThreePressTexture = new Texture(Gdx.files.internal("levels/3Press.png"));
         ImageButton level3 = new ImageButton(new TextureRegionDrawable(new TextureRegion(levelThreeTexture)), new TextureRegionDrawable(new TextureRegion(levelThreePressTexture)));
         level3.addListener(new ActorGestureListener() {
             @Override
@@ -106,8 +106,8 @@ class LevelsScreen extends ScreenAdapter {
             }
         });
 
-        bossTexture = new Texture(Gdx.files.internal("closet.png"));
-        bossPressTexture = new Texture(Gdx.files.internal("closetPress.png"));
+        bossTexture = new Texture(Gdx.files.internal("levels/boss.png"));
+        bossPressTexture = new Texture(Gdx.files.internal("levels/bossPress.png"));
         ImageButton boss = new ImageButton(new TextureRegionDrawable(new TextureRegion(bossTexture)), new TextureRegionDrawable(new TextureRegion(bossPressTexture)));
         boss.addListener(new ActorGestureListener() {
             @Override
@@ -120,16 +120,16 @@ class LevelsScreen extends ScreenAdapter {
 
         table = new Table();
         table.pad(20);
-        table.setDebug(true);
+        //table.setDebug(true);
 
         table.add(retur).top().left();
-        table.add(title).padBottom(100).colspan(3);
+        //table.add(title).padBottom(100).colspan(3);
 
         table.row();
-        table.add(levelOne).expand();
-        table.add(level2);
-        table.add(level3);
-        table.add(boss).top();
+        table.add(levelOne).expand().padTop(20);
+        table.add(level2).padLeft(100).padTop(20);
+        table.add(level3).padLeft(100).padTop(40);
+        table.add(boss).top().padTop(40);
 
         table.setFillParent(true);
         table.pack();
@@ -158,7 +158,11 @@ class LevelsScreen extends ScreenAdapter {
         backgroundTexture.dispose();
         levelOneTexture.dispose();
         levelOnePressTexture.dispose();
-        titleTexture.dispose();
+        levelTwoTexture.dispose();
+        levelTwoPressTexture.dispose();
+        levelThreeTexture.dispose();
+        levelThreePressTexture.dispose();
+        //titleTexture.dispose();
     }
 
     private void clearScreen() {
