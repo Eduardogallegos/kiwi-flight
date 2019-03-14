@@ -50,11 +50,11 @@ class SettingsScreen extends ScreenAdapter {
         stage = new Stage(new FitViewport(WORLD_WIDTH, WORLD_HEIGHT));
         Gdx.input.setInputProcessor(stage);
 
-        backgroundTexture = new Texture(Gdx.files.internal("MenuBackground.png"));
+        backgroundTexture = new Texture(Gdx.files.internal("fondoAjustes.png"));
         Image background = new Image(backgroundTexture);
         stage.addActor(background);
 
-        titleTexture = new Texture(Gdx.files.internal("MenuLogo.png"));
+        titleTexture = new Texture(Gdx.files.internal("ajustes.png"));
         Image title = new Image(titleTexture);
 
         musicLabel = new Texture(Gdx.files.internal("closet.png"));
@@ -63,8 +63,8 @@ class SettingsScreen extends ScreenAdapter {
         soundLabel = new Texture(Gdx.files.internal("closet.png"));
         Image sound = new Image(soundLabel);
 
-        returnTexture = new Texture(Gdx.files.internal("closet.png"));
-        returnPressTexture = new Texture(Gdx.files.internal("closetPress.png"));
+        returnTexture = new Texture(Gdx.files.internal("closet flecha.png"));
+        returnPressTexture = new Texture(Gdx.files.internal("closet flecha pressed.png"));
         ImageButton retur = new ImageButton(new TextureRegionDrawable(new TextureRegion(returnTexture)), new TextureRegionDrawable(new TextureRegion(returnPressTexture)));
         retur.addListener(new ActorGestureListener() {
             @Override
