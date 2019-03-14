@@ -57,10 +57,10 @@ class SettingsScreen extends ScreenAdapter {
         titleTexture = new Texture(Gdx.files.internal("ajustes.png"));
         Image title = new Image(titleTexture);
 
-        musicLabel = new Texture(Gdx.files.internal("closet.png"));
+        musicLabel = new Texture(Gdx.files.internal("settings/musica.png"));
         Image music = new Image(musicLabel);
 
-        soundLabel = new Texture(Gdx.files.internal("closet.png"));
+        soundLabel = new Texture(Gdx.files.internal("settings/sonido.png"));
         Image sound = new Image(soundLabel);
 
         returnTexture = new Texture(Gdx.files.internal("closet flecha.png"));
@@ -86,15 +86,15 @@ class SettingsScreen extends ScreenAdapter {
         table.pad(20);
         //table.setDebug(true);
 
-        table.add(title).padBottom(100).expand().top().colspan(3);
+        table.add(title).expand().colspan(3);
 
         table.row();
-        table.add(music);
-        table.add(musicSlider);
+        table.add(music).expand();
+        table.add(musicSlider).expand();
 
         table.row();
-        table.add(sound);
-        table.add(soundSlider);
+        table.add(sound).expand();
+        table.add(soundSlider).expand();
 
         table.row();
         table.add(retur).bottom().left();

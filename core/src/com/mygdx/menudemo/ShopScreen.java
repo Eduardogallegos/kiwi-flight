@@ -72,7 +72,7 @@ class ShopScreen extends ScreenAdapter {
 
         table = new Table();
         table.pad(20);
-        table.setDebug(true);
+        //table.setDebug(true);
 
         //table.add(title).padBottom(100).expand().top().colspan(3);
 

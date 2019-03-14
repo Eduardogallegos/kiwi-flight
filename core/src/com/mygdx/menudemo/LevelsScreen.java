@@ -120,7 +120,7 @@ class LevelsScreen extends ScreenAdapter {
 
         table = new Table();
         table.pad(20);
-        table.setDebug(true);
+        //table.setDebug(true);
 
         table.add(retur).top().left();
         //table.add(title).padBottom(100).colspan(3);

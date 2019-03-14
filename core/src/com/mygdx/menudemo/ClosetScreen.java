@@ -61,7 +61,7 @@ class ClosetScreen extends ScreenAdapter {
         });
 
         table = new Table();
-        table.setDebug(true);
+        //table.setDebug(true);
 
 
         table.row();
