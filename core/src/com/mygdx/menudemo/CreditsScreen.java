@@ -26,10 +26,10 @@ class CreditsScreen extends ScreenAdapter {
     private Stage stage;
 
     private Texture backgroundTexture;
-    private Texture titleTexture;
     private Texture returnTexture;
     private Texture returnPressTexture;
     private Table table;
+    private Texture kiwiImage;
 
     public CreditsScreen(Game game) {
         this.game=game;
@@ -42,15 +42,15 @@ class CreditsScreen extends ScreenAdapter {
         stage = new Stage(new FitViewport(WORLD_WIDTH, WORLD_HEIGHT));
         Gdx.input.setInputProcessor(stage);
 
-        backgroundTexture = new Texture(Gdx.files.internal("MenuBackground.png"));
+        backgroundTexture = new Texture(Gdx.files.internal("creditos/fondo.png"));
         Image background = new Image(backgroundTexture);
         stage.addActor(background);
 
-        titleTexture = new Texture(Gdx.files.internal("MenuLogo.png"));
-        Image title = new Image(titleTexture);
+        kiwiImage = new Texture(Gdx.files.internal("creditos/kiwi.png"));
+        Image kiwi = new Image(kiwiImage);
 
-        returnTexture = new Texture(Gdx.files.internal("closet.png"));
-        returnPressTexture = new Texture(Gdx.files.internal("closetPress.png"));
+        returnTexture = new Texture(Gdx.files.internal("creditos/return.png"));
+        returnPressTexture = new Texture(Gdx.files.internal("creditos/returnPressed.png"));
         ImageButton retur = new ImageButton(new TextureRegionDrawable(new TextureRegion(returnTexture)), new TextureRegionDrawable(new TextureRegion(returnPressTexture)));
         retur.addListener(new ActorGestureListener() {
             @Override
@@ -63,12 +63,10 @@ class CreditsScreen extends ScreenAdapter {
 
         table = new Table();
         table.pad(20);
-        table.setDebug(true);
+        //table.setDebug(true);
 
-        table.add(title).padBottom(100).expand().top();
-
-        table.row();
         table.add(retur).bottom().left();
+        table.add(kiwi).padBottom(100).expand().bottom();
 
         table.setFillParent(true);
         table.pack();
@@ -95,7 +93,7 @@ class CreditsScreen extends ScreenAdapter {
         super.dispose();
         stage.dispose();
         backgroundTexture.dispose();
-        titleTexture.dispose();
+        kiwiImage.dispose();
     }
 
     private void clearScreen() {

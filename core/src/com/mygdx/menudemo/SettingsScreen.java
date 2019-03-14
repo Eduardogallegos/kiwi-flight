@@ -76,7 +76,7 @@ class SettingsScreen extends ScreenAdapter {
         });
 
         Slider.SliderStyle ss = new Slider.SliderStyle();
-        ss.background = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("slider_background.png"))));
+        ss.background = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("sliderbarraajustes.png"))));
         ss.knob = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("slider_knob.png"))));
 
         musicSlider = new Slider(0f, 100f, 1f, false, ss);
@@ -84,7 +84,7 @@ class SettingsScreen extends ScreenAdapter {
 
         table = new Table();
         table.pad(20);
-        table.setDebug(true);
+        //table.setDebug(true);
 
         table.add(title).padBottom(100).expand().top().colspan(3);
 

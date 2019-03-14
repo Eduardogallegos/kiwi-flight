@@ -29,6 +29,8 @@ class ShopScreen extends ScreenAdapter {
     private Texture returnTexture;
     private Texture returnPressTexture;
     private Table table;
+    private Texture codeTexture;
+    private Texture codePressTexture;
 
     public ShopScreen(Game game) {
         this.game=game;
@@ -46,9 +48,21 @@ class ShopScreen extends ScreenAdapter {
         titleTexture = new Texture(Gdx.files.internal("MenuLogo.png"));
         Image title = new Image(titleTexture);
 
-        returnTexture = new Texture(Gdx.files.internal("closet.png"));
-        returnPressTexture = new Texture(Gdx.files.internal("closetPress.png"));
+        returnTexture = new Texture(Gdx.files.internal("shop/return.png"));
+        returnPressTexture = new Texture(Gdx.files.internal("shop/returnPress.png"));
         ImageButton retur = new ImageButton(new TextureRegionDrawable(new TextureRegion(returnTexture)), new TextureRegionDrawable(new TextureRegion(returnPressTexture)));
+        retur.addListener(new ActorGestureListener() {
+            @Override
+            public void tap(InputEvent event, float x, float y, int count, int button) {
+                super.tap(event, x, y, count, button);
+                game.setScreen(new StartScreen(game));
+                dispose();
+            }
+        });
+
+        codeTexture = new Texture(Gdx.files.internal("shop/code.png"));
+        codePressTexture = new Texture(Gdx.files.internal("shop/codePress.png"));
+        ImageButton code = new ImageButton(new TextureRegionDrawable(new TextureRegion(returnTexture)), new TextureRegionDrawable(new TextureRegion(returnPressTexture)));
         retur.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
@@ -60,9 +74,12 @@ class ShopScreen extends ScreenAdapter {
 
         table = new Table();
         table.pad(20);
-        table.setDebug(true);
+        //table.setDebug(true);
 
         table.add(title).padBottom(100).expand().top().colspan(3);
+
+        table.row();
+        table.add(code).right();
 
         table.row();
         table.add(retur).bottom().left();
@@ -91,8 +108,10 @@ class ShopScreen extends ScreenAdapter {
         super.dispose();
         stage.dispose();
         backgroundTexture.dispose();
-        //playTexture.dispose();
-        //playPressTexture.dispose();
+        returnTexture.dispose();
+        returnPressTexture.dispose();
+        codeTexture.dispose();
+        codePressTexture.dispose();
         titleTexture.dispose();
     }
 
