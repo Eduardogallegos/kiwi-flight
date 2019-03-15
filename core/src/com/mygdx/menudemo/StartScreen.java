@@ -53,21 +53,21 @@ class StartScreen extends ScreenAdapter {
         stage = new Stage(new FitViewport(WORLD_WIDTH, WORLD_HEIGHT));
         Gdx.input.setInputProcessor(stage);
 
-        backgroundTexture = new Texture(Gdx.files.internal("MenuBackground.png"));
+        backgroundTexture = new Texture(Gdx.files.internal("principal/MenuBackground.png"));
         Image background = new Image(backgroundTexture);
         stage.addActor(background);
 
-        titleTexture = new Texture(Gdx.files.internal("MenuLogo.png"));
+        titleTexture = new Texture(Gdx.files.internal("principal/MenuLogo.png"));
         Image title = new Image(titleTexture);
 
-        panelTexture= new Texture(Gdx.files.internal("panel.png"));
+        panelTexture= new Texture(Gdx.files.internal("principal/panel.png"));
         Image panel = new Image(panelTexture);
 
-        kiwiTexture= new Texture(Gdx.files.internal("kiwi.png"));
+        kiwiTexture= new Texture(Gdx.files.internal("principal/kiwi.png"));
         Image kiwi = new Image(kiwiTexture);
 
-        playTexture = new Texture(Gdx.files.internal("play.png"));
-        playPressTexture = new Texture(Gdx.files.internal("playPress.png"));
+        playTexture = new Texture(Gdx.files.internal("principal/play.png"));
+        playPressTexture = new Texture(Gdx.files.internal("principal/playPress.png"));
         ImageButton play = new ImageButton(new TextureRegionDrawable(new TextureRegion(playTexture)), new TextureRegionDrawable(new TextureRegion(playPressTexture)));
         play.addListener(new ActorGestureListener() {
             @Override
@@ -78,8 +78,8 @@ class StartScreen extends ScreenAdapter {
             }
         });
 
-        settingsTexture = new Texture(Gdx.files.internal("settings.png"));
-        settingsPressTexture = new Texture(Gdx.files.internal("settingsPress.png"));
+        settingsTexture = new Texture(Gdx.files.internal("principal/settings.png"));
+        settingsPressTexture = new Texture(Gdx.files.internal("principal/settingsPress.png"));
         ImageButton settings = new ImageButton(new TextureRegionDrawable(new TextureRegion(settingsTexture)), new TextureRegionDrawable(new TextureRegion(settingsPressTexture)));
         settings.addListener(new ActorGestureListener(){
             @Override
@@ -90,8 +90,8 @@ class StartScreen extends ScreenAdapter {
             }
         });
 
-        creditsTexture = new Texture(Gdx.files.internal("credits.png"));
-        creditsPressTexture = new Texture(Gdx.files.internal("creditsPress.png"));
+        creditsTexture = new Texture(Gdx.files.internal("principal/credits.png"));
+        creditsPressTexture = new Texture(Gdx.files.internal("principal/creditsPress.png"));
         ImageButton credits = new ImageButton(new TextureRegionDrawable(new TextureRegion(creditsTexture)), new TextureRegionDrawable(new TextureRegion(creditsPressTexture)));
         credits.addListener(new ActorGestureListener(){
             @Override
@@ -102,8 +102,8 @@ class StartScreen extends ScreenAdapter {
             }
         });
 
-        closetTexture = new Texture(Gdx.files.internal("closet.png"));
-        closetPressTexture = new Texture(Gdx.files.internal("closetPress.png"));
+        closetTexture = new Texture(Gdx.files.internal("principal/closet.png"));
+        closetPressTexture = new Texture(Gdx.files.internal("principal/closetPress.png"));
         ImageButton closet = new ImageButton(new TextureRegionDrawable(new TextureRegion(closetTexture)), new TextureRegionDrawable(new TextureRegion(closetPressTexture)));
         closet.addListener(new ActorGestureListener(){
             @Override
@@ -114,8 +114,8 @@ class StartScreen extends ScreenAdapter {
             }
         });
 
-        shopTexture = new Texture(Gdx.files.internal("shop.png"));
-        shopPressTexture = new Texture(Gdx.files.internal("shopPress.png"));
+        shopTexture = new Texture(Gdx.files.internal("principal/shop.png"));
+        shopPressTexture = new Texture(Gdx.files.internal("principal/shopPress.png"));
         ImageButton shop = new ImageButton(new TextureRegionDrawable(new TextureRegion(shopTexture)), new TextureRegionDrawable(new TextureRegion(shopPressTexture)));
         shop.addListener(new ActorGestureListener(){
             @Override

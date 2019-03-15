@@ -50,11 +50,11 @@ class SettingsScreen extends ScreenAdapter {
         stage = new Stage(new FitViewport(WORLD_WIDTH, WORLD_HEIGHT));
         Gdx.input.setInputProcessor(stage);
 
-        backgroundTexture = new Texture(Gdx.files.internal("fondoAjustes.png"));
+        backgroundTexture = new Texture(Gdx.files.internal("settings/fondoAjustes.png"));
         Image background = new Image(backgroundTexture);
         stage.addActor(background);
 
-        titleTexture = new Texture(Gdx.files.internal("ajustes.png"));
+        titleTexture = new Texture(Gdx.files.internal("settings/ajustes.png"));
         Image title = new Image(titleTexture);
 
         musicLabel = new Texture(Gdx.files.internal("settings/musica.png"));
@@ -63,8 +63,8 @@ class SettingsScreen extends ScreenAdapter {
         soundLabel = new Texture(Gdx.files.internal("settings/sonido.png"));
         Image sound = new Image(soundLabel);
 
-        returnTexture = new Texture(Gdx.files.internal("closet flecha.png"));
-        returnPressTexture = new Texture(Gdx.files.internal("closet flecha pressed.png"));
+        returnTexture = new Texture(Gdx.files.internal("settings/return.png"));
+        returnPressTexture = new Texture(Gdx.files.internal("settings/returnPress.png"));
         ImageButton retur = new ImageButton(new TextureRegionDrawable(new TextureRegion(returnTexture)), new TextureRegionDrawable(new TextureRegion(returnPressTexture)));
         retur.addListener(new ActorGestureListener() {
             @Override
@@ -76,8 +76,8 @@ class SettingsScreen extends ScreenAdapter {
         });
 
         Slider.SliderStyle ss = new Slider.SliderStyle();
-        ss.background = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("sliderbarraajustes.png"))));
-        ss.knob = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("slider_knob.png"))));
+        ss.background = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("settings/sliderbarraajustes.png"))));
+        ss.knob = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("settings/slider_knob.png"))));
 
         musicSlider = new Slider(0f, 100f, 1f, false, ss);
         soundSlider = new Slider(0f, 100f, 1f, false, ss);

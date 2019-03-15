@@ -118,22 +118,26 @@ class LevelsScreen extends ScreenAdapter {
             }
         });
 
+        levelOne.setPosition(100,200);
+        level2.setPosition(400,200);
+        level3.setPosition(730,200);
+        boss.setPosition(1030,375);
+        stage.addActor(levelOne);
+        stage.addActor(level2);
+        stage.addActor(level3);
+        stage.addActor(boss);
+
         table = new Table();
         table.pad(20);
         //table.setDebug(true);
 
-        table.add(retur).top().left();
+        table.add(retur).expand().top().left();
         //table.add(title).padBottom(100).colspan(3);
-
-        table.row();
-        table.add(levelOne).expand().padTop(20);
-        table.add(level2).padLeft(100).padTop(20);
-        table.add(level3).padLeft(100).padTop(40);
-        table.add(boss).top().padTop(40);
 
         table.setFillParent(true);
         table.pack();
         stage.addActor(table);
+
 
     }
 

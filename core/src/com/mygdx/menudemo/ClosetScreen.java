@@ -41,15 +41,15 @@ class ClosetScreen extends ScreenAdapter {
         stage = new Stage(new FitViewport(WORLD_WIDTH, WORLD_HEIGHT));
         Gdx.input.setInputProcessor(stage);
 
-        backgroundTexture = new Texture(Gdx.files.internal("fondo closet.png"));
+        backgroundTexture = new Texture(Gdx.files.internal("closet/fondo closet.png"));
         Image background = new Image(backgroundTexture);
         stage.addActor(background);
 
-        closetkiwi = new Texture(Gdx.files.internal("closet kiwi.png"));
+        closetkiwi = new Texture(Gdx.files.internal("closet/closet kiwi.png"));
         Image kiwi = new Image(closetkiwi);
 
-        flecha = new Texture(Gdx.files.internal("closet flecha.png"));
-        flechaPress = new Texture(Gdx.files.internal("closet flecha pressed.png"));
+        flecha = new Texture(Gdx.files.internal("closet/closet flecha.png"));
+        flechaPress = new Texture(Gdx.files.internal("closet/closet flecha pressed.png"));
         ImageButton button = new ImageButton(new TextureRegionDrawable(new TextureRegion(flecha)), new TextureRegionDrawable(new TextureRegion(flechaPress)));
         button.addListener(new ActorGestureListener() {
             @Override
