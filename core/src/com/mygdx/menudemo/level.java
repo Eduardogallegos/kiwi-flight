@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -26,8 +27,9 @@ public class level extends ScreenAdapter {
     private Viewport viewport;
     private Camera camera;
     private SpriteBatch batch;
-    private Kiiw kiiw;
-    private static final float GAP_BETWEEN_FLOWERS = 200F;
+    private Kiiw kiiw = new Kiiw();
+    private Array<Obstacle> obstacles = new Array<Obstacle>();
+    private static final float GAP_BETWEEN_OBSTACLES = 200F;
     private int score = 0;
     private BitmapFont bitmapFont;
     private GlyphLayout glyphLayout;
@@ -54,6 +56,7 @@ public class level extends ScreenAdapter {
         viewport = new FitViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
         shapeRenderer = new ShapeRenderer();
         batch = new SpriteBatch();
+        kiiw.setPosition(WORLD_WIDTH/4,WORLD_HEIGHT/2);
     }
 
     @Override
@@ -71,8 +74,10 @@ public class level extends ScreenAdapter {
             break;
         }
         draw();
+        drawDebug();
         clearSreen();
     }
+
 
     private void queryInput() {
         boolean uPressed = Gdx.input.isKeyPressed(Input.Keys.UP);
@@ -82,7 +87,7 @@ public class level extends ScreenAdapter {
         if(dPressed) moveKiiw(DOWN);
     }
 
-    //Me quedé aqui, falta dibujar formas en general, método para dibujar obstaculos
+    //Me quedé aqui, falta dibujar formas en general
     //Implementar restart, stage para botón pausa
 
     private void draw() {
@@ -91,18 +96,28 @@ public class level extends ScreenAdapter {
         batch.setTransformMatrix(camera.view);
         batch.begin();
         //batch.draw(background,0,0);
-        drawObstacles();
-        kiiw.draw(batch);
+        //drawObstacles();
+        //kiiw.draw(batch);
         //drawSpeed();
         //drawSpeedBar();
+
         batch.end();
-        //drawDebug();
+        drawDebug();
         Gdx.app.log("Debug", String.valueOf(batch.totalRenderCalls));
     }
 
-    private void drawObstacles() {
+    private void drawDebug() {
+        shapeRenderer.setProjectionMatrix(camera.projection);
+        shapeRenderer.setTransformMatrix(camera.view);
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        kiiw.drawDebug(shapeRenderer);
+        shapeRenderer.end();
 
     }
+
+    /*private void drawObstacles() {
+
+    }*/
 
     private void update(float delta) {
         updateKiiw(delta);
@@ -114,14 +129,42 @@ public class level extends ScreenAdapter {
     }
 
     private void updateObstacles(float delta) {
+        for (Obstacle obstacle : obstacles){
+            obstacle.update(delta);
+        }
+        checkIfNewObstacleNeeded();
+        removeObstaclesIfPassed();
+    }
 
+    private void removeObstaclesIfPassed() {
+        if(obstacles.size > 0){
+            Obstacle firstObstacle = obstacles.first();
+            if(firstObstacle.getX() < -Obstacle.WIDTH){
+                obstacles.removeValue(firstObstacle, true);
+            }
+        }
+    }
+
+    private void checkIfNewObstacleNeeded() {
+        if(obstacles.size==0){
+            createNewObstacle();
+        }else{
+            Obstacle obstacle = obstacles.peek();
+            if(obstacle.getX()<WORLD_WIDTH-GAP_BETWEEN_OBSTACLES){
+                createNewObstacle();
+            }
+        }
+    }
+
+    private void createNewObstacle() {
+        Obstacle newObstacle = new Obstacle();
+        newObstacle.setPosition(WORLD_WIDTH + Obstacle.WIDTH);
+        obstacles.add(newObstacle);
     }
 
     private void updateKiiw(float delta) {
         kiiw.update(delta);
-        if (Gdx.input.isTouched()){
-
-        }
+        queryInput();
     }
 
     private void moveKiiw(int newKiiwDirection) {
@@ -142,10 +185,16 @@ public class level extends ScreenAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     }
     private void restart() {
-
+        kiiw.setPosition(WORLD_WIDTH/5, .26f);
+        obstacles.clear();
     }
 
     private boolean checkForCollision() {
+        for(Obstacle obstacle : obstacles){
+            if(obstacle.isKiiwColliding(kiiw)){
+                return true;
+            }
+        }
         return false;
     }
 

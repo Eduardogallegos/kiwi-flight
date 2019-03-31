@@ -77,7 +77,7 @@ class LevelsScreen extends ScreenAdapter {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 super.tap(event, x, y, count, button);
-                game.setScreen(new LevelsScreen(game));
+                game.setScreen(new level(game));
                 dispose();
             }
         });
