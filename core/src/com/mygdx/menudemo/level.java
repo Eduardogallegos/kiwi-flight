@@ -114,6 +114,7 @@ public class level extends ScreenAdapter {
         drawObstacle();
         batch.end();
         //drawDebug();
+        Gdx.app.log("Debug", String.valueOf(batch.totalRenderCalls));
     }
 
     private void drawObstacle() {
