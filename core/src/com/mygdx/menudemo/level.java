@@ -12,9 +12,15 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -45,6 +51,11 @@ public class level extends ScreenAdapter {
     private OrthographicCamera cameraHUD;
     private FitViewport viewportHUD;
     private Stage stageUI;
+    private Texture playButtonTexture;
+    private enum STATE {
+        PLAYING, PAUSED
+    }
+    private STATE state = STATE.PLAYING;
 
     public level(Game aGame) {
         game = aGame;
@@ -54,6 +65,7 @@ public class level extends ScreenAdapter {
     public void resize(int width, int height) {
         viewport.update(width, height);
         stage.getViewport().update(width,height);
+        viewportHUD.update(width, height);
     }
 
     @Override
@@ -87,15 +99,34 @@ public class level extends ScreenAdapter {
         cameraHUD.update();
 
         stageUI = new Stage(viewportHUD);
+        playButtonTexture = new Texture(Gdx.files.internal("pausa.png"));
+        ImageButton pause = new ImageButton(new TextureRegionDrawable(new TextureRegion(playButtonTexture)), new TextureRegionDrawable(new TextureRegion(playButtonTexture)));
+        pause.setPosition(WORLD_WIDTH - pause.getWidth()*1.2f, WORLD_HEIGHT- pause.getHeight()*1.2f);
+        pause.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if(state==STATE.PLAYING){
+                    state = STATE.PAUSED;
+                }else{
+                    state = STATE.PLAYING;
+                }
+            };
+        });
+        stageUI.addActor(pause);
+        Gdx.input.setInputProcessor(stageUI);
     }
 
     @Override
     public void render(float delta) {
+        if(state == STATE.PLAYING){
+            update(delta);
+        }
         levelTimer+=delta;
         clearScreen();
-        update(delta);
+        //update(delta);
         draw();
         chechIfTimeFinish();
+        stageUI.draw();
     }
 
     private void chechIfTimeFinish() {
