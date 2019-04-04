@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -83,7 +84,6 @@ public class level extends ScreenAdapter {
         kiiwTexture = new Texture(Gdx.files.internal("level1/RunningKiwi.png"));
         kiiw = new Kiiw(kiiwTexture);
         kiiw.setPosition(WORLD_WIDTH/4,97*padCounter);
-
         Array<Texture> textures = new Array<Texture>();
         for(int i = 1; i <=5;i++){
             textures.add(new Texture(Gdx.files.internal("level1/BGselva"+i+".png")));
@@ -122,6 +122,7 @@ public class level extends ScreenAdapter {
     public void render(float delta) {
         if(state == STATE.PLAYING){
             update(delta);
+
         }
         levelTimer+=delta;
         clearScreen();
@@ -180,8 +181,23 @@ public class level extends ScreenAdapter {
         }
     }
 
+    private class GestureHandler extends GestureDetector.GestureAdapter {
+        @Override
+        public boolean fling(float velocityX, float velocityY, int button) {
+                if (velocityY < 0) {
+                    kiiw.setPosition(WORLD_WIDTH / 4, (97 * ++padCounter) + kiiw.RADIUS);
+                } else {
+                    kiiw.setPosition(WORLD_WIDTH / 4, (97 * --padCounter) + kiiw.RADIUS);
+                }
+            return false;
+        }
+    }
+
+
+
     private void updateKiiw(float delta) {
         kiiw.update(delta);
+        Gdx.input.setInputProcessor(new GestureDetector(new GestureHandler()));
         if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) kiiw.setPosition(WORLD_WIDTH/4, (97* ++padCounter)+kiiw.RADIUS);
         if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) kiiw.setPosition(WORLD_WIDTH/4, (97* --padCounter)+kiiw.RADIUS);
         blockKiiwLeavingTheWorld();
@@ -195,7 +211,7 @@ public class level extends ScreenAdapter {
     }
 
     private void restart() {
-        padCounter = 0;
+        padCounter = 2;
         levelTimer = 0;
         kiiw.setPosition(WORLD_WIDTH/4,padCounter);
         obstacles.clear();
