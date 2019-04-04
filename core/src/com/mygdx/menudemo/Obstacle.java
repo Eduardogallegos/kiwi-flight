@@ -9,84 +9,43 @@ import com.badlogic.gdx.math.Rectangle;
 
 public class Obstacle {
 
-    private static final float COLLISION_RECTANGLE_WIDTH = 13f;
-    private static final float COLLISION_RECTANGLE_HEIGHT = 13f;
-    private final Rectangle obstacle;
-    private static final float MAX_SPEED_PER_SECOND = 100F;
-    private static final float DISTANCE_BETWEEN_PADS = 13f;
+    private static final float COLLISION_SQUARE_WIDTH = 50F;
+    private static final float MAX_SPEED_PER_SECOND = 130F;
 
-    public static final float WIDTH = COLLISION_RECTANGLE_WIDTH;
 
+    public static final float WIDTH = COLLISION_SQUARE_WIDTH;
+
+    private final Rectangle collisionRectangle;
     private float x = 0;
     private float y = 0;
-    private boolean pointClaimed = false;
-    /*private final Texture rock;
-    private final Texture tree;
-    private final Texture grass;*/
-    private enum PAD{
-        ONE,TWO,THREE,FOUR,FIVE
-    }
-    private PAD pad = PAD.ONE;
+
 
     public Obstacle(){
-        this.obstacle = new Rectangle(x,y, COLLISION_RECTANGLE_WIDTH, COLLISION_RECTANGLE_HEIGHT);
+        this.collisionRectangle = new Rectangle(x,y,COLLISION_SQUARE_WIDTH, COLLISION_SQUARE_WIDTH);
     }
 
-    /*public void draw(SpriteBatch batch){
-        batch.draw();
-    }*/
-
-    public void setPosition(float x){
-        this.x =x;
-        switch (pad){
-            case ONE:{
-                this.y = 0;
-            }
-            break;
-            case TWO:{
-                this.y = DISTANCE_BETWEEN_PADS;
-            }
-            break;
-            case THREE:{
-                this.y = 2* DISTANCE_BETWEEN_PADS;
-            }
-            break;
-            case FOUR:{
-                this.y = 3*DISTANCE_BETWEEN_PADS;
-            }
-            break;
-            case FIVE:{
-                this.y = 4*DISTANCE_BETWEEN_PADS;
-            }
-            break;
-        }
-        updateCollisionCircle();
+    public void setPosition(float x, float y){
+        this.x = x;
+        this.y = y;
+        updateCollisionRectangle();
     }
 
-    private void updateCollisionCircle() {
-        obstacle.setX(x);
+    public void updateCollisionRectangle() {
+        collisionRectangle.setX(x);
+        collisionRectangle.setY(y);
     }
+
     public void drawDebug(ShapeRenderer shapeRenderer){
-        shapeRenderer.circle(obstacle.x,obstacle.y,obstacle.width, (int) obstacle.height);
-    }
-
-    public void update(float delta){
-        setPosition(x-(MAX_SPEED_PER_SECOND*delta));
+        shapeRenderer.rect(collisionRectangle.x,collisionRectangle.y,collisionRectangle.width, collisionRectangle.height);
     }
 
     public boolean isKiiwColliding(Kiiw kiiw){
         Circle kiiwCollisionCircle = kiiw.getCollisionCircle();
-        return
-                Intersector.overlaps(kiiwCollisionCircle, obstacle);
+        return Intersector.overlaps(kiiwCollisionCircle, collisionRectangle);
     }
 
-    public boolean isPointClaimed() {
-        return pointClaimed;
-    }
-
-    public void markPointClaimed() {
-        pointClaimed = true;
-
+    public void update(float delta) {
+        setPosition(x - (MAX_SPEED_PER_SECOND * delta), y);
     }
 
     public float getX() {
