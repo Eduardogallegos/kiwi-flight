@@ -38,9 +38,13 @@ public class level extends ScreenAdapter {
     private Kiiw kiiw;
     private int padCounter = 0;
     private int lifes = 3;
-
-    private Texture background;
     private Texture kiiwTexture;
+    private Texture obstacleTexture;
+    private float levelTimer = 0;
+
+    private OrthographicCamera cameraHUD;
+    private FitViewport viewportHUD;
+    private Stage stageUI;
 
     public level(Game aGame) {
         game = aGame;
@@ -64,7 +68,7 @@ public class level extends ScreenAdapter {
         batch = new SpriteBatch();
         kiiwTexture = new Texture(Gdx.files.internal("level1/RunningKiwi.png"));
         kiiw = new Kiiw(kiiwTexture);
-        kiiw.setPosition(WORLD_WIDTH/4,padCounter);
+        kiiw.setPosition(WORLD_WIDTH/4,97*padCounter);
 
         Array<Texture> textures = new Array<Texture>();
         for(int i = 1; i <=5;i++){
@@ -77,15 +81,27 @@ public class level extends ScreenAdapter {
         stage.addActor(parallaxBackground);
 
         Gdx.input.setInputProcessor(stage);
+
+        cameraHUD = new OrthographicCamera();
+        viewportHUD = new FitViewport(WORLD_WIDTH,WORLD_HEIGHT,cameraHUD);
+        cameraHUD.update();
+
+        stageUI = new Stage(viewportHUD);
     }
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        levelTimer+=delta;
         clearScreen();
         update(delta);
         draw();
+        chechIfTimeFinish();
+    }
+
+    private void chechIfTimeFinish() {
+        if (levelTimer>=120){
+            game.setScreen(new LevelsScreen(game));
+        }
     }
 
     private void draw(){
@@ -94,10 +110,16 @@ public class level extends ScreenAdapter {
         batch.setProjectionMatrix(camera.projection);
         batch.setTransformMatrix(camera.view);
         batch.begin();
-        //batch.draw(background,0,0);
         kiiw.draw(batch);
+        drawObstacle();
         batch.end();
-        drawDebug();
+        //drawDebug();
+    }
+
+    private void drawObstacle() {
+        for(Obstacle obstacle : obstacles){
+            obstacle.draw(batch);
+        }
     }
 
     private void drawDebug() {
@@ -126,18 +148,21 @@ public class level extends ScreenAdapter {
 
     private void updateKiiw(float delta) {
         kiiw.update(delta);
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)) kiiw.setPosition(WORLD_WIDTH/4, 97* ++padCounter);
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) kiiw.setPosition(WORLD_WIDTH/4, 97* --padCounter);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) kiiw.setPosition(WORLD_WIDTH/4, (97* ++padCounter)+kiiw.RADIUS);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) kiiw.setPosition(WORLD_WIDTH/4, (97* --padCounter)+kiiw.RADIUS);
         blockKiiwLeavingTheWorld();
     }
 
     private void restLife() {
         if (lifes<=0)restart();
-        else lifes--;
+        else{
+            lifes--;
+        }
     }
 
     private void restart() {
         padCounter = 0;
+        levelTimer = 0;
         kiiw.setPosition(WORLD_WIDTH/4,padCounter);
         obstacles.clear();
         lifes = 3;
@@ -159,7 +184,18 @@ public class level extends ScreenAdapter {
     private void createNewObstacle(){
         Random rnd = new Random();
         int RandomPad = rnd.nextInt(5);
-        Obstacle newObstacle = new Obstacle();
+        boolean isGrass = rnd.nextBoolean();
+        if (!isGrass){
+            boolean rock = rnd.nextBoolean();
+            if(rock){
+                obstacleTexture = new Texture(Gdx.files.internal("level1/roca.png"));
+            }else {
+                obstacleTexture = new Texture(Gdx.files.internal("level1/arbol.png"));
+            }
+        }else{
+            obstacleTexture = new Texture(Gdx.files.internal("level1/pasto.png"));
+        }
+        Obstacle newObstacle = new Obstacle(isGrass, obstacleTexture);
         float y = PADS[RandomPad];
         newObstacle.setPosition(WORLD_WIDTH + Obstacle.WIDTH,  y + newObstacle.WIDTH/2);
         obstacles.add(newObstacle);

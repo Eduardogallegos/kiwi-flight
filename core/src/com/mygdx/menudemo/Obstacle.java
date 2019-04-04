@@ -1,7 +1,9 @@
 package com.mygdx.menudemo;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Intersector;
@@ -14,20 +16,49 @@ public class Obstacle {
 
 
     public static final float WIDTH = COLLISION_SQUARE_WIDTH;
+    private static final int TILE_WIDTH = 100;
+    private static final int TILE_HEIGHT = 100;
+    private static final float FRAME_DURATION = 0.1F;
 
     private final Rectangle collisionRectangle;
     private float x = 0;
     private float y = 0;
+    private boolean isGrass;
+    private TextureRegion obstacleTexture;
+    private TextureRegion kiiwTexture;
+    private final Animation animation;
+    private float animationTimer = 0;
 
 
-    public Obstacle(){
-        this.collisionRectangle = new Rectangle(x,y,COLLISION_SQUARE_WIDTH, COLLISION_SQUARE_WIDTH);
+    public Obstacle(boolean isGrass, Texture obstacleTexture){
+        if (isGrass){
+            TextureRegion[][] obstacleTextures = new TextureRegion(obstacleTexture).split(TILE_WIDTH, TILE_HEIGHT);
+            animation = new Animation(FRAME_DURATION, obstacleTextures[0][0], obstacleTextures[0][1],obstacleTextures[1][0],obstacleTextures[1][1]);
+            animation.setPlayMode(Animation.PlayMode.LOOP);
+        }else {
+            TextureRegion[][] obstacleTextures = new TextureRegion(obstacleTexture).split(TILE_WIDTH, TILE_HEIGHT);
+            animation = new Animation(FRAME_DURATION, obstacleTextures[0][0]);
+            animation.setPlayMode(Animation.PlayMode.LOOP);
+        }
+        collisionRectangle = new Rectangle(x,y,COLLISION_SQUARE_WIDTH, COLLISION_SQUARE_WIDTH);
+        this.isGrass = isGrass;
     }
 
     public void setPosition(float x, float y){
         this.x = x;
         this.y = y;
         updateCollisionRectangle();
+    }
+
+    public void draw(SpriteBatch batch){
+        drawObstacle(batch);
+    }
+
+    private void drawObstacle(SpriteBatch batch) {
+        TextureRegion obstacleTexture = (TextureRegion) animation.getKeyFrame(animationTimer);
+        float textureX = collisionRectangle.getX() - obstacleTexture.getRegionWidth()/2;
+        float textureY = collisionRectangle.getY();
+        batch.draw(obstacleTexture, textureX, textureY);
     }
 
     public void updateCollisionRectangle() {
@@ -50,5 +81,9 @@ public class Obstacle {
 
     public float getX() {
         return x;
+    }
+
+    public boolean grass(){
+        return isGrass;
     }
 }
