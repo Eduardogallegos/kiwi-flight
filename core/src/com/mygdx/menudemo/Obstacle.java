@@ -12,7 +12,7 @@ import com.badlogic.gdx.math.Rectangle;
 public class Obstacle {
 
     private static final float COLLISION_SQUARE_WIDTH = 50F;
-    private static final float MAX_SPEED_PER_SECOND = 130F;
+    private static final float MAX_SPEED_PER_SECOND = 350F;
 
 
     public static final float WIDTH = COLLISION_SQUARE_WIDTH;

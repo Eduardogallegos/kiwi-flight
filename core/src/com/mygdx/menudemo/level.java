@@ -42,11 +42,13 @@ public class level extends ScreenAdapter {
     private Game game;
     private SpriteBatch batch;
     private Kiiw kiiw;
-    private int padCounter = 0;
+    private int padCounter = 2;
     private int lifes = 3;
     private Texture kiiwTexture;
     private Texture obstacleTexture;
     private float levelTimer = 0;
+
+
 
     private OrthographicCamera cameraHUD;
     private FitViewport viewportHUD;
@@ -99,7 +101,7 @@ public class level extends ScreenAdapter {
         cameraHUD.update();
 
         stageUI = new Stage(viewportHUD);
-        playButtonTexture = new Texture(Gdx.files.internal("pausa.png"));
+        playButtonTexture = new Texture(Gdx.files.internal("level1/pausa.png"));
         ImageButton pause = new ImageButton(new TextureRegionDrawable(new TextureRegion(playButtonTexture)), new TextureRegionDrawable(new TextureRegion(playButtonTexture)));
         pause.setPosition(WORLD_WIDTH - pause.getWidth()*1.2f, WORLD_HEIGHT- pause.getHeight()*1.2f);
         pause.addListener(new ClickListener() {
