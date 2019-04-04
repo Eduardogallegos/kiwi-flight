@@ -42,7 +42,7 @@ public class level extends ScreenAdapter {
     private Texture background;
     private Texture kiiwTexture;
 
-    public GameScreen(Game aGame) {
+    public level(Game aGame) {
         game = aGame;
     }
 
@@ -62,14 +62,13 @@ public class level extends ScreenAdapter {
 
         shapeRenderer = new ShapeRenderer();
         batch = new SpriteBatch();
-        background = new Texture(Gdx.files.internal("BGselva5.png"));
-        kiiwTexture = new Texture(Gdx.files.internal("RunningKiwi.png"));
+        kiiwTexture = new Texture(Gdx.files.internal("level1/RunningKiwi.png"));
         kiiw = new Kiiw(kiiwTexture);
         kiiw.setPosition(WORLD_WIDTH/4,padCounter);
 
         Array<Texture> textures = new Array<Texture>();
         for(int i = 1; i <=5;i++){
-            textures.add(new Texture(Gdx.files.internal("BGselva"+i+".png")));
+            textures.add(new Texture(Gdx.files.internal("level1/BGselva"+i+".png")));
             textures.get(textures.size-1).setWrap(Texture.TextureWrap.MirroredRepeat, Texture.TextureWrap.MirroredRepeat);
         }
         ParallaxBackground parallaxBackground = new ParallaxBackground(textures, WORLD_WIDTH, WORLD_HEIGHT);
