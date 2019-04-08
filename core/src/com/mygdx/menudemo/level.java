@@ -18,6 +18,7 @@ import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -53,6 +54,10 @@ public class level extends ScreenAdapter {
     private FitViewport viewportHUD;
     private Stage stageUI;
     private Texture playButtonTexture;
+    private Texture speedBarTexture;
+    private Texture livesBarTexture;
+    private Texture coinsIndicatorTexture;
+
     private enum STATE {
         PLAYING, PAUSED
     }
@@ -112,7 +117,23 @@ public class level extends ScreenAdapter {
                 }
             };
         });
+
+        speedBarTexture = new Texture(Gdx.files.internal("level1/Barra.png"));
+        Image speedBar = new Image(speedBarTexture);
+        speedBar.setPosition(speedBar.getWidth()/5, WORLD_HEIGHT - speedBar.getHeight()*1.7f);
+
+        livesBarTexture = new Texture(Gdx.files.internal("level1/Lives.png"));
+        Image livesBar = new Image(livesBarTexture);
+        livesBar.setPosition(WORLD_WIDTH/2, WORLD_HEIGHT-livesBar.getHeight()*1.7f);
+
+        coinsIndicatorTexture = new Texture(Gdx.files.internal("level1/Coins.png"));
+        Image coins = new Image(coinsIndicatorTexture);
+        coins.setPosition(2*WORLD_WIDTH/3, WORLD_HEIGHT-coins.getHeight()*1.7f);
+
         stageUI.addActor(pause);
+        stageUI.addActor(speedBar);
+        stageUI.addActor(livesBar);
+        stageUI.addActor(coins);
         Gdx.input.setInputProcessor(stageUI);
     }
 
@@ -135,13 +156,15 @@ public class level extends ScreenAdapter {
     }
 
     private void draw(){
-        stage.act();
-        stage.draw();
+        if(state == STATE.PLAYING){
+            stage.act();
+            stage.draw();
+        }
         batch.setProjectionMatrix(camera.projection);
         batch.setTransformMatrix(camera.view);
         batch.begin();
-        drawObstacle();
         kiiw.draw(batch);
+        drawObstacle();
         batch.end();
         //drawDebug();
         Gdx.app.log("Debug", String.valueOf(batch.totalRenderCalls));
@@ -232,17 +255,25 @@ public class level extends ScreenAdapter {
         Random rnd = new Random();
         int RandomPad = rnd.nextInt(5);
         boolean isGrass = rnd.nextBoolean();
+        int width = 0;
+        int height = 0;
         if (!isGrass){
             boolean rock = rnd.nextBoolean();
             if(rock){
                 obstacleTexture = new Texture(Gdx.files.internal("level1/roca.png"));
+                width = 165;
+                height = 105;
             }else {
                 obstacleTexture = new Texture(Gdx.files.internal("level1/arbol.png"));
+                width = 210;
+                height = 270;
             }
         }else{
             obstacleTexture = new Texture(Gdx.files.internal("level1/pasto.png"));
+            width = 115;
+            height = 150;
         }
-        Obstacle newObstacle = new Obstacle(isGrass, obstacleTexture);
+        Obstacle newObstacle = new Obstacle(isGrass, obstacleTexture, width, height);
         float y = PADS[RandomPad];
         newObstacle.setPosition(WORLD_WIDTH + Obstacle.WIDTH,  y + newObstacle.WIDTH/2);
         obstacles.add(newObstacle);
