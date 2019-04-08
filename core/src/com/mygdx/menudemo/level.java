@@ -49,8 +49,6 @@ public class level extends ScreenAdapter {
     private Texture obstacleTexture;
     private float levelTimer = 0;
 
-
-
     private OrthographicCamera cameraHUD;
     private FitViewport viewportHUD;
     private Stage stageUI;
@@ -83,7 +81,7 @@ public class level extends ScreenAdapter {
         batch = new SpriteBatch();
         kiiwTexture = new Texture(Gdx.files.internal("level1/RunningKiwi.png"));
         kiiw = new Kiiw(kiiwTexture);
-        kiiw.setPosition(WORLD_WIDTH/4,97*padCounter);
+        kiiw.setPosition(WORLD_WIDTH/4,97*padCounter+kiiw.RADIUS);
         Array<Texture> textures = new Array<Texture>();
         for(int i = 1; i <=5;i++){
             textures.add(new Texture(Gdx.files.internal("level1/BGselva"+i+".png")));
@@ -122,11 +120,9 @@ public class level extends ScreenAdapter {
     public void render(float delta) {
         if(state == STATE.PLAYING){
             update(delta);
-
         }
         levelTimer+=delta;
         clearScreen();
-        //update(delta);
         draw();
         chechIfTimeFinish();
         stageUI.draw();
@@ -144,8 +140,8 @@ public class level extends ScreenAdapter {
         batch.setProjectionMatrix(camera.projection);
         batch.setTransformMatrix(camera.view);
         batch.begin();
-        kiiw.draw(batch);
         drawObstacle();
+        kiiw.draw(batch);
         batch.end();
         //drawDebug();
         Gdx.app.log("Debug", String.valueOf(batch.totalRenderCalls));
@@ -174,6 +170,7 @@ public class level extends ScreenAdapter {
     }
 
     private void update(float delta){
+
         updateKiiw(delta);
         updateObstacles(delta);
         if (checkForCollision()){
@@ -197,7 +194,7 @@ public class level extends ScreenAdapter {
 
     private void updateKiiw(float delta) {
         kiiw.update(delta);
-        Gdx.input.setInputProcessor(new GestureDetector(new GestureHandler()));
+        //Gdx.input.setInputProcessor(new GestureDetector(new GestureHandler()));
         if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) kiiw.setPosition(WORLD_WIDTH/4, (97* ++padCounter)+kiiw.RADIUS);
         if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) kiiw.setPosition(WORLD_WIDTH/4, (97* --padCounter)+kiiw.RADIUS);
         blockKiiwLeavingTheWorld();
@@ -213,7 +210,7 @@ public class level extends ScreenAdapter {
     private void restart() {
         padCounter = 2;
         levelTimer = 0;
-        kiiw.setPosition(WORLD_WIDTH/4,padCounter);
+        kiiw.setPosition(WORLD_WIDTH/4,97*padCounter+kiiw.RADIUS);
         obstacles.clear();
         lifes = 3;
 
