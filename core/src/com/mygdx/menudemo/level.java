@@ -3,6 +3,7 @@ package com.mygdx.menudemo;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
@@ -33,9 +34,10 @@ public class level extends ScreenAdapter {
 
     private static final float WORLD_WIDTH = 1280;
     private static final float WORLD_HEIGHT = 720;
-    private static final float GAP_BETWEEN_OBSTACLES = 40f;
-    private float[] PADS = {0,97,194,291,388};
+    private static final float GAP_BETWEEN_OBSTACLES = 80f;
+    private static int LEVEL;
 
+    private float[] PADS = {0,97,194,291,388};
     private Array<Obstacle> obstacles = new Array<Obstacle>();
     private ShapeRenderer shapeRenderer;
     private Viewport viewport;
@@ -63,8 +65,9 @@ public class level extends ScreenAdapter {
     }
     private STATE state = STATE.PLAYING;
 
-    public level(Game aGame) {
+    public level(Game aGame, int level) {
         game = aGame;
+        this.LEVEL = level;
     }
 
     @Override
@@ -84,12 +87,12 @@ public class level extends ScreenAdapter {
 
         shapeRenderer = new ShapeRenderer();
         batch = new SpriteBatch();
-        kiiwTexture = new Texture(Gdx.files.internal("level1/RunningKiwi.png"));
+        kiiwTexture = new Texture(Gdx.files.internal("defaultLevels/RunningKiwi.png"));
         kiiw = new Kiiw(kiiwTexture);
         kiiw.setPosition(WORLD_WIDTH/4,97*padCounter+kiiw.RADIUS);
         Array<Texture> textures = new Array<Texture>();
         for(int i = 1; i <=5;i++){
-            textures.add(new Texture(Gdx.files.internal("level1/BGselva"+i+".png")));
+            textures.add(new Texture(Gdx.files.internal("level"+LEVEL+"/BG"+i+".png")));
             textures.get(textures.size-1).setWrap(Texture.TextureWrap.MirroredRepeat, Texture.TextureWrap.MirroredRepeat);
         }
         ParallaxBackground parallaxBackground = new ParallaxBackground(textures, WORLD_WIDTH, WORLD_HEIGHT);
@@ -97,14 +100,14 @@ public class level extends ScreenAdapter {
         parallaxBackground.setSpeed(1);
         stage.addActor(parallaxBackground);
 
-        Gdx.input.setInputProcessor(stage);
+
 
         cameraHUD = new OrthographicCamera();
         viewportHUD = new FitViewport(WORLD_WIDTH,WORLD_HEIGHT,cameraHUD);
         cameraHUD.update();
 
         stageUI = new Stage(viewportHUD);
-        playButtonTexture = new Texture(Gdx.files.internal("level1/pausa.png"));
+        playButtonTexture = new Texture(Gdx.files.internal("defaultLevels/pausa.png"));
         ImageButton pause = new ImageButton(new TextureRegionDrawable(new TextureRegion(playButtonTexture)), new TextureRegionDrawable(new TextureRegion(playButtonTexture)));
         pause.setPosition(WORLD_WIDTH - pause.getWidth()*1.2f, WORLD_HEIGHT- pause.getHeight()*1.2f);
         pause.addListener(new ClickListener() {
@@ -118,15 +121,15 @@ public class level extends ScreenAdapter {
             };
         });
 
-        speedBarTexture = new Texture(Gdx.files.internal("level1/Barra.png"));
+        speedBarTexture = new Texture(Gdx.files.internal("defaultLevels/Barra.png"));
         Image speedBar = new Image(speedBarTexture);
         speedBar.setPosition(speedBar.getWidth()/5, WORLD_HEIGHT - speedBar.getHeight()*1.7f);
 
-        livesBarTexture = new Texture(Gdx.files.internal("level1/Lives.png"));
+        livesBarTexture = new Texture(Gdx.files.internal("defaultLevels/Lives.png"));
         Image livesBar = new Image(livesBarTexture);
         livesBar.setPosition(WORLD_WIDTH/2, WORLD_HEIGHT-livesBar.getHeight()*1.7f);
 
-        coinsIndicatorTexture = new Texture(Gdx.files.internal("level1/Coins.png"));
+        coinsIndicatorTexture = new Texture(Gdx.files.internal("defaultLevels/Coins.png"));
         Image coins = new Image(coinsIndicatorTexture);
         coins.setPosition(2*WORLD_WIDTH/3, WORLD_HEIGHT-coins.getHeight()*1.7f);
 
@@ -134,7 +137,16 @@ public class level extends ScreenAdapter {
         stageUI.addActor(speedBar);
         stageUI.addActor(livesBar);
         stageUI.addActor(coins);
-        Gdx.input.setInputProcessor(stageUI);
+
+        InputMultiplexer multiplexer = new InputMultiplexer();
+        multiplexer.addProcessor(stageUI);
+        multiplexer.addProcessor(stage);
+        multiplexer.addProcessor(new GestureDetector(new GestureHandler()));
+        Gdx.input.setInputProcessor(multiplexer);
+        /*Gdx.input.setInputProcessor(stageUI);
+        Gdx.input.setInputProcessor(stage);
+        Gdx.input.setInputProcessor(new GestureDetector(new GestureHandler()));
+    */
     }
 
     @Override
@@ -156,7 +168,7 @@ public class level extends ScreenAdapter {
     }
 
     private void draw(){
-        if(state == STATE.PLAYING){
+         if(state == STATE.PLAYING){
             stage.act();
             stage.draw();
         }
@@ -167,7 +179,7 @@ public class level extends ScreenAdapter {
         drawObstacle();
         batch.end();
         //drawDebug();
-        Gdx.app.log("Debug", String.valueOf(batch.totalRenderCalls));
+        //Gdx.app.log("Debug", String.valueOf(batch.totalRenderCalls));
     }
 
     private void drawObstacle() {
@@ -209,15 +221,14 @@ public class level extends ScreenAdapter {
                 } else {
                     kiiw.setPosition(WORLD_WIDTH / 4, (97 * --padCounter) + kiiw.RADIUS);
                 }
+                Gdx.app.log("LOG: ", String.valueOf(velocityY));
             return false;
         }
     }
 
-
-
     private void updateKiiw(float delta) {
         kiiw.update(delta);
-        //Gdx.input.setInputProcessor(new GestureDetector(new GestureHandler()));
+
         if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) kiiw.setPosition(WORLD_WIDTH/4, (97* ++padCounter)+kiiw.RADIUS);
         if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) kiiw.setPosition(WORLD_WIDTH/4, (97* --padCounter)+kiiw.RADIUS);
         blockKiiwLeavingTheWorld();
@@ -260,16 +271,16 @@ public class level extends ScreenAdapter {
         if (!isGrass){
             boolean rock = rnd.nextBoolean();
             if(rock){
-                obstacleTexture = new Texture(Gdx.files.internal("level1/roca.png"));
+                obstacleTexture = new Texture(Gdx.files.internal("level"+LEVEL+"/roca.png"));
                 width = 165;
                 height = 105;
             }else {
-                obstacleTexture = new Texture(Gdx.files.internal("level1/arbol.png"));
+                obstacleTexture = new Texture(Gdx.files.internal("level"+LEVEL+"/arbol.png"));
                 width = 210;
                 height = 270;
             }
         }else{
-            obstacleTexture = new Texture(Gdx.files.internal("level1/pasto.png"));
+            obstacleTexture = new Texture(Gdx.files.internal("level"+LEVEL+"/pasto.png"));
             width = 115;
             height = 150;
         }

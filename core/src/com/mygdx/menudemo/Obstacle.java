@@ -76,6 +76,7 @@ public class Obstacle {
 
     public void update(float delta) {
         setPosition(x - (MAX_SPEED_PER_SECOND * delta), y);
+        animationTimer+=delta/4;
     }
 
     public float getX() {

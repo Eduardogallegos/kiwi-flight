@@ -77,7 +77,7 @@ class LevelsScreen extends ScreenAdapter {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 super.tap(event, x, y, count, button);
-                game.setScreen(new level(game));
+                game.setScreen(new level(game, 1));
                 dispose();
             }
         });
@@ -89,7 +89,7 @@ class LevelsScreen extends ScreenAdapter {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 super.tap(event, x, y, count, button);
-                game.setScreen(new LevelsScreen(game));
+                game.setScreen(new level(game, 2));
                 dispose();
             }
         });
@@ -101,7 +101,7 @@ class LevelsScreen extends ScreenAdapter {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 super.tap(event, x, y, count, button);
-                game.setScreen(new LevelsScreen(game));
+                game.setScreen(new level(game, 3));
                 dispose();
             }
         });
@@ -113,7 +113,7 @@ class LevelsScreen extends ScreenAdapter {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 super.tap(event, x, y, count, button);
-                game.setScreen(new LevelsScreen(game));
+                game.setScreen(new level(game, 4));
                 dispose();
             }
         });
