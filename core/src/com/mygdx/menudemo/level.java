@@ -266,25 +266,34 @@ public class level extends ScreenAdapter {
         Random rnd = new Random();
         int RandomPad = rnd.nextInt(5);
         boolean isGrass = rnd.nextBoolean();
-        int width = 0;
-        int height = 0;
+        int obstacleWidth;
+        int obstacleHeight;
         if (!isGrass){
             boolean rock = rnd.nextBoolean();
             if(rock){
                 obstacleTexture = new Texture(Gdx.files.internal("level"+LEVEL+"/roca.png"));
-                width = 165;
-                height = 105;
+                obstacleWidth = 166;
+                obstacleHeight = 105;
+
             }else {
                 obstacleTexture = new Texture(Gdx.files.internal("level"+LEVEL+"/arbol.png"));
-                width = 210;
-                height = 270;
+                if(LEVEL==1) {
+                    obstacleWidth = 208;
+                    obstacleHeight = 270;
+                }else if(LEVEL == 2) {
+                    obstacleWidth = 135;
+                    obstacleHeight = 256;
+                }else{
+                    obstacleWidth = 480;
+                    obstacleHeight=258;
+                }
             }
         }else{
             obstacleTexture = new Texture(Gdx.files.internal("level"+LEVEL+"/pasto.png"));
-            width = 115;
-            height = 150;
+            obstacleWidth = 115;
+            obstacleHeight = 165;
         }
-        Obstacle newObstacle = new Obstacle(isGrass, obstacleTexture, width, height);
+        Obstacle newObstacle = new Obstacle(isGrass, obstacleTexture, obstacleWidth, obstacleHeight);
         float y = PADS[RandomPad];
         newObstacle.setPosition(WORLD_WIDTH + Obstacle.WIDTH,  y + newObstacle.WIDTH/2);
         obstacles.add(newObstacle);
