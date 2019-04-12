@@ -1,5 +1,6 @@
 package com.mygdx.menudemo;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -23,6 +24,8 @@ public class Kiiw {
     private float x = 0;
     private float y = 97;
     private float animationTimer = 0;
+    private float hitTimer = 1;
+    private boolean isHit = false;
 
     public Kiiw(Texture kiiwTexture) {
         TextureRegion [][] kiiwTextures = new TextureRegion(kiiwTexture).split(TILE_WIDTH, TILE_HEIGHT);
@@ -35,7 +38,16 @@ public class Kiiw {
         TextureRegion kiiwTexture = (TextureRegion) animation.getKeyFrame(animationTimer);
         float textureX = collisionCircle.x - kiiwTexture.getRegionWidth()/2;
         float textureY = collisionCircle.y ;
-        batch.draw(kiiwTexture, textureX, textureY);
+
+        if(isHit){
+            Color c = batch.getColor();
+            batch.setColor(c.r, c.g, c.b, .5f);
+            batch.draw(kiiwTexture, textureX, textureY);
+            batch.setColor(c.r, c.g, c.b, 1f);
+        }else{
+            batch.draw(kiiwTexture, textureX, textureY);
+        }
+
     }
 
     public void drawDebug(ShapeRenderer shapeRenderer) {
@@ -50,6 +62,13 @@ public class Kiiw {
 
     public void update(float delta) {
         animationTimer += delta;
+        if(isHit){
+            hitTimer-=delta;
+            if(hitTimer<=0){
+                isHit=false;
+                hitTimer=1;
+            }
+        }
     }
 
     private void updateCollisionCircle() {
@@ -71,5 +90,13 @@ public class Kiiw {
 
     public Circle getCollisionCircle() {
         return collisionCircle;
+    }
+
+    public boolean isHit() {
+        return isHit;
+    }
+
+    public void setHit(boolean hit) {
+        isHit = hit;
     }
 }

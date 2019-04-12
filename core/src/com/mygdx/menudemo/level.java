@@ -47,7 +47,7 @@ public class level extends ScreenAdapter {
     private SpriteBatch batch;
     private Kiiw kiiw;
     private int padCounter = 2;
-    private int lifes = 3;
+    private int lifes = 2;
     private Texture kiiwTexture;
     private Texture obstacleTexture;
     private float levelTimer = 0;
@@ -153,12 +153,12 @@ public class level extends ScreenAdapter {
     public void render(float delta) {
         if(state == STATE.PLAYING){
             update(delta);
+            stage.act();
         }
         levelTimer+=delta;
         clearScreen();
         draw();
         chechIfTimeFinish();
-        stageUI.draw();
     }
 
     private void chechIfTimeFinish() {
@@ -168,16 +168,15 @@ public class level extends ScreenAdapter {
     }
 
     private void draw(){
-         if(state == STATE.PLAYING){
-            stage.act();
-            stage.draw();
-        }
+        stage.draw();
         batch.setProjectionMatrix(camera.projection);
         batch.setTransformMatrix(camera.view);
         batch.begin();
         kiiw.draw(batch);
         drawObstacle();
         batch.end();
+
+        stageUI.draw();
         //drawDebug();
         //Gdx.app.log("Debug", String.valueOf(batch.totalRenderCalls));
     }
@@ -210,6 +209,7 @@ public class level extends ScreenAdapter {
         updateObstacles(delta);
         if (checkForCollision()){
             restLife();
+            kiiw.setHit(true);
         }
     }
 
@@ -238,6 +238,7 @@ public class level extends ScreenAdapter {
         if (lifes<=0)restart();
         else{
             lifes--;
+            Gdx.app.log("LOG", String.valueOf(lifes));
         }
     }
 
@@ -320,10 +321,13 @@ public class level extends ScreenAdapter {
     }
 
     private  boolean checkForCollision(){
-        for (Obstacle obstacle : obstacles){
-            if (obstacle.isKiiwColliding(kiiw)){
-                return true;
+        if(!kiiw.isHit()){
+            for (Obstacle obstacle : obstacles){
+                if (obstacle.isKiiwColliding(kiiw)){
+                    return true;
+                }
             }
+            return false;
         }
         return false;
     }
