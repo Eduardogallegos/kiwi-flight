@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -30,6 +31,7 @@ class CreditsScreen extends ScreenAdapter {
     private Texture returnPressTexture;
     private Table table;
     private Texture kiwiImage;
+    private Music music;
 
     public CreditsScreen(Game game) {
         this.game=game;
@@ -41,6 +43,10 @@ class CreditsScreen extends ScreenAdapter {
 
         stage = new Stage(new FitViewport(WORLD_WIDTH, WORLD_HEIGHT));
         Gdx.input.setInputProcessor(stage);
+
+        music = Gdx.audio.newMusic(Gdx.files.internal("creditos/song.mp3"));
+        music.setLooping(true);
+        music.play();
 
         backgroundTexture = new Texture(Gdx.files.internal("creditos/fondo.png"));
         Image background = new Image(backgroundTexture);
@@ -55,6 +61,7 @@ class CreditsScreen extends ScreenAdapter {
         retur.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
+                music.stop();
                 super.tap(event, x, y, count, button);
                 game.setScreen(new StartScreen(game));
                 dispose();

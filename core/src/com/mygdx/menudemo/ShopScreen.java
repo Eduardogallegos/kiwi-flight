@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -32,6 +33,8 @@ class ShopScreen extends ScreenAdapter {
     private Texture codeTexture;
     private Texture codePressTexture;
 
+    private Music music;
+
     public ShopScreen(Game game) {
         this.game=game;
     }
@@ -40,6 +43,10 @@ class ShopScreen extends ScreenAdapter {
         super.show();
         stage = new Stage(new FitViewport(WORLD_WIDTH, WORLD_HEIGHT));
         Gdx.input.setInputProcessor(stage);
+
+        music = Gdx.audio.newMusic(Gdx.files.internal("shop/song.mp3"));
+        music.setLooping(true);
+        music.play();
 
         backgroundTexture = new Texture(Gdx.files.internal("shop/fondo.png"));
         Image background = new Image(backgroundTexture);
@@ -52,6 +59,7 @@ class ShopScreen extends ScreenAdapter {
         retur.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
+                music.stop();
                 super.tap(event, x, y, count, button);
                 game.setScreen(new StartScreen(game));
                 dispose();
@@ -64,6 +72,7 @@ class ShopScreen extends ScreenAdapter {
         code.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
+                music.stop();
                 super.tap(event, x, y, count, button);
                 game.setScreen(new StartScreen(game));
                 dispose();

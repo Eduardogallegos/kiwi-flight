@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -38,6 +39,8 @@ class SettingsScreen extends ScreenAdapter {
     private Slider soundSlider;
     private Table table;
 
+    private Music music;
+
 
     public SettingsScreen(Game game) {
         this.game=game;
@@ -50,6 +53,10 @@ class SettingsScreen extends ScreenAdapter {
         stage = new Stage(new FitViewport(WORLD_WIDTH, WORLD_HEIGHT));
         Gdx.input.setInputProcessor(stage);
 
+        music = Gdx.audio.newMusic(Gdx.files.internal("settings/song.mp3"));
+        music.setLooping(true);
+        music.play();
+
         backgroundTexture = new Texture(Gdx.files.internal("settings/fondoAjustes.png"));
         Image background = new Image(backgroundTexture);
         stage.addActor(background);
@@ -58,10 +65,10 @@ class SettingsScreen extends ScreenAdapter {
         Image title = new Image(titleTexture);
 
         musicLabel = new Texture(Gdx.files.internal("settings/musica.png"));
-        Image music = new Image(musicLabel);
+        Image musicTitle = new Image(musicLabel);
 
         soundLabel = new Texture(Gdx.files.internal("settings/sonido.png"));
-        Image sound = new Image(soundLabel);
+        Image soundTitle = new Image(soundLabel);
 
         returnTexture = new Texture(Gdx.files.internal("settings/return.png"));
         returnPressTexture = new Texture(Gdx.files.internal("settings/returnPress.png"));
@@ -69,6 +76,7 @@ class SettingsScreen extends ScreenAdapter {
         retur.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
+                music.stop();
                 super.tap(event, x, y, count, button);
                 game.setScreen(new StartScreen(game));
                 dispose();
@@ -89,11 +97,11 @@ class SettingsScreen extends ScreenAdapter {
         table.add(title).expand().colspan(3);
 
         table.row();
-        table.add(music).expand();
+        table.add(musicTitle).expand();
         table.add(musicSlider).expand();
 
         table.row();
-        table.add(sound).expand();
+        table.add(soundTitle).expand();
         table.add(soundSlider).expand();
 
         table.row();

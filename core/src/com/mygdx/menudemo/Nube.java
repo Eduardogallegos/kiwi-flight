@@ -9,7 +9,7 @@ import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 
-public class Obstacle {
+public class Nube {
 
     private static final float COLLISION_SQUARE_WIDTH = 50F;
 
@@ -30,7 +30,7 @@ public class Obstacle {
     private float speedPerSecond = 350F;
 
 
-    public Obstacle(boolean isGrass, Texture obstacleTexture, int TILE_WIDTH, int TILE_HEIGHT){
+    public Nube(boolean isRayo, Texture obstacleTexture, int TILE_WIDTH, int TILE_HEIGHT){
         this.isGrass = isGrass;
         this.TILE_WIDTH = TILE_WIDTH;
         this.TILE_HEIGHT = TILE_HEIGHT;

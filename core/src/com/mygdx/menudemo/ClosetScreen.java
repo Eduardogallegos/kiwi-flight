@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -31,6 +32,8 @@ class ClosetScreen extends ScreenAdapter {
     private Texture flechaPress;
     private Table table;
 
+    private Music music;
+
     public ClosetScreen(Game game) {
         this.game=game;
     }
@@ -40,6 +43,10 @@ class ClosetScreen extends ScreenAdapter {
 
         stage = new Stage(new FitViewport(WORLD_WIDTH, WORLD_HEIGHT));
         Gdx.input.setInputProcessor(stage);
+
+        music = Gdx.audio.newMusic(Gdx.files.internal("closet/song.mp3"));
+        music.setLooping(true);
+        music.play();
 
         backgroundTexture = new Texture(Gdx.files.internal("closet/fondo closet.png"));
         Image background = new Image(backgroundTexture);
@@ -54,6 +61,7 @@ class ClosetScreen extends ScreenAdapter {
         button.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
+                music.stop();
                 super.tap(event, x, y, count, button);
                 game.setScreen(new StartScreen(game));
                 dispose();

@@ -31,15 +31,14 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import java.util.Random;
 
-public class level extends ScreenAdapter {
+public class bossLevel extends ScreenAdapter {
 
     private static final float WORLD_WIDTH = 1280;
     private static final float WORLD_HEIGHT = 720;
     private static final float GAP_BETWEEN_OBSTACLES = 80f;
-    private static int LEVEL;
 
     private float[] PADS = {0,97,194,291,388};
-    private Array<Obstacle> obstacles = new Array<Obstacle>();
+    private Array<Nube> nubes = new Array<Nube>();
     private ShapeRenderer shapeRenderer;
     private Viewport viewport;
     private Camera camera;
@@ -50,7 +49,7 @@ public class level extends ScreenAdapter {
     private int padCounter = 2;
     private int lifes = 2;
     private Texture kiiwTexture;
-    private Texture obstacleTexture;
+    private Texture nubeTexture;
     private float levelTimer = 0;
 
     private OrthographicCamera cameraHUD;
@@ -68,9 +67,8 @@ public class level extends ScreenAdapter {
     }
     private STATE state = STATE.PLAYING;
 
-    public level(Game aGame, int level) {
-        game = aGame;
-        this.LEVEL = level;
+    public bossLevel(Game Game) {
+        game = Game;
     }
 
     @Override
@@ -88,7 +86,7 @@ public class level extends ScreenAdapter {
         camera.update();
         stage = new Stage(new FitViewport(WORLD_WIDTH, WORLD_HEIGHT));
 
-        music = Gdx.audio.newMusic(Gdx.files.internal("level"+LEVEL+"/song.mp3"));
+        music = Gdx.audio.newMusic(Gdx.files.internal("levelBoss/song.mp3"));
         music.setLooping(true);
         music.play();
 
@@ -98,8 +96,8 @@ public class level extends ScreenAdapter {
         kiiw = new Kiiw(kiiwTexture);
         kiiw.setPosition(WORLD_WIDTH/4,97*padCounter+kiiw.RADIUS);
         Array<Texture> textures = new Array<Texture>();
-        for(int i = 1; i <=5;i++){
-            textures.add(new Texture(Gdx.files.internal("level"+LEVEL+"/BG"+i+".png")));
+        for(int i = 1; i <=3;i++){
+            textures.add(new Texture(Gdx.files.internal("levelBoss/BG"+i+".png")));
             textures.get(textures.size-1).setWrap(Texture.TextureWrap.MirroredRepeat, Texture.TextureWrap.MirroredRepeat);
         }
         ParallaxBackground parallaxBackground = new ParallaxBackground(textures, WORLD_WIDTH, WORLD_HEIGHT);
@@ -190,8 +188,8 @@ public class level extends ScreenAdapter {
     }
 
     private void drawObstacle() {
-        for(Obstacle obstacle : obstacles){
-            obstacle.draw(batch);
+        for(Nube nube : nubes){
+            nube.draw(batch);
         }
     }
 
@@ -200,8 +198,8 @@ public class level extends ScreenAdapter {
         shapeRenderer.setTransformMatrix(camera.view);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         kiiw.drawDebug(shapeRenderer);
-        for (Obstacle obstacle : obstacles){
-            obstacle.drawDebug(shapeRenderer);
+        for (Nube nube: nubes){
+            nube.drawDebug(shapeRenderer);
         }
         shapeRenderer.end();
     }
@@ -214,42 +212,22 @@ public class level extends ScreenAdapter {
     private void update(float delta){
 
         updateKiiw(delta);
-        updateObstacles(delta);
-        if (checkForCollision() && !checkIfIsGrass()){
+        updateNube(delta);
+        if (checkForCollision()){
             restLife();
             kiiw.setHit(true);
-        }else if(checkForCollision() && checkIfIsGrass()){
-            sumLife();
-            kiiw.setHit(true);
         }
-    }
-
-    private void sumLife() {
-        lifes++;
-        Gdx.app.log("LOG", String.valueOf(lifes));
-    }
-
-    private boolean checkIfIsGrass() {
-        if(!kiiw.isHit()){
-            for (Obstacle obstacle: obstacles){
-                if(obstacle.grass()){
-                    return true;
-                }
-            }
-            return false;
-        }
-        return false;
     }
 
     private class GestureHandler extends GestureDetector.GestureAdapter {
         @Override
         public boolean fling(float velocityX, float velocityY, int button) {
-                if (velocityY < 0) {
-                    kiiw.setPosition(WORLD_WIDTH / 4, (97 * ++padCounter) + kiiw.RADIUS);
-                } else {
-                    kiiw.setPosition(WORLD_WIDTH / 4, (97 * --padCounter) + kiiw.RADIUS);
-                }
-                Gdx.app.log("LOG: ", String.valueOf(velocityY));
+            if (velocityY < 0) {
+                kiiw.setPosition(WORLD_WIDTH / 4, (97 * ++padCounter) + kiiw.RADIUS);
+            } else {
+                kiiw.setPosition(WORLD_WIDTH / 4, (97 * --padCounter) + kiiw.RADIUS);
+            }
+            Gdx.app.log("LOG: ", String.valueOf(velocityY));
             return false;
         }
     }
@@ -266,7 +244,7 @@ public class level extends ScreenAdapter {
         if (lifes<=0)restart();
         else{
             lifes--;
-            Gdx.app.log("LOG", String.valueOf(lifes));
+            //Gdx.app.log("LOG", String.valueOf(lifes));
         }
     }
 
@@ -274,17 +252,17 @@ public class level extends ScreenAdapter {
         padCounter = 2;
         levelTimer = 0;
         kiiw.setPosition(WORLD_WIDTH/4,97*padCounter+kiiw.RADIUS);
-        obstacles.clear();
+        nubes.clear();
         lifes = 3;
 
     }
 
-    private void updateObstacles(float delta) {
-        for (Obstacle obstacle : obstacles){
-            obstacle.update(delta);
-            float speed = obstacle.getSpeedPerSecond()+LEVEL*(levelTimer/2);
-            obstacle.setSpeedPerSecond(speed);
-            //Gdx.app.log("LOG", String.valueOf(speed));
+    private void updateNube(float delta) {
+        for (Nube nube: nubes){
+            nube.update(delta);
+            float speed = nube.getSpeedPerSecond()+(levelTimer/2);
+            nube.setSpeedPerSecond(speed);
+            Gdx.app.log("LOG", String.valueOf(speed));
         }
         checkIfNewObstacleNeeded();
         removeObstaclesIfPassed();
@@ -297,64 +275,48 @@ public class level extends ScreenAdapter {
     private void createNewObstacle(){
         Random rnd = new Random();
         int RandomPad = rnd.nextInt(5);
-        boolean isGrass = rnd.nextBoolean();
+        boolean isRayo = rnd.nextBoolean();
         int obstacleWidth;
         int obstacleHeight;
-        if (!isGrass){
-            boolean rock = rnd.nextBoolean();
-            if(rock){
-                obstacleTexture = new Texture(Gdx.files.internal("level"+LEVEL+"/roca.png"));
-                obstacleWidth = 166;
-                obstacleHeight = 105;
-
-            }else {
-                obstacleTexture = new Texture(Gdx.files.internal("level"+LEVEL+"/arbol.png"));
-                if(LEVEL==1) {
-                    obstacleWidth = 208;
-                    obstacleHeight = 270;
-                }else if(LEVEL == 2) {
-                    obstacleWidth = 135;
-                    obstacleHeight = 256;
-                }else{
-                    obstacleWidth = 480;
-                    obstacleHeight=258;
-                }
-            }
+        if (!isRayo){
+            nubeTexture = new Texture(Gdx.files.internal("levelBoss/blanca.png"));
+            obstacleWidth = 166;
+            obstacleHeight = 105;
         }else{
-            obstacleTexture = new Texture(Gdx.files.internal("level"+LEVEL+"/pasto.png"));
+            nubeTexture = new Texture(Gdx.files.internal("levelBoss/rayo.png"));
             obstacleWidth = 115;
             obstacleHeight = 165;
         }
-        Obstacle newObstacle = new Obstacle(isGrass, obstacleTexture, obstacleWidth, obstacleHeight);
+        Nube newNube = new Nube(isRayo, nubeTexture, obstacleWidth, obstacleHeight);
         float y = PADS[RandomPad];
-        newObstacle.setPosition(WORLD_WIDTH + Obstacle.WIDTH,  y + newObstacle.WIDTH/2);
-        obstacles.add(newObstacle);
+        newNube.setPosition(WORLD_WIDTH + Obstacle.WIDTH,  y + newNube.WIDTH/2);
+        nubes.add(newNube);
     }
 
     private void checkIfNewObstacleNeeded() {
-        if(obstacles.size==0){
+        if(nubes.size==0){
             createNewObstacle();
         }else{
-            Obstacle obstacle = obstacles.peek();
-            if(obstacle.getX()<WORLD_WIDTH-GAP_BETWEEN_OBSTACLES){
+            Nube nube = nubes.peek();
+            if(nube.getX()<WORLD_WIDTH-GAP_BETWEEN_OBSTACLES){
                 createNewObstacle();
             }
         }
     }
 
     private void removeObstaclesIfPassed() {
-        if(obstacles.size > 0){
-            Obstacle firstObstacle = obstacles.first();
-            if(firstObstacle.getX() < -Obstacle.WIDTH){
-                obstacles.removeValue(firstObstacle, true);
+        if(nubes.size > 0){
+            Nube firstNube = nubes.first();
+            if(firstNube.getX() < -Obstacle.WIDTH){
+                nubes.removeValue(firstNube, true);
             }
         }
     }
 
     private  boolean checkForCollision(){
         if(!kiiw.isHit()){
-            for (Obstacle obstacle : obstacles){
-                if (obstacle.isKiiwColliding(kiiw)){
+            for (Nube nube: nubes){
+                if (nube.isKiiwColliding(kiiw)){
                     return true;
                 }
             }
@@ -369,3 +331,4 @@ public class level extends ScreenAdapter {
     }
 
 }
+
