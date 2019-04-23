@@ -119,6 +119,7 @@ class ShopScreen extends ScreenAdapter {
         returnPressTexture.dispose();
         codeTexture.dispose();
         codePressTexture.dispose();
+        music.dispose();
         //titleTexture.dispose();
     }
 

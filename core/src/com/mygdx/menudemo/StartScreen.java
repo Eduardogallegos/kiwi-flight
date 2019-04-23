@@ -192,6 +192,15 @@ class StartScreen extends ScreenAdapter {
         playTexture.dispose();
         playPressTexture.dispose();
         titleTexture.dispose();
+        closetTexture.dispose();
+        closetPressTexture.dispose();
+        creditsTexture.dispose();
+        creditsPressTexture.dispose();
+        shopTexture.dispose();
+        shopPressTexture.dispose();
+        settingsTexture.dispose();
+        settingsPressTexture.dispose();
+        music.dispose();
     }
 
     private void clearScreen() {

@@ -135,6 +135,9 @@ class SettingsScreen extends ScreenAdapter {
         //playTexture.dispose();
         //playPressTexture.dispose();
         titleTexture.dispose();
+        music.dispose();
+        returnTexture.dispose();
+        returnPressTexture.dispose();
     }
 
     private void clearScreen() {

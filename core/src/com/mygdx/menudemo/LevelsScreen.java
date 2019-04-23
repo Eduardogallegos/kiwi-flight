@@ -85,7 +85,7 @@ class LevelsScreen extends ScreenAdapter {
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 music.stop();
                 super.tap(event, x, y, count, button);
-                game.setScreen(new level(game, 1));
+                game.setScreen(new LoadingScreen((MenuDemo)game, 1));
                 dispose();
             }
         });
@@ -98,7 +98,7 @@ class LevelsScreen extends ScreenAdapter {
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 music.stop();
                 super.tap(event, x, y, count, button);
-                game.setScreen(new level(game, 2));
+                game.setScreen(new LoadingScreen((MenuDemo)game, 2));
                 dispose();
             }
         });
@@ -111,7 +111,7 @@ class LevelsScreen extends ScreenAdapter {
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 music.stop();
                 super.tap(event, x, y, count, button);
-                game.setScreen(new level(game, 3));
+                game.setScreen(new LoadingScreen((MenuDemo)game, 3));
                 dispose();
             }
         });
@@ -124,7 +124,7 @@ class LevelsScreen extends ScreenAdapter {
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 music.stop();
                 super.tap(event, x, y, count, button);
-                game.setScreen(new bossLevel(game));
+                game.setScreen(new LoadingScreen((MenuDemo)game,4));
                 dispose();
             }
         });
@@ -178,6 +178,7 @@ class LevelsScreen extends ScreenAdapter {
         levelThreeTexture.dispose();
         levelThreePressTexture.dispose();
         //titleTexture.dispose();
+        music.dispose();
     }
 
     private void clearScreen() {

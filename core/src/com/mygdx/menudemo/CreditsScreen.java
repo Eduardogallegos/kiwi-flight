@@ -101,6 +101,10 @@ class CreditsScreen extends ScreenAdapter {
         stage.dispose();
         backgroundTexture.dispose();
         kiwiImage.dispose();
+        returnTexture.dispose();
+        returnPressTexture.dispose();
+        music.dispose();
+
     }
 
     private void clearScreen() {

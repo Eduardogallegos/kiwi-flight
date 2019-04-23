@@ -104,8 +104,11 @@ class ClosetScreen extends ScreenAdapter {
     public void dispose() {
         super.dispose();
         stage.dispose();
+        music.dispose();
         backgroundTexture.dispose();
         closetkiwi.dispose();
+        flecha.dispose();
+        flechaPress.dispose();
     }
 
     private void clearScreen() {

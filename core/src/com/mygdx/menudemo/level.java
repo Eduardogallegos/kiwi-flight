@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
@@ -52,16 +53,23 @@ public class level extends ScreenAdapter {
     private Texture kiiwTexture;
     private Texture obstacleTexture;
     private float levelTimer = 0;
+    private float secondsTimer = 60;
+    private int minutes;
+    private int seconds;
 
     private OrthographicCamera cameraHUD;
     private FitViewport viewportHUD;
     private Stage stageUI;
     private Texture playButtonTexture;
     private Texture speedBarTexture;
-    private Texture livesBarTexture;
+    private Texture lifesBarTexture;
     private Texture coinsIndicatorTexture;
 
+    private BitmapFont bitmapFont;
+    private GlyphLayout glyphLayout;
+
     private Music music;
+    //private final AssetManager assetManager = new AssetManager();
 
     private enum STATE {
         PLAYING, PAUSED
@@ -71,6 +79,7 @@ public class level extends ScreenAdapter {
     public level(Game aGame, int level) {
         game = aGame;
         this.LEVEL = level;
+
     }
 
     @Override
@@ -88,13 +97,17 @@ public class level extends ScreenAdapter {
         camera.update();
         stage = new Stage(new FitViewport(WORLD_WIDTH, WORLD_HEIGHT));
 
-        music = Gdx.audio.newMusic(Gdx.files.internal("level"+LEVEL+"/song.mp3"));
+
+        bitmapFont = new BitmapFont();
+        glyphLayout = new GlyphLayout();
+
+        music = MenuDemo.getAssetManager().get("level"+LEVEL+"/song.mp3");
         music.setLooping(true);
         music.play();
 
         shapeRenderer = new ShapeRenderer();
         batch = new SpriteBatch();
-        kiiwTexture = new Texture(Gdx.files.internal("defaultLevels/RunningKiwi.png"));
+        kiiwTexture = MenuDemo.getAssetManager().get("defaultLevels/RunningKiwi.png");
         kiiw = new Kiiw(kiiwTexture);
         kiiw.setPosition(WORLD_WIDTH/4,97*padCounter+kiiw.RADIUS);
         Array<Texture> textures = new Array<Texture>();
@@ -108,14 +121,12 @@ public class level extends ScreenAdapter {
         parallaxBackground.setSpeed(1);
         stage.addActor(parallaxBackground);
 
-
-
         cameraHUD = new OrthographicCamera();
         viewportHUD = new FitViewport(WORLD_WIDTH,WORLD_HEIGHT,cameraHUD);
         cameraHUD.update();
 
         stageUI = new Stage(viewportHUD);
-        playButtonTexture = new Texture(Gdx.files.internal("defaultLevels/pausa.png"));
+        playButtonTexture = MenuDemo.getAssetManager().get("defaultLevels/pausa.png");
         ImageButton pause = new ImageButton(new TextureRegionDrawable(new TextureRegion(playButtonTexture)), new TextureRegionDrawable(new TextureRegion(playButtonTexture)));
         pause.setPosition(WORLD_WIDTH - pause.getWidth()*1.2f, WORLD_HEIGHT- pause.getHeight()*1.2f);
         pause.addListener(new ClickListener() {
@@ -126,24 +137,24 @@ public class level extends ScreenAdapter {
                 }else{
                     state = STATE.PLAYING;
                 }
-            };
+            }
         });
 
-        speedBarTexture = new Texture(Gdx.files.internal("defaultLevels/Barra.png"));
+        speedBarTexture = MenuDemo.getAssetManager().get("defaultLevels/Barra.png");
         Image speedBar = new Image(speedBarTexture);
         speedBar.setPosition(speedBar.getWidth()/5, WORLD_HEIGHT - speedBar.getHeight()*1.7f);
 
-        livesBarTexture = new Texture(Gdx.files.internal("defaultLevels/Lives.png"));
-        Image livesBar = new Image(livesBarTexture);
-        livesBar.setPosition(WORLD_WIDTH/2, WORLD_HEIGHT-livesBar.getHeight()*1.7f);
+        lifesBarTexture = MenuDemo.getAssetManager().get("defaultLevels/lifes2.png");
+        Image lifesBar = new Image(lifesBarTexture);
+        lifesBar.setPosition(WORLD_WIDTH/2, WORLD_HEIGHT-lifesBar.getHeight()*1.7f);
 
-        coinsIndicatorTexture = new Texture(Gdx.files.internal("defaultLevels/Coins.png"));
+        coinsIndicatorTexture = MenuDemo.getAssetManager().get("defaultLevels/Coins.png");
         Image coins = new Image(coinsIndicatorTexture);
         coins.setPosition(2*WORLD_WIDTH/3, WORLD_HEIGHT-coins.getHeight()*1.7f);
 
         stageUI.addActor(pause);
         stageUI.addActor(speedBar);
-        stageUI.addActor(livesBar);
+        stageUI.addActor(lifesBar);
         stageUI.addActor(coins);
 
         InputMultiplexer multiplexer = new InputMultiplexer();
@@ -151,10 +162,6 @@ public class level extends ScreenAdapter {
         multiplexer.addProcessor(stage);
         multiplexer.addProcessor(new GestureDetector(new GestureHandler()));
         Gdx.input.setInputProcessor(multiplexer);
-        /*Gdx.input.setInputProcessor(stageUI);
-        Gdx.input.setInputProcessor(stage);
-        Gdx.input.setInputProcessor(new GestureDetector(new GestureHandler()));
-    */
     }
 
     @Override
@@ -162,16 +169,18 @@ public class level extends ScreenAdapter {
         if(state == STATE.PLAYING){
             update(delta);
             stage.act();
+            levelTimer+=delta;
+            secondsTimer-=delta;
+            chechIfTimeFinish();
         }
-        levelTimer+=delta;
         clearScreen();
         draw();
-        chechIfTimeFinish();
     }
 
     private void chechIfTimeFinish() {
         if (levelTimer>=120){
             game.setScreen(new LevelsScreen(game));
+            dispose();
         }
     }
 
@@ -182,11 +191,24 @@ public class level extends ScreenAdapter {
         batch.begin();
         kiiw.draw(batch);
         drawObstacle();
+        drawMinuteTimer();
+        drawSecondtimer();
         batch.end();
-
         stageUI.draw();
         //drawDebug();
         //Gdx.app.log("Debug", String.valueOf(batch.totalRenderCalls));
+    }
+
+    private void drawSecondtimer() {
+        String secondsAsString = Integer.toString(seconds);
+        glyphLayout.setText(bitmapFont, secondsAsString);
+        bitmapFont.draw(batch, secondsAsString,80, 7 * viewport.getWorldHeight() / 8);
+    }
+
+    private void drawMinuteTimer() {
+        String minutesAsString = Integer.toString(minutes);
+        glyphLayout.setText(bitmapFont, minutesAsString);
+        bitmapFont.draw(batch, minutesAsString + "  : ",50, 7 * viewport.getWorldHeight() / 8);
     }
 
     private void drawObstacle() {
@@ -195,16 +217,6 @@ public class level extends ScreenAdapter {
         }
     }
 
-    private void drawDebug() {
-        shapeRenderer.setProjectionMatrix(camera.projection);
-        shapeRenderer.setTransformMatrix(camera.view);
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        kiiw.drawDebug(shapeRenderer);
-        for (Obstacle obstacle : obstacles){
-            obstacle.drawDebug(shapeRenderer);
-        }
-        shapeRenderer.end();
-    }
 
     private void clearScreen() {
         Gdx.gl.glClearColor(Color.BLACK.r, Color.BLACK.g, Color.BLACK.b, Color.BLACK.a);
@@ -215,12 +227,38 @@ public class level extends ScreenAdapter {
 
         updateKiiw(delta);
         updateObstacles(delta);
-        if (checkForCollision() && !checkIfIsGrass()){
+        updateMinuteTimer();
+        updateSecondTimer();
+        updateLifesIndicator();
+        if (checkForCollision()){
             restLife();
             kiiw.setHit(true);
-        }else if(checkForCollision() && checkIfIsGrass()){
-            sumLife();
-            kiiw.setHit(true);
+        }
+    }
+
+    private void updateLifesIndicator() {
+        if (lifes == 1) lifesBarTexture = MenuDemo.getAssetManager().get("defaultLevels/lifes1.png");
+        else lifesBarTexture = MenuDemo.getAssetManager().get("defaultLevels/lifes0.png");
+    }
+
+    private void checkIfIsGrass() {
+        if(kiiw.isHit()){
+            for (Obstacle obstacle: obstacles){
+                if(obstacle.grass()){
+                    sumLife();
+                }else{
+                    restLife();
+                }
+            }
+        }
+
+    }
+
+    private void restLife() {
+        if (lifes<=0)restart();
+        else{
+            lifes--;
+            Gdx.app.log("LOG", String.valueOf(lifes));
         }
     }
 
@@ -229,17 +267,24 @@ public class level extends ScreenAdapter {
         Gdx.app.log("LOG", String.valueOf(lifes));
     }
 
-    private boolean checkIfIsGrass() {
-        if(!kiiw.isHit()){
-            for (Obstacle obstacle: obstacles){
-                if(obstacle.grass()){
-                    return true;
-                }
-            }
-            return false;
+    private void updateSecondTimer() {
+        if (secondsTimer<0){
+            secondsTimer=60;
         }
-        return false;
+        seconds = (int) secondsTimer;
+
     }
+
+    private void updateMinuteTimer() {
+        if (levelTimer > 60){
+            minutes = 0;
+        }else if (levelTimer> 1){
+            minutes = 1;
+        }else{
+            minutes = 2;
+        }
+    }
+
 
     private class GestureHandler extends GestureDetector.GestureAdapter {
         @Override
@@ -262,20 +307,17 @@ public class level extends ScreenAdapter {
         blockKiiwLeavingTheWorld();
     }
 
-    private void restLife() {
-        if (lifes<=0)restart();
-        else{
-            lifes--;
-            Gdx.app.log("LOG", String.valueOf(lifes));
-        }
-    }
+
 
     private void restart() {
         padCounter = 2;
         levelTimer = 0;
+        secondsTimer = 60;
+        minutes=0;
+        seconds = 0;
         kiiw.setPosition(WORLD_WIDTH/4,97*padCounter+kiiw.RADIUS);
         obstacles.clear();
-        lifes = 3;
+        lifes = 2;
 
     }
 
@@ -358,7 +400,6 @@ public class level extends ScreenAdapter {
                     return true;
                 }
             }
-            return false;
         }
         return false;
     }
@@ -366,6 +407,13 @@ public class level extends ScreenAdapter {
     @Override
     public void dispose() {
         stage.dispose();
+        music.dispose();
+        kiiwTexture.dispose();
+        playButtonTexture.dispose();
+        speedBarTexture.dispose();
+        lifesBarTexture.dispose();
+        coinsIndicatorTexture.dispose();
+        stageUI.dispose();
     }
 
 }
