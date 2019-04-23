@@ -41,6 +41,7 @@ public class level extends ScreenAdapter {
 
     private float[] PADS = {0,97,194,291,388};
     private Array<Obstacle> obstacles = new Array<Obstacle>();
+    private Array<Object> lifeTextures = new Array<Object>();
     private ShapeRenderer shapeRenderer;
     private Viewport viewport;
     private Camera camera;
@@ -56,6 +57,7 @@ public class level extends ScreenAdapter {
     private float secondsTimer = 60;
     private int minutes;
     private int seconds;
+    private int coins = 150;
 
     private OrthographicCamera cameraHUD;
     private FitViewport viewportHUD;
@@ -98,7 +100,7 @@ public class level extends ScreenAdapter {
         stage = new Stage(new FitViewport(WORLD_WIDTH, WORLD_HEIGHT));
 
 
-        bitmapFont = new BitmapFont();
+        bitmapFont = new BitmapFont(Gdx.files.internal("defaultLevels/numbers.fnt"));
         glyphLayout = new GlyphLayout();
 
         music = MenuDemo.getAssetManager().get("level"+LEVEL+"/song.mp3");
@@ -144,13 +146,16 @@ public class level extends ScreenAdapter {
         Image speedBar = new Image(speedBarTexture);
         speedBar.setPosition(speedBar.getWidth()/5, WORLD_HEIGHT - speedBar.getHeight()*1.7f);
 
-        lifesBarTexture = MenuDemo.getAssetManager().get("defaultLevels/lifes2.png");
+        for(int i = 0; i <=2;i++){
+            lifeTextures.add(MenuDemo.getAssetManager().get("defaultLevels/lifes"+i+".png"));
+        }
+        lifesBarTexture = (Texture) lifeTextures.get(lifes);
         Image lifesBar = new Image(lifesBarTexture);
-        lifesBar.setPosition(WORLD_WIDTH/2, WORLD_HEIGHT-lifesBar.getHeight()*1.7f);
+        lifesBar.setPosition(1*WORLD_WIDTH/3-80, WORLD_HEIGHT-lifesBar.getHeight()*1.1f);
 
         coinsIndicatorTexture = MenuDemo.getAssetManager().get("defaultLevels/Coins.png");
         Image coins = new Image(coinsIndicatorTexture);
-        coins.setPosition(2*WORLD_WIDTH/3, WORLD_HEIGHT-coins.getHeight()*1.7f);
+        coins.setPosition(3*WORLD_WIDTH/5-70, WORLD_HEIGHT-coins.getHeight()-20);
 
         stageUI.addActor(pause);
         stageUI.addActor(speedBar);
@@ -193,22 +198,31 @@ public class level extends ScreenAdapter {
         drawObstacle();
         drawMinuteTimer();
         drawSecondtimer();
+        drawCoinsCounter();
         batch.end();
         stageUI.draw();
         //drawDebug();
         //Gdx.app.log("Debug", String.valueOf(batch.totalRenderCalls));
     }
 
+    private void drawCoinsCounter() {
+        String coinsAsString = Integer.toString(coins);
+        glyphLayout.setText(bitmapFont, coinsAsString);
+        bitmapFont.draw(batch, coinsAsString, 3*WORLD_WIDTH/5+100, WORLD_HEIGHT-coinsIndicatorTexture.getHeight()+50);
+    }
+
+    //https://learning.oreilly.com/library/view/libgdx-game-development/9781785281440/ch05s03.html
+
     private void drawSecondtimer() {
         String secondsAsString = Integer.toString(seconds);
         glyphLayout.setText(bitmapFont, secondsAsString);
-        bitmapFont.draw(batch, secondsAsString,80, 7 * viewport.getWorldHeight() / 8);
+        bitmapFont.draw(batch, secondsAsString,100, 7 * viewport.getWorldHeight() / 8);
     }
 
     private void drawMinuteTimer() {
-        String minutesAsString = Integer.toString(minutes);
+        String minutesAsString = Integer.toString(minutes)+ ":";
         glyphLayout.setText(bitmapFont, minutesAsString);
-        bitmapFont.draw(batch, minutesAsString + "  : ",50, 7 * viewport.getWorldHeight() / 8);
+        bitmapFont.draw(batch, minutesAsString ,50, 7 * viewport.getWorldHeight() / 8);
     }
 
     private void drawObstacle() {
@@ -237,8 +251,8 @@ public class level extends ScreenAdapter {
     }
 
     private void updateLifesIndicator() {
-        if (lifes == 1) lifesBarTexture = MenuDemo.getAssetManager().get("defaultLevels/lifes1.png");
-        else lifesBarTexture = MenuDemo.getAssetManager().get("defaultLevels/lifes0.png");
+        if (lifes == 1) lifesBarTexture = (Texture) lifeTextures.get(lifes);
+        else if(lifes == 0) lifesBarTexture = (Texture) lifeTextures.get(lifes);
     }
 
     private void checkIfIsGrass() {
