@@ -18,6 +18,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -37,6 +38,7 @@ public class level extends ScreenAdapter {
     private static final float GAP_BETWEEN_OBSTACLES = 80f;
     private static final float GAP_BETWEEN_COINS = 350f;
     private static int LEVEL;
+    private static final float DEFAULT_CHUNCK_SIZE = 11 ;
 
     private float[] PADS = {0,97,194,291,388};
     private Array<Obstacle> obstacles = new Array<Obstacle>();
@@ -87,6 +89,9 @@ public class level extends ScreenAdapter {
     private Texture coinTexture;
     private int lowSpeedLimit = 0;
 
+    private Rectangle speedBarRectangle;
+    private float speedBarChunkSize = DEFAULT_CHUNCK_SIZE;
+
     //private final AssetManager assetManager = new AssetManager();
 
     private enum STATE {
@@ -114,7 +119,6 @@ public class level extends ScreenAdapter {
         camera.position.set(WORLD_WIDTH / 2, WORLD_HEIGHT / 2, camera.position.z);
         camera.update();
         stage = new Stage(new FitViewport(WORLD_WIDTH, WORLD_HEIGHT));
-
 
         bitmapFont = new BitmapFont(Gdx.files.internal("defaultLevels/numbers.fnt"));
         glyphLayout = new GlyphLayout();
@@ -156,9 +160,21 @@ public class level extends ScreenAdapter {
             }
         });
 
+        if(LEVEL == 1)speedNeeded = 15;
+        else if( LEVEL == 2)speedNeeded = 25;
+        else if (LEVEL == 3)speedNeeded = 35;
+        else speedNeeded = 40;
+
         speedBarTexture = MenuDemo.getAssetManager().get("defaultLevels/Barra.png");
         Image speedBar = new Image(speedBarTexture);
         speedBar.setPosition(30, WORLD_HEIGHT - speedBar.getHeight()*1.1f);
+        speedBarChunkSize = 275 / speedNeeded;
+
+        speedBarRectangle = new Rectangle();
+        speedBarRectangle.x = 31;
+        speedBarRectangle.y = WORLD_HEIGHT - speedBar.getHeight()*1f;
+        speedBarRectangle.height = 35;
+        speedBarRectangle.width = 0;
 
         for(int i = 0; i <=2;i++){
             lifeTextures.add(MenuDemo.getAssetManager().get("defaultLevels/lifes"+i+".png"));
@@ -235,11 +251,6 @@ public class level extends ScreenAdapter {
         stagePause.addActor(restart);
         stagePause.addActor(exit);
 
-        if(LEVEL == 1)speedNeeded = 25;
-        else if( LEVEL == 2)speedNeeded = 30;
-        else if (LEVEL == 3)speedNeeded = 35;
-        else speedNeeded = 40;
-
         InputMultiplexer multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(stageUI);
         multiplexer.addProcessor(stage);
@@ -296,6 +307,15 @@ public class level extends ScreenAdapter {
         drawNeededSpeedIndicator();
         drawActualSpeedIndicator();
         batch.end();
+
+        shapeRenderer.setProjectionMatrix(camera.projection);
+        shapeRenderer.setTransformMatrix(camera.view);
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.setColor(Color.CORAL);
+        shapeRenderer.rect(speedBarRectangle.x,speedBarRectangle.y,speedBarRectangle.width,speedBarRectangle.height);
+        shapeRenderer.end();
+
+
         stageUI.draw();
         if(state== STATE.PAUSED){
             stagePause.draw();
@@ -378,6 +398,11 @@ public class level extends ScreenAdapter {
             substractSpeed();
             kiiw.setHit(true);
         }
+        updateSpeedBarRectangle();
+    }
+
+    private void updateSpeedBarRectangle() {
+        speedBarRectangle.width = speedBarChunkSize * actualSpeed;
     }
 
     private void updateActualSpeed() {
@@ -429,7 +454,7 @@ public class level extends ScreenAdapter {
 
 
     private void substractSpeed() {
-        if(actualSpeed<lowSpeedLimit){
+        if(actualSpeed<=lowSpeedLimit){
             music.stop();
             restart();
         }else{
