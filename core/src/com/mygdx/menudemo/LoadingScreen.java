@@ -52,6 +52,20 @@ public class LoadingScreen extends ScreenAdapter {
         menuDemo.getAssetManager().load("defaultLevels/lifes1.png", Texture.class);
         menuDemo.getAssetManager().load("defaultLevels/lifes2.png", Texture.class);
         menuDemo.getAssetManager().load("defaultLevels/Coins.png", Texture.class);
+        menuDemo.getAssetManager().load("defaultLevels/pausepanel.png", Texture.class);
+        menuDemo.getAssetManager().load("defaultLevels/exit.png", Texture.class);
+        menuDemo.getAssetManager().load("defaultLevels/exitPressed.png", Texture.class);
+        menuDemo.getAssetManager().load("defaultLevels/restart.png", Texture.class);
+        menuDemo.getAssetManager().load("defaultLevels/restartPressed.png", Texture.class);
+        menuDemo.getAssetManager().load("defaultLevels/resume.png", Texture.class);
+        menuDemo.getAssetManager().load("defaultLevels/resumePressed.png", Texture.class);
+        menuDemo.getAssetManager().load("defaultLevels/settings.png", Texture.class);
+        menuDemo.getAssetManager().load("defaultLevels/settingsPressed.png", Texture.class);
+        menuDemo.getAssetManager().load("level"+LEVEL+"/roca.png", Texture.class);
+        menuDemo.getAssetManager().load("level"+LEVEL+"/arbol.png", Texture.class);
+        menuDemo.getAssetManager().load("level"+LEVEL+"/pasto.png", Texture.class);
+        menuDemo.getAssetManager().load("defaultLevels/gamecoin.png", Texture.class);
+
     }
 
     @Override

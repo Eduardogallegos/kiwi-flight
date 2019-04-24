@@ -5,7 +5,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
@@ -23,7 +22,6 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
@@ -37,11 +35,13 @@ public class level extends ScreenAdapter {
     private static final float WORLD_WIDTH = 1280;
     private static final float WORLD_HEIGHT = 720;
     private static final float GAP_BETWEEN_OBSTACLES = 80f;
+    private static final float GAP_BETWEEN_COINS = 350f;
     private static int LEVEL;
 
     private float[] PADS = {0,97,194,291,388};
     private Array<Obstacle> obstacles = new Array<Obstacle>();
     private Array<Object> lifeTextures = new Array<Object>();
+    private Array<Coin> coins = new Array<Coin>();
     private ShapeRenderer shapeRenderer;
     private Viewport viewport;
     private Camera camera;
@@ -57,7 +57,9 @@ public class level extends ScreenAdapter {
     private float secondsTimer = 60;
     private int minutes;
     private int seconds;
-    private int coins = 150;
+    private int coinsCounter = 0;
+    private float nonCollisionTimer=0;
+    private int actualSpeed = 0;
 
     private OrthographicCamera cameraHUD;
     private FitViewport viewportHUD;
@@ -66,11 +68,25 @@ public class level extends ScreenAdapter {
     private Texture speedBarTexture;
     private Texture lifesBarTexture;
     private Texture coinsIndicatorTexture;
+    private Texture pausePanelTexture;
 
     private BitmapFont bitmapFont;
     private GlyphLayout glyphLayout;
 
     private Music music;
+    private Texture resumeButtonTexture;
+    private Texture resumePressedButtonTexture;
+    private Stage stagePause;
+    private Texture settingsPressedButtonTexture;
+    private Texture settingsButtonTexture;
+    private Texture restartButtonTexture;
+    private Texture restartPressedButtonTexture;
+    private Texture exitButtonTexture;
+    private Texture exitPressedButtonTexture;
+    private int speedNeeded;
+    private Texture coinTexture;
+    private int lowSpeedLimit = 0;
+
     //private final AssetManager assetManager = new AssetManager();
 
     private enum STATE {
@@ -130,41 +146,104 @@ public class level extends ScreenAdapter {
         stageUI = new Stage(viewportHUD);
         playButtonTexture = MenuDemo.getAssetManager().get("defaultLevels/pausa.png");
         ImageButton pause = new ImageButton(new TextureRegionDrawable(new TextureRegion(playButtonTexture)), new TextureRegionDrawable(new TextureRegion(playButtonTexture)));
-        pause.setPosition(WORLD_WIDTH - pause.getWidth()*1.2f, WORLD_HEIGHT- pause.getHeight()*1.2f);
+        pause.setPosition(WORLD_WIDTH - pause.getWidth()*1.1f, WORLD_HEIGHT- pause.getHeight()*1.1f);
         pause.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if(state==STATE.PLAYING){
                     state = STATE.PAUSED;
-                }else{
-                    state = STATE.PLAYING;
                 }
             }
         });
 
         speedBarTexture = MenuDemo.getAssetManager().get("defaultLevels/Barra.png");
         Image speedBar = new Image(speedBarTexture);
-        speedBar.setPosition(speedBar.getWidth()/5, WORLD_HEIGHT - speedBar.getHeight()*1.7f);
+        speedBar.setPosition(30, WORLD_HEIGHT - speedBar.getHeight()*1.1f);
 
         for(int i = 0; i <=2;i++){
             lifeTextures.add(MenuDemo.getAssetManager().get("defaultLevels/lifes"+i+".png"));
         }
         lifesBarTexture = (Texture) lifeTextures.get(lifes);
         Image lifesBar = new Image(lifesBarTexture);
-        lifesBar.setPosition(1*WORLD_WIDTH/3-80, WORLD_HEIGHT-lifesBar.getHeight()*1.1f);
+        lifesBar.setPosition(1*WORLD_WIDTH/3+50, WORLD_HEIGHT-lifesBar.getHeight()*1.1f);
 
         coinsIndicatorTexture = MenuDemo.getAssetManager().get("defaultLevels/Coins.png");
         Image coins = new Image(coinsIndicatorTexture);
-        coins.setPosition(3*WORLD_WIDTH/5-70, WORLD_HEIGHT-coins.getHeight()-20);
+        coins.setPosition(3*WORLD_WIDTH/5+50, WORLD_HEIGHT-coins.getHeight()-10);
 
         stageUI.addActor(pause);
         stageUI.addActor(speedBar);
         stageUI.addActor(lifesBar);
         stageUI.addActor(coins);
 
+        stagePause = new Stage(viewportHUD);
+
+        pausePanelTexture = MenuDemo.getAssetManager().get("defaultLevels/pausepanel.png");
+        Image pausePanel = new Image(pausePanelTexture);
+
+        resumeButtonTexture = MenuDemo.getAssetManager().get("defaultLevels/resume.png");
+        resumePressedButtonTexture = MenuDemo.getAssetManager().get("defaultLevels/resumePressed.png");
+        ImageButton resume = new ImageButton(new TextureRegionDrawable(new TextureRegion(resumeButtonTexture)), new TextureRegionDrawable(new TextureRegion(resumePressedButtonTexture)));
+        resume.setPosition(WORLD_WIDTH/2-resume.getWidth()/2+15, WORLD_HEIGHT/2+resume.getHeight()-20);
+        resume.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                state=STATE.PLAYING;
+            }
+        });
+
+        settingsButtonTexture = MenuDemo.getAssetManager().get("defaultLevels/settings.png");
+        settingsPressedButtonTexture = MenuDemo.getAssetManager().get("defaultLevels/settingsPressed.png");
+        ImageButton settings = new ImageButton(new TextureRegionDrawable(new TextureRegion(settingsButtonTexture)), new TextureRegionDrawable(new TextureRegion(settingsPressedButtonTexture)));
+        settings.setPosition(WORLD_WIDTH/2-settings.getWidth()/2+15, WORLD_HEIGHT/2-30);
+        settings.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                music.stop();
+                //game.setScreen(new SettingsScreen(game));
+            }
+        });
+
+        restartButtonTexture = MenuDemo.getAssetManager().get("defaultLevels/restart.png");
+        restartPressedButtonTexture = MenuDemo.getAssetManager().get("defaultLevels/restartPressed.png");
+        ImageButton restart = new ImageButton(new TextureRegionDrawable(new TextureRegion(restartButtonTexture)), new TextureRegionDrawable(new TextureRegion(restartPressedButtonTexture)));
+        restart.setPosition(WORLD_WIDTH/2-restart.getWidth()/2+15, WORLD_HEIGHT/2-(2*restart.getHeight())+20);
+        restart.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                music.stop();
+                state = STATE.PLAYING;
+                restart();
+            }
+        });
+
+        exitButtonTexture = MenuDemo.getAssetManager().get("defaultLevels/exit.png");
+        exitPressedButtonTexture = MenuDemo.getAssetManager().get("defaultLevels/exitPressed.png");
+        ImageButton exit = new ImageButton(new TextureRegionDrawable(new TextureRegion(exitButtonTexture)), new TextureRegionDrawable(new TextureRegion(exitPressedButtonTexture)));
+        exit.setPosition(WORLD_WIDTH/2-exit.getWidth()/2+15, WORLD_HEIGHT/2-(3*exit.getHeight()));
+        exit.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                music.stop();
+                game.setScreen(new StartScreen(game));
+            }
+        });
+
+        stagePause.addActor(pausePanel);
+        stagePause.addActor(resume);
+        stagePause.addActor(settings);
+        stagePause.addActor(restart);
+        stagePause.addActor(exit);
+
+        if(LEVEL == 1)speedNeeded = 25;
+        else if( LEVEL == 2)speedNeeded = 30;
+        else if (LEVEL == 3)speedNeeded = 35;
+        else speedNeeded = 40;
+
         InputMultiplexer multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(stageUI);
         multiplexer.addProcessor(stage);
+        multiplexer.addProcessor(stagePause);
         multiplexer.addProcessor(new GestureDetector(new GestureHandler()));
         Gdx.input.setInputProcessor(multiplexer);
     }
@@ -176,13 +255,26 @@ public class level extends ScreenAdapter {
             stage.act();
             levelTimer+=delta;
             secondsTimer-=delta;
-            chechIfTimeFinish();
+            checkIfTimeFinish();
+            checkIfSpeedReached();
+            if(kiiw.isHit()){
+                nonCollisionTimer = 0;
+            }else{
+                nonCollisionTimer+=delta;
+            }
         }
         clearScreen();
         draw();
     }
 
-    private void chechIfTimeFinish() {
+    private void checkIfSpeedReached() {
+        if(actualSpeed == speedNeeded){
+            game.setScreen(new LevelsScreen(game));
+            dispose();
+        }
+    }
+
+    private void checkIfTimeFinish() {
         if (levelTimer>=120){
             game.setScreen(new LevelsScreen(game));
             dispose();
@@ -196,33 +288,69 @@ public class level extends ScreenAdapter {
         batch.begin();
         kiiw.draw(batch);
         drawObstacle();
+        drawCoin();
+        drawTimerString();
         drawMinuteTimer();
         drawSecondtimer();
         drawCoinsCounter();
+        drawNeededSpeedIndicator();
+        drawActualSpeedIndicator();
         batch.end();
         stageUI.draw();
+        if(state== STATE.PAUSED){
+            stagePause.draw();
+        }
         //drawDebug();
         //Gdx.app.log("Debug", String.valueOf(batch.totalRenderCalls));
     }
 
+    private void drawActualSpeedIndicator() {
+        String actualSpeedAsString = Integer.toString(actualSpeed);
+        glyphLayout.setText(bitmapFont, actualSpeedAsString);
+        bitmapFont.draw(batch, actualSpeedAsString, 25, WORLD_HEIGHT-speedBarTexture.getHeight()-15);
+    }
+
+    private void drawCoin() {
+        for(Coin coin:coins){
+            coin.draw(batch);
+        }
+    }
+
+    private void drawTimerString() {
+        String timerString = "time left";
+        glyphLayout.setText(bitmapFont, timerString);
+        bitmapFont.draw(batch, timerString, 25, 7*viewport.getWorldHeight()/8);
+    }
+
+    private void drawNeededSpeedIndicator() {
+        String speedNeededAsString = Integer.toString(speedNeeded) ;
+        glyphLayout.setText(bitmapFont, speedNeededAsString);
+        bitmapFont.draw(batch, speedNeededAsString, 30+speedBarTexture.getWidth()+20,WORLD_HEIGHT-5 );
+    }
+
     private void drawCoinsCounter() {
-        String coinsAsString = Integer.toString(coins);
+        String coinsAsString = Integer.toString(coinsCounter);
         glyphLayout.setText(bitmapFont, coinsAsString);
-        bitmapFont.draw(batch, coinsAsString, 3*WORLD_WIDTH/5+100, WORLD_HEIGHT-coinsIndicatorTexture.getHeight()+50);
+        bitmapFont.draw(batch, coinsAsString, 3*WORLD_WIDTH/5+145, WORLD_HEIGHT-coinsIndicatorTexture.getHeight()+50);
     }
 
     //https://learning.oreilly.com/library/view/libgdx-game-development/9781785281440/ch05s03.html
 
     private void drawSecondtimer() {
-        String secondsAsString = Integer.toString(seconds);
+        String secondsAsString;
+        if(seconds<10){
+            secondsAsString = "0" + Integer.toString(seconds);
+        }else{
+            secondsAsString = Integer.toString(seconds);
+        }
         glyphLayout.setText(bitmapFont, secondsAsString);
-        bitmapFont.draw(batch, secondsAsString,100, 7 * viewport.getWorldHeight() / 8);
+        bitmapFont.draw(batch, secondsAsString,80, (7 * viewport.getWorldHeight() / 8)-bitmapFont.getCapHeight());
     }
 
     private void drawMinuteTimer() {
         String minutesAsString = Integer.toString(minutes)+ ":";
         glyphLayout.setText(bitmapFont, minutesAsString);
-        bitmapFont.draw(batch, minutesAsString ,50, 7 * viewport.getWorldHeight() / 8);
+        bitmapFont.draw(batch, minutesAsString ,30, (7 * viewport.getWorldHeight() / 8)-bitmapFont.getCapHeight());
     }
 
     private void drawObstacle() {
@@ -238,16 +366,36 @@ public class level extends ScreenAdapter {
     }
 
     private void update(float delta){
-
         updateKiiw(delta);
         updateObstacles(delta);
+        updateCoins(delta);
         updateMinuteTimer();
         updateSecondTimer();
+        updateActualSpeed();
         updateLifesIndicator();
         if (checkForCollision()){
-            restLife();
+            substractLife();
+            substractSpeed();
             kiiw.setHit(true);
         }
+    }
+
+    private void updateActualSpeed() {
+        if(nonCollisionTimer >= 2){
+            actualSpeed++;
+            nonCollisionTimer=0;
+        }
+    }
+
+    private void updateCoins(float delta) {
+        for(Coin coin: coins){
+            coin.update(delta);
+            float speed = coin.getSpeedPerSecond()+actualSpeed/2;
+            coin.setSpeedPerSecond(speed);
+        }
+        checkIfNewCoinIsNeeded();
+        removeCoinIfCollected();
+        removeCoinIfPassed();
     }
 
     private void updateLifesIndicator() {
@@ -259,26 +407,34 @@ public class level extends ScreenAdapter {
         if(kiiw.isHit()){
             for (Obstacle obstacle: obstacles){
                 if(obstacle.grass()){
-                    sumLife();
+                    substractSpeed();
                 }else{
-                    restLife();
+                    substractLife();
+                    substractSpeed();
                 }
             }
         }
 
     }
 
-    private void restLife() {
-        if (lifes<=0)restart();
+    private void substractLife() {
+        if (lifes<=0){
+            music.stop();
+            restart();
+        }
         else{
             lifes--;
-            Gdx.app.log("LOG", String.valueOf(lifes));
         }
     }
 
-    private void sumLife() {
-        lifes++;
-        Gdx.app.log("LOG", String.valueOf(lifes));
+
+    private void substractSpeed() {
+        if(actualSpeed<lowSpeedLimit){
+            music.stop();
+            restart();
+        }else{
+            actualSpeed--;
+        }
     }
 
     private void updateSecondTimer() {
@@ -315,15 +471,14 @@ public class level extends ScreenAdapter {
 
     private void updateKiiw(float delta) {
         kiiw.update(delta);
-
         if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) kiiw.setPosition(WORLD_WIDTH/4, (97* ++padCounter)+kiiw.RADIUS);
         if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) kiiw.setPosition(WORLD_WIDTH/4, (97* --padCounter)+kiiw.RADIUS);
         blockKiiwLeavingTheWorld();
     }
 
 
-
     private void restart() {
+        music.play();
         padCounter = 2;
         levelTimer = 0;
         secondsTimer = 60;
@@ -332,13 +487,16 @@ public class level extends ScreenAdapter {
         kiiw.setPosition(WORLD_WIDTH/4,97*padCounter+kiiw.RADIUS);
         obstacles.clear();
         lifes = 2;
+        coinsCounter = 0;
+        actualSpeed = 0;
+        nonCollisionTimer = 0;
 
     }
 
     private void updateObstacles(float delta) {
         for (Obstacle obstacle : obstacles){
             obstacle.update(delta);
-            float speed = obstacle.getSpeedPerSecond()+LEVEL*(levelTimer/2);
+            float speed = obstacle.getSpeedPerSecond()+actualSpeed/2;
             obstacle.setSpeedPerSecond(speed);
             //Gdx.app.log("LOG", String.valueOf(speed));
         }
@@ -350,6 +508,49 @@ public class level extends ScreenAdapter {
         kiiw.setPosition(kiiw.getX(), MathUtils.clamp(kiiw.getY(),kiiw.getHeigth(),388 + kiiw.RADIUS));
     }
 
+    private void createNewCoin(){
+        coinTexture = MenuDemo.getAssetManager().get("defaultLevels/gamecoin.png");
+        Coin newCoin = new Coin(coinTexture);
+        Random random = new Random();
+        int RandomPad1 = random.nextInt(5);
+        float pad = PADS[RandomPad1];
+        newCoin.setPosition(WORLD_WIDTH+Coin.WIDTH, pad+newCoin.WIDTH/2);
+        coins.add(newCoin);
+    }
+
+    private void checkIfNewCoinIsNeeded(){
+        if(coins.size == 0){
+            createNewCoin();
+        } else{
+            Coin coin = coins.peek();
+            if(coin.getX()<WORLD_WIDTH-GAP_BETWEEN_COINS){
+                createNewCoin();
+            }
+        }
+    }
+
+    private void removeCoinIfPassed(){
+        if(coins.size>0){
+            Coin firstCoin = coins.first();
+            if (firstCoin.getX() < -Coin.WIDTH){
+                coins.removeValue(firstCoin, true);
+            }
+        }
+    }
+
+    private void removeCoinIfCollected(){
+        if (coins.size>0){
+            if(!kiiw.isHit()){
+                for (Coin coin: coins){
+                    if (coin.isKiiwColecting(kiiw)){
+                        coinsCounter++;
+                        coins.removeValue(coin, true);
+                    }
+                }
+            }
+        }
+    }
+
     private void createNewObstacle(){
         Random rnd = new Random();
         int RandomPad = rnd.nextInt(5);
@@ -359,12 +560,12 @@ public class level extends ScreenAdapter {
         if (!isGrass){
             boolean rock = rnd.nextBoolean();
             if(rock){
-                obstacleTexture = new Texture(Gdx.files.internal("level"+LEVEL+"/roca.png"));
+                obstacleTexture = MenuDemo.getAssetManager().get("level"+LEVEL+"/roca.png");
                 obstacleWidth = 166;
                 obstacleHeight = 105;
 
             }else {
-                obstacleTexture = new Texture(Gdx.files.internal("level"+LEVEL+"/arbol.png"));
+                obstacleTexture = MenuDemo.getAssetManager().get("level"+LEVEL+"/arbol.png");
                 if(LEVEL==1) {
                     obstacleWidth = 208;
                     obstacleHeight = 270;
@@ -377,7 +578,7 @@ public class level extends ScreenAdapter {
                 }
             }
         }else{
-            obstacleTexture = new Texture(Gdx.files.internal("level"+LEVEL+"/pasto.png"));
+            obstacleTexture = MenuDemo.getAssetManager().get("level"+LEVEL+"/pasto.png");
             obstacleWidth = 115;
             obstacleHeight = 165;
         }
