@@ -160,8 +160,8 @@ public class level extends ScreenAdapter {
             }
         });
 
-        if(LEVEL == 1)speedNeeded = 15;
-        else if( LEVEL == 2)speedNeeded = 25;
+        if(LEVEL == 1)speedNeeded = 25;
+        else if( LEVEL == 2)speedNeeded = 30;
         else if (LEVEL == 3)speedNeeded = 35;
         else speedNeeded = 40;
 
@@ -306,6 +306,7 @@ public class level extends ScreenAdapter {
         drawCoinsCounter();
         drawNeededSpeedIndicator();
         drawActualSpeedIndicator();
+        drawLifeIndicator();
         batch.end();
 
         shapeRenderer.setProjectionMatrix(camera.projection);
@@ -322,6 +323,12 @@ public class level extends ScreenAdapter {
         }
         //drawDebug();
         //Gdx.app.log("Debug", String.valueOf(batch.totalRenderCalls));
+    }
+
+    private void drawLifeIndicator() {
+        String lifesAsString = Integer.toString(lifes + 1);
+        glyphLayout.setText(bitmapFont, lifesAsString);
+        bitmapFont.draw(batch, lifesAsString, WORLD_WIDTH/2, WORLD_HEIGHT-5);
     }
 
     private void drawActualSpeedIndicator() {
@@ -394,8 +401,12 @@ public class level extends ScreenAdapter {
         updateActualSpeed();
         updateLifesIndicator();
         if (checkForCollision()){
-            substractLife();
-            substractSpeed();
+            if(checkIfIsGrass()){
+                substractSpeed();
+            }else{
+                substractLife();
+                substractSpeed();
+            }
             kiiw.setHit(true);
         }
         updateSpeedBarRectangle();
@@ -428,18 +439,16 @@ public class level extends ScreenAdapter {
         else if(lifes == 0) lifesBarTexture = (Texture) lifeTextures.get(lifes);
     }
 
-    private void checkIfIsGrass() {
-        if(kiiw.isHit()){
+    private boolean checkIfIsGrass() {
+        if(!kiiw.isHit()){
             for (Obstacle obstacle: obstacles){
                 if(obstacle.grass()){
-                    substractSpeed();
-                }else{
-                    substractLife();
-                    substractSpeed();
+                    return true;
                 }
+
             }
         }
-
+        return false;
     }
 
     private void substractLife() {
@@ -449,6 +458,7 @@ public class level extends ScreenAdapter {
         }
         else{
             lifes--;
+            Gdx.app.log("LOG", String.valueOf(lifes));
         }
     }
 
@@ -489,7 +499,6 @@ public class level extends ScreenAdapter {
                 } else {
                     kiiw.setPosition(WORLD_WIDTH / 4, (97 * --padCounter) + kiiw.RADIUS);
                 }
-                Gdx.app.log("LOG: ", String.valueOf(velocityY));
             return false;
         }
     }
@@ -512,10 +521,10 @@ public class level extends ScreenAdapter {
         kiiw.setPosition(WORLD_WIDTH/4,97*padCounter+kiiw.RADIUS);
         obstacles.clear();
         lifes = 2;
+        kiiw.setHit(false);
         coinsCounter = 0;
         actualSpeed = 0;
         nonCollisionTimer = 0;
-
     }
 
     private void updateObstacles(float delta) {
@@ -523,7 +532,6 @@ public class level extends ScreenAdapter {
             obstacle.update(delta);
             float speed = obstacle.getSpeedPerSecond()+actualSpeed/2;
             obstacle.setSpeedPerSecond(speed);
-            //Gdx.app.log("LOG", String.valueOf(speed));
         }
         checkIfNewObstacleNeeded();
         removeObstaclesIfPassed();
@@ -648,12 +656,8 @@ public class level extends ScreenAdapter {
     public void dispose() {
         stage.dispose();
         music.dispose();
-        kiiwTexture.dispose();
-        playButtonTexture.dispose();
-        speedBarTexture.dispose();
-        lifesBarTexture.dispose();
-        coinsIndicatorTexture.dispose();
         stageUI.dispose();
+        stagePause.dispose();
     }
 
 }

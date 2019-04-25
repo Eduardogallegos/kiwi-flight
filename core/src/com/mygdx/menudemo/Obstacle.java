@@ -22,7 +22,7 @@ public class Obstacle {
     private final Rectangle collisionRectangle;
     private float x = 0;
     private float y = 0;
-    private boolean isGrass;
+    private boolean Grass;
     private TextureRegion obstacleTexture;
     private final Animation animation;
     private float animationTimer = 0;
@@ -30,7 +30,7 @@ public class Obstacle {
 
 
     public Obstacle(boolean isGrass, Texture obstacleTexture, int TILE_WIDTH, int TILE_HEIGHT){
-        this.isGrass = isGrass;
+        this.Grass = isGrass;
         this.TILE_WIDTH = TILE_WIDTH;
         this.TILE_HEIGHT = TILE_HEIGHT;
         TextureRegion[][] obstacleTextures = new TextureRegion(obstacleTexture).split(TILE_WIDTH, TILE_HEIGHT);
@@ -82,7 +82,7 @@ public class Obstacle {
     }
 
     public boolean grass(){
-        return isGrass;
+        return Grass;
     }
 
     public float getSpeedPerSecond() {
