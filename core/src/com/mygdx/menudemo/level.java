@@ -587,18 +587,16 @@ public class level extends ScreenAdapter {
     private void createNewObstacle(){
         Random rnd = new Random();
         int RandomPad = rnd.nextInt(5);
-        boolean isGrass = rnd.nextBoolean();
-        int obstacleWidth;
-        int obstacleHeight;
-        if (!isGrass){
-            boolean rock = rnd.nextBoolean();
-            if(rock){
-                obstacleTexture = MenuDemo.getAssetManager().get("level"+LEVEL+"/roca.png");
-                obstacleWidth = 166;
-                obstacleHeight = 105;
-
-            }else {
-                obstacleTexture = MenuDemo.getAssetManager().get("level"+LEVEL+"/arbol.png");
+        int obstacleWidth=166;
+        int obstacleHeight = 105;
+        int obstacleType = rnd.nextInt(3);
+        boolean isGrass = false;
+        switch (obstacleType){
+            case 0:
+                obstacleTexture = new Texture(Gdx.files.internal("level"+LEVEL+"/roca.png"));
+                break;
+            case 1:
+                obstacleTexture = new Texture(Gdx.files.internal("level"+LEVEL+"/arbol.png"));
                 if(LEVEL==1) {
                     obstacleWidth = 208;
                     obstacleHeight = 270;
@@ -609,11 +607,13 @@ public class level extends ScreenAdapter {
                     obstacleWidth = 480;
                     obstacleHeight=258;
                 }
-            }
-        }else{
-            obstacleTexture = MenuDemo.getAssetManager().get("level"+LEVEL+"/pasto.png");
-            obstacleWidth = 115;
-            obstacleHeight = 165;
+                break;
+            case 2:
+                obstacleTexture = new Texture(Gdx.files.internal("level"+LEVEL+"/pasto.png"));
+                obstacleWidth = 116;
+                obstacleHeight=170;
+                isGrass=true;
+                break;
         }
         Obstacle newObstacle = new Obstacle(isGrass, obstacleTexture, obstacleWidth, obstacleHeight);
         float y = PADS[RandomPad];
