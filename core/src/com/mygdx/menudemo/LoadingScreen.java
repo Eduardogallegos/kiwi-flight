@@ -65,6 +65,11 @@ public class LoadingScreen extends ScreenAdapter {
         menuDemo.getAssetManager().load("level"+LEVEL+"/arbol.png", Texture.class);
         menuDemo.getAssetManager().load("level"+LEVEL+"/pasto.png", Texture.class);
         menuDemo.getAssetManager().load("defaultLevels/gamecoin.png", Texture.class);
+        menuDemo.getAssetManager().load("defaultLevels/gameOverPanel.png", Texture.class);
+        menuDemo.getAssetManager().load("defaultLevels/yes.png", Texture.class);
+        menuDemo.getAssetManager().load("defaultLevels/yesPressed.png", Texture.class);
+        menuDemo.getAssetManager().load("defaultLevels/no.png", Texture.class);
+        menuDemo.getAssetManager().load("defaultLevels/noPressed.png", Texture.class);
 
     }
 

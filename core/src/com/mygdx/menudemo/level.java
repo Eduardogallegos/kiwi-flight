@@ -91,11 +91,16 @@ public class level extends ScreenAdapter {
 
     private Rectangle speedBarRectangle;
     private float speedBarChunkSize = DEFAULT_CHUNCK_SIZE;
-
-    //private final AssetManager assetManager = new AssetManager();
+    private Stage stageWin;
+    private Stage stageGameOver;
+    private Texture gameOverPanelTexture;
+    private Texture yesButtonTexture;
+    private Texture yesPressedButtonTexture;
+    private Texture noButtonTexture;
+    private Texture noPressedButtonTexture;
 
     private enum STATE {
-        PLAYING, PAUSED
+        PLAYING, PAUSED, GAMEOVER, WIN
     }
     private STATE state = STATE.PLAYING;
 
@@ -222,7 +227,7 @@ public class level extends ScreenAdapter {
 
         restartButtonTexture = MenuDemo.getAssetManager().get("defaultLevels/restart.png");
         restartPressedButtonTexture = MenuDemo.getAssetManager().get("defaultLevels/restartPressed.png");
-        ImageButton restart = new ImageButton(new TextureRegionDrawable(new TextureRegion(restartButtonTexture)), new TextureRegionDrawable(new TextureRegion(restartPressedButtonTexture)));
+        final ImageButton restart = new ImageButton(new TextureRegionDrawable(new TextureRegion(restartButtonTexture)), new TextureRegionDrawable(new TextureRegion(restartPressedButtonTexture)));
         restart.setPosition(WORLD_WIDTH/2-restart.getWidth()/2+15, WORLD_HEIGHT/2-(2*restart.getHeight())+20);
         restart.addListener(new ClickListener() {
             @Override
@@ -245,6 +250,41 @@ public class level extends ScreenAdapter {
             }
         });
 
+        stageWin = new Stage(viewportHUD);
+
+        stageGameOver = new Stage(viewportHUD);
+        gameOverPanelTexture = MenuDemo.getAssetManager().get("defaultLevels/gameOverPanel.png");
+        Image gameOverPanel = new Image(gameOverPanelTexture);
+
+        yesButtonTexture = MenuDemo.getAssetManager().get("defaultLevels/yes.png");
+        yesPressedButtonTexture = MenuDemo.getAssetManager().get("defaultLevels/yesPressed.png");
+        ImageButton retry = new ImageButton(new TextureRegionDrawable(new TextureRegion(yesButtonTexture)), new TextureRegionDrawable(new TextureRegion(yesPressedButtonTexture)));
+        retry.setPosition(WORLD_WIDTH/2-290, WORLD_HEIGHT/2-75);
+        retry.addListener(new ClickListener(){
+           @Override
+           public void clicked(InputEvent event, float x, float y){
+               music.stop();
+               state = STATE.PLAYING;
+               restart();
+           }
+        });
+
+        noButtonTexture = MenuDemo.getAssetManager().get("defaultLevels/no.png");
+        noPressedButtonTexture = MenuDemo.getAssetManager().get("defaultLevels/noPressed.png");
+        ImageButton noRetry = new ImageButton(new TextureRegionDrawable(new TextureRegion(noButtonTexture)), new TextureRegionDrawable(new TextureRegion(noPressedButtonTexture)));
+        noRetry.setPosition(WORLD_WIDTH/2+30, WORLD_HEIGHT/2-75);
+        noRetry.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                music.stop();
+                game.setScreen(new StartScreen(game));
+            }
+        });
+
+        stageGameOver.addActor(gameOverPanel);
+        stageGameOver.addActor(retry);
+        stageGameOver.addActor(noRetry);
+
         stagePause.addActor(pausePanel);
         stagePause.addActor(resume);
         stagePause.addActor(settings);
@@ -255,6 +295,7 @@ public class level extends ScreenAdapter {
         multiplexer.addProcessor(stageUI);
         multiplexer.addProcessor(stage);
         multiplexer.addProcessor(stagePause);
+        multiplexer.addProcessor(stageGameOver);
         multiplexer.addProcessor(new GestureDetector(new GestureHandler()));
         Gdx.input.setInputProcessor(multiplexer);
     }
@@ -280,14 +321,14 @@ public class level extends ScreenAdapter {
 
     private void checkIfSpeedReached() {
         if(actualSpeed == speedNeeded){
-            game.setScreen(new LevelsScreen(game));
+            state = STATE.WIN;
             dispose();
         }
     }
 
     private void checkIfTimeFinish() {
         if (levelTimer>=120){
-            game.setScreen(new LevelsScreen(game));
+            state = STATE.GAMEOVER;
             dispose();
         }
     }
@@ -321,8 +362,9 @@ public class level extends ScreenAdapter {
         if(state== STATE.PAUSED){
             stagePause.draw();
         }
-        //drawDebug();
-        //Gdx.app.log("Debug", String.valueOf(batch.totalRenderCalls));
+        if (state == STATE.GAMEOVER){
+            stageGameOver.draw();
+        }
     }
 
     private void drawLifeIndicator() {
@@ -452,7 +494,7 @@ public class level extends ScreenAdapter {
     private void substractLife() {
         if (lifes<=0){
             music.stop();
-            restart();
+            state = STATE.GAMEOVER;
         }
         else{
             lifes--;
@@ -462,12 +504,12 @@ public class level extends ScreenAdapter {
 
 
     private void substractSpeed() {
-        if(actualSpeed<=lowSpeedLimit){
+        /*if(actualSpeed<=lowSpeedLimit){
             music.stop();
             restart();
-        }else{
+        }else{*/
             actualSpeed--;
-        }
+
     }
 
     private void updateSecondTimer() {
@@ -517,6 +559,7 @@ public class level extends ScreenAdapter {
         seconds = 0;
         kiiw.setPosition(WORLD_WIDTH/4,97*padCounter+kiiw.RADIUS);
         obstacles.clear();
+        coins.clear();
         lifes = 2;
         kiiw.setHit(false);
         coinsCounter = 0;

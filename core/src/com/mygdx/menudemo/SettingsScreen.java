@@ -2,6 +2,7 @@ package com.mygdx.menudemo;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.audio.Music;
@@ -11,6 +12,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
@@ -23,6 +25,8 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 
 class SettingsScreen extends ScreenAdapter {
 
+    private static final float MUSIC_VOLUME_DEFAULT = 1;
+    private static final float EFFECTS_VOLUME_DEFAULT = 1;
     private final Game game;
     private static final float WORLD_WIDTH = 1280;
     private static final float WORLD_HEIGHT = 720;
@@ -40,6 +44,9 @@ class SettingsScreen extends ScreenAdapter {
     private Table table;
 
     private Music music;
+    private Preferences preferences;
+    private float musicVolume;
+    private float effectsVolume;
 
 
     public SettingsScreen(Game game) {
@@ -49,6 +56,9 @@ class SettingsScreen extends ScreenAdapter {
 
     @Override
     public void show() {
+        preferences = Gdx.app.getPreferences(SettingsScreen.class.getName());
+        loadPreferences();
+
         super.show();
         stage = new Stage(new FitViewport(WORLD_WIDTH, WORLD_HEIGHT));
         Gdx.input.setInputProcessor(stage);
@@ -88,7 +98,30 @@ class SettingsScreen extends ScreenAdapter {
         ss.knob = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("settings/slider_knob.png"))));
 
         musicSlider = new Slider(0f, 100f, 1f, false, ss);
+        musicSlider.addListener(new InputListener(){
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button){
+                musicVolume = musicSlider.getValue();
+                Gdx.app.log("EVENT", "slider changed to " + musicSlider.getValue());
+            }
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button){
+                return true;
+            }
+        });
+
         soundSlider = new Slider(0f, 100f, 1f, false, ss);
+        soundSlider.addListener(new InputListener(){
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button){
+                effectsVolume = soundSlider.getValue();
+                Gdx.app.log("EVENT", "slider changed to " + soundSlider.getValue());
+            }
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button){
+                return true;
+            }
+        });
 
         table = new Table();
         table.pad(20);
@@ -113,6 +146,14 @@ class SettingsScreen extends ScreenAdapter {
 
     }
 
+    private void loadPreferences() {
+        musicVolume = preferences.getFloat("musicVolume", MUSIC_VOLUME_DEFAULT);
+        Gdx.app.log("LOG:","Music volume: " +  musicVolume + "/100");
+
+        effectsVolume = preferences.getFloat("effectsVolume", EFFECTS_VOLUME_DEFAULT);
+        Gdx.app.log("LOG:","Effects volume: " + effectsVolume + "/100");
+    }
+
     @Override
     public void resize(int width, int height) {
         super.resize(width, height);
@@ -120,11 +161,32 @@ class SettingsScreen extends ScreenAdapter {
     }
 
     @Override
+    public void pause(){
+        //se guardan las preferencias antes de salir
+        savePreferences();
+    }
+
+    private void savePreferences() {
+        preferences.putFloat("musicVolume", musicVolume);
+        Gdx.app.log("LOG:","Music volume: " +  musicVolume + "/100");
+
+        preferences.putFloat("effectsVolume", effectsVolume);
+        Gdx.app.log("LOG:","Effects volume: " + effectsVolume + "/100");
+
+        preferences.flush();
+    }
+
+    @Override
     public void render(float delta) {
         super.render(delta);
         clearScreen();
+        updateVolume();
         stage.act(delta);
         stage.draw();
+    }
+
+    private void updateVolume() {
+        music.setVolume(musicVolume);
     }
 
     @Override
@@ -132,8 +194,6 @@ class SettingsScreen extends ScreenAdapter {
         super.dispose();
         stage.dispose();
         backgroundTexture.dispose();
-        //playTexture.dispose();
-        //playPressTexture.dispose();
         titleTexture.dispose();
         music.dispose();
         returnTexture.dispose();
