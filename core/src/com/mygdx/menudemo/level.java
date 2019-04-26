@@ -42,7 +42,7 @@ public class level extends ScreenAdapter {
 
     private float[] PADS = {0,97,194,291,388};
     private Array<Obstacle> obstacles = new Array<Obstacle>();
-    private Array<Object> lifeTextures = new Array<Object>();
+    private Array<Texture> lifeTextures = new Array<Texture>();
     private Array<Coin> coins = new Array<Coin>();
     private ShapeRenderer shapeRenderer;
     private Viewport viewport;
@@ -177,7 +177,7 @@ public class level extends ScreenAdapter {
         speedBarRectangle.width = 0;
 
         for(int i = 0; i <=2;i++){
-            lifeTextures.add(MenuDemo.getAssetManager().get("defaultLevels/lifes"+i+".png"));
+            lifeTextures.add((Texture) MenuDemo.getAssetManager().get("defaultLevels/lifes"+i+".png"));
         }
         lifesBarTexture = (Texture) lifeTextures.get(lifes);
         Image lifesBar = new Image(lifesBarTexture);
@@ -400,16 +400,27 @@ public class level extends ScreenAdapter {
         updateSecondTimer();
         updateActualSpeed();
         updateLifesIndicator();
-        if (checkForCollision()){
-            if(checkIfIsGrass()){
+
+        handleCollisions();
+
+        updateSpeedBarRectangle();
+    }
+
+    private void handleCollisions() {
+
+        Obstacle culprit = checkForCollision();
+
+        if (culprit != null){
+            if(culprit.isGrass()){
                 substractSpeed();
+                Gdx.app.log("LOG: ", "Collided with grass!!!");
             }else{
                 substractLife();
                 substractSpeed();
             }
+
             kiiw.setHit(true);
         }
-        updateSpeedBarRectangle();
     }
 
     private void updateSpeedBarRectangle() {
@@ -435,20 +446,7 @@ public class level extends ScreenAdapter {
     }
 
     private void updateLifesIndicator() {
-        if (lifes == 1) lifesBarTexture = (Texture) lifeTextures.get(lifes);
-        else if(lifes == 0) lifesBarTexture = (Texture) lifeTextures.get(lifes);
-    }
-
-    private boolean checkIfIsGrass() {
-        if(!kiiw.isHit()){
-            for (Obstacle obstacle: obstacles){
-                if(obstacle.grass()){
-                    return true;
-                }
-
-            }
-        }
-        return false;
+            lifesBarTexture = (Texture) lifeTextures.get(lifes);
     }
 
     private void substractLife() {
@@ -489,7 +487,6 @@ public class level extends ScreenAdapter {
             minutes = 2;
         }
     }
-
 
     private class GestureHandler extends GestureDetector.GestureAdapter {
         @Override
@@ -641,15 +638,16 @@ public class level extends ScreenAdapter {
         }
     }
 
-    private  boolean checkForCollision(){
+    // returns the colliding obstacle or null if not colliding
+    private  Obstacle checkForCollision(){
         if(!kiiw.isHit()){
             for (Obstacle obstacle : obstacles){
                 if (obstacle.isKiiwColliding(kiiw)){
-                    return true;
+                    return obstacle;
                 }
             }
         }
-        return false;
+        return null;
     }
 
     @Override
