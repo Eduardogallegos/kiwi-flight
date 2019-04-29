@@ -1,8 +1,6 @@
 package com.mygdx.menudemo;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -18,7 +16,7 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.run;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 
 public class TransitionScreen extends ScreenAdapter {
-   private final Game game;
+   private final MenuDemo menuDemo;
    private static final float WORLD_WIDTH=1280;
    private static final float WORLD_HEIGHT=720;
 
@@ -26,8 +24,8 @@ public class TransitionScreen extends ScreenAdapter {
    private Texture backgroundTexture;
    private Texture logoTexture;
 
-   public TransitionScreen(Game game){
-       this.game=game;
+   public TransitionScreen(MenuDemo menuDemo){
+       this.menuDemo =menuDemo;
    }
 
    public void show(){
@@ -49,7 +47,7 @@ public class TransitionScreen extends ScreenAdapter {
        logo.addAction(sequence(delay(4), fadeIn(1),delay(2), fadeOut(1), run(new Runnable() {
            @Override
            public void run() {
-               game.setScreen(new StartScreen(game));
+               menuDemo.setScreen(new StartScreen(menuDemo));
                dispose();
            }
        })));

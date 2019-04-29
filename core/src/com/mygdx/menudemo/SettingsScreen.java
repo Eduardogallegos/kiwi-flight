@@ -1,22 +1,18 @@
 package com.mygdx.menudemo;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
@@ -27,7 +23,7 @@ class SettingsScreen extends ScreenAdapter {
 
     private static final float MUSIC_VOLUME_DEFAULT = 1;
     private static final float EFFECTS_VOLUME_DEFAULT = 1;
-    private final Game game;
+    private final MenuDemo menuDemo;
     private static final float WORLD_WIDTH = 1280;
     private static final float WORLD_HEIGHT = 720;
 
@@ -44,19 +40,20 @@ class SettingsScreen extends ScreenAdapter {
     private Table table;
 
     private Music music;
-    private Preferences preferences;
     private float musicVolume;
     private float effectsVolume;
 
+    private Preferences preferencias;
 
-    public SettingsScreen(Game game) {
-        this.game=game;
+
+    public SettingsScreen(MenuDemo game) {
+        this.menuDemo =game;
+        this.preferencias = menuDemo.getPreferences();
     }
 
 
     @Override
     public void show() {
-        preferences = Gdx.app.getPreferences(SettingsScreen.class.getName());
         loadPreferences();
 
         super.show();
@@ -88,7 +85,8 @@ class SettingsScreen extends ScreenAdapter {
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 music.stop();
                 super.tap(event, x, y, count, button);
-                game.setScreen(new StartScreen(game));
+                savePreferences();
+                menuDemo.setScreen(new StartScreen(menuDemo));
                 dispose();
             }
         });
@@ -97,7 +95,7 @@ class SettingsScreen extends ScreenAdapter {
         ss.background = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("settings/sliderbarraajustes.png"))));
         ss.knob = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("settings/slider_knob.png"))));
 
-        musicSlider = new Slider(0f, 100f, 1f, false, ss);
+        musicSlider = new Slider(0f, 1f, 0.1f, false, ss);
         musicSlider.addListener(new InputListener(){
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button){
@@ -110,7 +108,7 @@ class SettingsScreen extends ScreenAdapter {
             }
         });
 
-        soundSlider = new Slider(0f, 100f, 1f, false, ss);
+        soundSlider = new Slider(0f, 1f, 0.1f, false, ss);
         soundSlider.addListener(new InputListener(){
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button){
@@ -147,10 +145,10 @@ class SettingsScreen extends ScreenAdapter {
     }
 
     private void loadPreferences() {
-        musicVolume = preferences.getFloat("musicVolume", MUSIC_VOLUME_DEFAULT);
+        musicVolume = preferencias.getFloat("musicVolume", MUSIC_VOLUME_DEFAULT);
         Gdx.app.log("LOG:","Music volume: " +  musicVolume + "/100");
 
-        effectsVolume = preferences.getFloat("effectsVolume", EFFECTS_VOLUME_DEFAULT);
+        effectsVolume = preferencias.getFloat("effectsVolume", EFFECTS_VOLUME_DEFAULT);
         Gdx.app.log("LOG:","Effects volume: " + effectsVolume + "/100");
     }
 
@@ -167,13 +165,13 @@ class SettingsScreen extends ScreenAdapter {
     }
 
     private void savePreferences() {
-        preferences.putFloat("musicVolume", musicVolume);
+        preferencias.putFloat("musicVolume", musicVolume);
         Gdx.app.log("LOG:","Music volume: " +  musicVolume + "/100");
 
-        preferences.putFloat("effectsVolume", effectsVolume);
+        preferencias.putFloat("effectsVolume", effectsVolume);
         Gdx.app.log("LOG:","Effects volume: " + effectsVolume + "/100");
 
-        preferences.flush();
+        preferencias.flush();
     }
 
     @Override

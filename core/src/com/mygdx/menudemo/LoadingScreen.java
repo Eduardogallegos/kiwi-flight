@@ -45,6 +45,11 @@ public class LoadingScreen extends ScreenAdapter {
         viewport = new FitViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
         shapeRenderer = new ShapeRenderer();
         menuDemo.getAssetManager().load("level"+LEVEL+"/song.mp3", Music.class);
+        menuDemo.getAssetManager().load("defaultLevels/coin.mp3", Music.class);
+        menuDemo.getAssetManager().load("defaultLevels/hit.mp3", Music.class);
+        menuDemo.getAssetManager().load("defaultLevels/KiiwLose.mp3", Music.class);
+        menuDemo.getAssetManager().load("defaultLevels/KiiwWin.mp3", Music.class);
+        menuDemo.getAssetManager().load("defaultLevels/Kiwhine.mp3", Music.class);
         menuDemo.getAssetManager().load("defaultLevels/RunningKiwi.png", Texture.class);
         menuDemo.getAssetManager().load("defaultLevels/pausa.png", Texture.class);
         menuDemo.getAssetManager().load("defaultLevels/Barra.png", Texture.class);

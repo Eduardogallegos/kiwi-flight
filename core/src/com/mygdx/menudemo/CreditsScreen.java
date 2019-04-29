@@ -1,8 +1,7 @@
 package com.mygdx.menudemo;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
@@ -20,7 +19,8 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 
 class CreditsScreen extends ScreenAdapter {
 
-    private final Game game;
+    private static final float MUSIC_VOLUME_DEFAULT = 1;
+    private final MenuDemo menuDemo;
     private static final float WORLD_WIDTH = 1280;
     private static final float WORLD_HEIGHT = 720;
 
@@ -32,13 +32,17 @@ class CreditsScreen extends ScreenAdapter {
     private Table table;
     private Texture kiwiImage;
     private Music music;
+    private float musicVolume;
+    private Preferences preferencias;
 
-    public CreditsScreen(Game game) {
-        this.game=game;
+    public CreditsScreen(MenuDemo menuDemo) {
+        this.menuDemo = menuDemo;
+        this.preferencias= menuDemo.getPreferences();
     }
 
     @Override
     public void show() {
+        loadPreferences();
         super.show();
 
         stage = new Stage(new FitViewport(WORLD_WIDTH, WORLD_HEIGHT));
@@ -63,7 +67,7 @@ class CreditsScreen extends ScreenAdapter {
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 music.stop();
                 super.tap(event, x, y, count, button);
-                game.setScreen(new StartScreen(game));
+                menuDemo.setScreen(new StartScreen(menuDemo));
                 dispose();
             }
         });
@@ -81,6 +85,11 @@ class CreditsScreen extends ScreenAdapter {
 
     }
 
+    private void loadPreferences() {
+        musicVolume = preferencias.getFloat("musicVolume", MUSIC_VOLUME_DEFAULT);
+        Gdx.app.log("LOG:","Music volume: " +  musicVolume + "/100");
+    }
+
     @Override
     public void resize(int width, int height) {
         super.resize(width, height);
@@ -91,8 +100,13 @@ class CreditsScreen extends ScreenAdapter {
     public void render(float delta) {
         super.render(delta);
         clearScreen();
+        updateVolume();
         stage.act(delta);
         stage.draw();
+    }
+
+    private void updateVolume() {
+        music.setVolume(musicVolume);
     }
 
     @Override

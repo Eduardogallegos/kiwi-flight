@@ -1,8 +1,7 @@
 package com.mygdx.menudemo;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
@@ -20,13 +19,13 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 
 class ShopScreen extends ScreenAdapter {
 
-    private final Game game;
+    private static final float MUSIC_VOLUME_DEFAULT = 1;
+    private final MenuDemo menuDemo;
     private static final float WORLD_WIDTH = 1280;
     private static final float WORLD_HEIGHT = 720;
 
     private Stage stage;
     private Texture backgroundTexture;
-    //private Texture titleTexture;
     private Texture returnTexture;
     private Texture returnPressTexture;
     private Table table;
@@ -34,12 +33,16 @@ class ShopScreen extends ScreenAdapter {
     private Texture codePressTexture;
 
     private Music music;
+    private Preferences preferencias;
+    private float musicVolume;
 
-    public ShopScreen(Game game) {
-        this.game=game;
+    public ShopScreen(MenuDemo menuDemo) {
+        this.menuDemo =menuDemo;
+        this.preferencias = menuDemo.getPreferences();
     }
 
     public void show() {
+        loadPreferences();
         super.show();
         stage = new Stage(new FitViewport(WORLD_WIDTH, WORLD_HEIGHT));
         Gdx.input.setInputProcessor(stage);
@@ -61,7 +64,7 @@ class ShopScreen extends ScreenAdapter {
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 music.stop();
                 super.tap(event, x, y, count, button);
-                game.setScreen(new StartScreen(game));
+                menuDemo.setScreen(new StartScreen(menuDemo));
                 dispose();
             }
         });
@@ -74,7 +77,7 @@ class ShopScreen extends ScreenAdapter {
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 music.stop();
                 super.tap(event, x, y, count, button);
-                game.setScreen(new StartScreen(game));
+                menuDemo.setScreen(new StartScreen(menuDemo));
                 dispose();
             }
         });
@@ -96,6 +99,11 @@ class ShopScreen extends ScreenAdapter {
         stage.addActor(table);
     }
 
+    private void loadPreferences() {
+        musicVolume = preferencias.getFloat("musicVolume", MUSIC_VOLUME_DEFAULT);
+        Gdx.app.log("LOG:","Music volume: " +  musicVolume + "/100");
+    }
+
     @Override
     public void resize(int width, int height) {
         super.resize(width, height);
@@ -106,8 +114,13 @@ class ShopScreen extends ScreenAdapter {
     public void render(float delta) {
         super.render(delta);
         clearScreen();
+        updateVolume();
         stage.act(delta);
         stage.draw();
+    }
+
+    private void updateVolume() {
+        music.setVolume(musicVolume);
     }
 
     @Override
