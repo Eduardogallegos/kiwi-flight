@@ -89,7 +89,7 @@ public class level extends ScreenAdapter {
     private Texture exitPressedButtonTexture;
     private int speedNeeded;
     private Texture coinTexture;
-    private int lowSpeedLimit = 0;
+    private int lowSpeedLimit = 15;
 
     private Rectangle speedBarRectangle;
     private float speedBarChunkSize = DEFAULT_CHUNCK_SIZE;
@@ -108,6 +108,8 @@ public class level extends ScreenAdapter {
     private Music loseEffect;
     private Music loseMusic;
     private Music winEffect;
+    private int bgImagesNumber = 5;
+    private boolean bossLevel = false;
 
     private enum STATE {
         PLAYING, PAUSED, GAMEOVER, WIN
@@ -118,7 +120,6 @@ public class level extends ScreenAdapter {
         this.menuDemo = menuDemo;
         this.LEVEL = level;
         this.preferencias = menuDemo.getPreferences();
-
     }
 
     @Override
@@ -144,22 +145,32 @@ public class level extends ScreenAdapter {
         music.setLooping(true);
         music.play();
 
-        hitEffect = MenuDemo.getAssetManager().get("defaultLevels/hit.mp3", Music.class);
+        hitEffect = MenuDemo.getAssetManager().get("defaultLevels/hit.mp3");
 
-        coinEffect = menuDemo.getAssetManager().get("defaultLevels/coin.mp3", Music.class);
+        coinEffect = menuDemo.getAssetManager().get("defaultLevels/coin.mp3");
 
-        loseEffect = menuDemo.getAssetManager().get("defaultLevels/Kiwhine.mp3", Music.class);
-        loseMusic = menuDemo.getAssetManager().get("defaultLevels/KiiwLose.mp3", Music.class);
+        loseEffect = menuDemo.getAssetManager().get("defaultLevels/Kiwhine.mp3");
+        loseMusic = menuDemo.getAssetManager().get("defaultLevels/KiiwLose.mp3");
 
-        winEffect = menuDemo.getAssetManager().get("defaultLevels/KiiwWin.mp3", Music.class);
+        winEffect = menuDemo.getAssetManager().get("defaultLevels/KiiwWin.mp3");
 
         shapeRenderer = new ShapeRenderer();
         batch = new SpriteBatch();
-        kiiwTexture = menuDemo.getAssetManager().get("defaultLevels/RunningKiwi.png");
-        kiiw = new Kiiw(kiiwTexture);
+        if (!bossLevel){
+            kiiwTexture = menuDemo.getAssetManager().get("defaultLevels/RunningKiwi.png");
+
+        }else{
+            kiiwTexture = menuDemo.getAssetManager().get("level4/FlyingKiwi.png");
+        }
+        kiiw = new Kiiw(kiiwTexture, bossLevel);
         kiiw.setPosition(WORLD_WIDTH/4,97*padCounter+kiiw.RADIUS);
+
+        if(LEVEL==4){
+            bgImagesNumber = 3;
+            bossLevel = true;
+        }
         Array<Texture> textures = new Array<Texture>();
-        for(int i = 1; i <=5;i++){
+        for(int i = 1; i <=bgImagesNumber;i++){
             textures.add(new Texture(Gdx.files.internal("level"+LEVEL+"/BG"+i+".png")));
             textures.get(textures.size-1).setWrap(Texture.TextureWrap.MirroredRepeat, Texture.TextureWrap.MirroredRepeat);
         }
@@ -382,8 +393,8 @@ public class level extends ScreenAdapter {
         batch.setTransformMatrix(camera.view);
         batch.begin();
         kiiw.draw(batch);
-        drawObstacle();
         drawCoin();
+        drawObstacle();
         drawTimerString();
         drawMinuteTimer();
         drawSecondtimer();
@@ -556,12 +567,12 @@ public class level extends ScreenAdapter {
 
 
     private void substractSpeed() {
-        /*if(actualSpeed<=lowSpeedLimit){
+        if(actualSpeed<=lowSpeedLimit && bossLevel){
             music.stop();
-            restart();
-        }else{*/
+            state = STATE.GAMEOVER;
+        }else {
             actualSpeed--;
-
+        }
     }
 
     private void updateSecondTimer() {
@@ -685,13 +696,17 @@ public class level extends ScreenAdapter {
     private void createNewObstacle(){
         Random rnd = new Random();
         int RandomPad = rnd.nextInt(5);
-        int obstacleWidth=166;
+        int obstacleWidth=160;
         int obstacleHeight = 105;
         int obstacleType = rnd.nextInt(3);
         boolean isGrass = false;
         switch (obstacleType){
             case 0:
                 obstacleTexture = new Texture(Gdx.files.internal("level"+LEVEL+"/roca.png"));
+                if(bossLevel){
+                    obstacleWidth = 170;
+                    obstacleHeight = 170;
+                }
                 break;
             case 1:
                 obstacleTexture = new Texture(Gdx.files.internal("level"+LEVEL+"/arbol.png"));
@@ -701,19 +716,27 @@ public class level extends ScreenAdapter {
                 }else if(LEVEL == 2) {
                     obstacleWidth = 135;
                     obstacleHeight = 256;
-                }else{
+                }else if(LEVEL == 3){
                     obstacleWidth = 480;
                     obstacleHeight=258;
+                }else{
+                    obstacleWidth = 170;
+                    obstacleHeight = 170;
                 }
                 break;
             case 2:
                 obstacleTexture = new Texture(Gdx.files.internal("level"+LEVEL+"/pasto.png"));
-                obstacleWidth = 116;
-                obstacleHeight=170;
+                if(bossLevel){
+                    obstacleWidth = 170;
+                    obstacleHeight = 102;
+                }else{
+                    obstacleWidth = 116;
+                    obstacleHeight=170;
+                }
                 isGrass=true;
                 break;
         }
-        Obstacle newObstacle = new Obstacle(isGrass, obstacleTexture, obstacleWidth, obstacleHeight);
+        Obstacle newObstacle = new Obstacle(bossLevel, isGrass, obstacleTexture, obstacleWidth, obstacleHeight);
         float y = PADS[RandomPad];
         newObstacle.setPosition(WORLD_WIDTH + Obstacle.WIDTH,  y + newObstacle.WIDTH/2);
         obstacles.add(newObstacle);

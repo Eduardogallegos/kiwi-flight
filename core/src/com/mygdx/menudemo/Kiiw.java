@@ -26,16 +26,25 @@ public class Kiiw {
     private float animationTimer = 0;
     private float hitTimer = 1;
     private boolean isHit = false;
+    private boolean bossLevel = false;
 
-    public Kiiw(Texture kiiwTexture) {
-        TextureRegion [][] kiiwTextures = new TextureRegion(kiiwTexture).split(TILE_WIDTH, TILE_HEIGHT);
-        animation = new Animation(FRAME_DURATION, kiiwTextures[0][0], kiiwTextures[0][1],kiiwTextures[0][2],kiiwTextures[0][3]);
-        animation.setPlayMode(Animation.PlayMode.LOOP);
+    public Kiiw(Texture kiiwTexture, boolean bossLevel) {
+        this.bossLevel = bossLevel;
+        if(!bossLevel){
+            TextureRegion [][] kiiwTextures = new TextureRegion(kiiwTexture).split(TILE_WIDTH, TILE_HEIGHT);
+            animation = new Animation(FRAME_DURATION, kiiwTextures[0][0], kiiwTextures[0][1],kiiwTextures[0][2],kiiwTextures[0][3]);
+            animation.setPlayMode(Animation.PlayMode.LOOP);
+        }else{
+            TextureRegion [][] kiiwTextures = new TextureRegion(kiiwTexture).split(TILE_WIDTH, TILE_HEIGHT);
+            animation = new Animation(FRAME_DURATION, kiiwTextures[0][0], kiiwTextures[0][1]);
+            animation.setPlayMode(Animation.PlayMode.LOOP);
+        }
+
         collisionCircle = new Circle(x,y, COLLISION_RADIUS);
     }
 
     public void draw(SpriteBatch batch){
-        TextureRegion kiiwTexture = (TextureRegion) animation.getKeyFrame(animationTimer);
+        kiiwTexture = (TextureRegion) animation.getKeyFrame(animationTimer);
         float textureX = collisionCircle.x - kiiwTexture.getRegionWidth()/2;
         float textureY = collisionCircle.y ;
 

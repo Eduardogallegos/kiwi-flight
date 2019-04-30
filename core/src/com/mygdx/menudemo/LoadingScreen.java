@@ -75,7 +75,7 @@ public class LoadingScreen extends ScreenAdapter {
         menuDemo.getAssetManager().load("defaultLevels/yesPressed.png", Texture.class);
         menuDemo.getAssetManager().load("defaultLevels/no.png", Texture.class);
         menuDemo.getAssetManager().load("defaultLevels/noPressed.png", Texture.class);
-
+        menuDemo.getAssetManager().load("level4/FlyingKiwi.png", Texture.class);
     }
 
     @Override

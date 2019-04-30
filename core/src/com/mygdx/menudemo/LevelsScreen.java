@@ -4,13 +4,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
@@ -20,6 +23,9 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 class LevelsScreen extends ScreenAdapter {
 
     private static final float MUSIC_VOLUME_DEFAULT = 1;
+    private static final float FRAME_DURATION = 0.1F;
+    private static final int TILE_WIDTH = 1275;
+    private static final int TILE_HEIGHT = 710;
     private final MenuDemo menuDemo;
     private static final float WORLD_WIDTH = 1280;
     private static final float WORLD_HEIGHT = 720;
@@ -27,7 +33,6 @@ class LevelsScreen extends ScreenAdapter {
     private Stage stage;
 
     private Texture backgroundTexture;
-    private Texture titleTexture;
     private Texture levelOneTexture;
     private Texture levelOnePressTexture;
 
@@ -44,6 +49,11 @@ class LevelsScreen extends ScreenAdapter {
     private Music music;
     private float musicVolume;
     private Preferences preferencias;
+    private Animation animation;
+    private TextureRegion background;
+    private float animationTimer = 0;
+    private SpriteBatch batch;
+    private Camera camera;
 
     public LevelsScreen(MenuDemo menuDemo) {
         this.menuDemo =menuDemo;
@@ -54,6 +64,10 @@ class LevelsScreen extends ScreenAdapter {
     public void show(){
         loadPreferences();
         super.show();
+        batch = new SpriteBatch();
+        camera = new OrthographicCamera();
+        camera.position.set(WORLD_WIDTH / 2, WORLD_HEIGHT / 2, camera.position.z);
+        camera.update();
         stage = new Stage(new FitViewport(WORLD_WIDTH, WORLD_HEIGHT));
         Gdx.input.setInputProcessor(stage);
 
@@ -62,11 +76,9 @@ class LevelsScreen extends ScreenAdapter {
         music.play();
 
         backgroundTexture = new Texture(Gdx.files.internal("levels/fondo.png"));
-        Image background = new Image(backgroundTexture);
-        stage.addActor(background);
-
-        //titleTexture = new Texture(Gdx.files.internal("MenuLogo.png"));
-        //Image title = new Image(titleTexture);
+        TextureRegion [][] bgTextures = new TextureRegion(backgroundTexture).split(TILE_WIDTH, TILE_HEIGHT);
+        animation = new Animation(FRAME_DURATION, bgTextures[0][0], bgTextures[0][1],bgTextures[0][2],bgTextures[0][3]);
+        animation.setPlayMode(Animation.PlayMode.LOOP);
 
         returnTexture = new Texture(Gdx.files.internal("levels/return.png"));
         returnPressTexture = new Texture(Gdx.files.internal("levels/returnPress.png"));
@@ -89,7 +101,7 @@ class LevelsScreen extends ScreenAdapter {
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 music.stop();
                 super.tap(event, x, y, count, button);
-                menuDemo.setScreen(new LoadingScreen((MenuDemo) menuDemo, 1));
+                menuDemo.setScreen(new LoadingScreen(menuDemo, 1));
                 dispose();
             }
         });
@@ -102,7 +114,7 @@ class LevelsScreen extends ScreenAdapter {
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 music.stop();
                 super.tap(event, x, y, count, button);
-                menuDemo.setScreen(new LoadingScreen((MenuDemo) menuDemo, 2));
+                menuDemo.setScreen(new LoadingScreen( menuDemo, 2));
                 dispose();
             }
         });
@@ -115,7 +127,7 @@ class LevelsScreen extends ScreenAdapter {
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 music.stop();
                 super.tap(event, x, y, count, button);
-                menuDemo.setScreen(new LoadingScreen((MenuDemo) menuDemo, 3));
+                menuDemo.setScreen(new LoadingScreen(menuDemo, 3));
                 dispose();
             }
         });
@@ -128,7 +140,7 @@ class LevelsScreen extends ScreenAdapter {
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 music.stop();
                 super.tap(event, x, y, count, button);
-                menuDemo.setScreen(new LoadingScreen((MenuDemo) menuDemo,4));
+                menuDemo.setScreen(new LoadingScreen( menuDemo,4));
                 dispose();
             }
         });
@@ -161,6 +173,7 @@ class LevelsScreen extends ScreenAdapter {
         Gdx.app.log("LOG:","Music volume: " +  musicVolume + "/100");
     }
 
+
     @Override
     public void resize(int width, int height) {
         super.resize(width, height);
@@ -169,11 +182,22 @@ class LevelsScreen extends ScreenAdapter {
 
     @Override
     public void render(float delta) {
+        animationTimer+=delta;
         super.render(delta);
         clearScreen();
         updateVolume();
         stage.act(delta);
+        draw();
+    }
+
+    public void draw(){
         stage.draw();
+        batch.setProjectionMatrix(camera.projection);
+        batch.setTransformMatrix(camera.view);
+        batch.begin();
+        background = (TextureRegion) animation.getKeyFrame(animationTimer);
+        batch.draw(background, 0, 0);
+        batch.end();
     }
 
     private void updateVolume() {

@@ -27,15 +27,24 @@ public class Obstacle {
     private final Animation animation;
     private float animationTimer = 0;
     private float speedPerSecond = 350F;
+    private boolean bossLevel;
 
 
-    public Obstacle(boolean isGrass, Texture obstacleTexture, int TILE_WIDTH, int TILE_HEIGHT){
+    public Obstacle(boolean bossLevel, boolean isGrass, Texture obstacleTexture, int TILE_WIDTH, int TILE_HEIGHT){
         this.isGrass = isGrass;
         this.TILE_WIDTH = TILE_WIDTH;
         this.TILE_HEIGHT = TILE_HEIGHT;
-        TextureRegion[][] obstacleTextures = new TextureRegion(obstacleTexture).split(TILE_WIDTH, TILE_HEIGHT);
-        animation = new Animation(FRAME_DURATION, obstacleTextures[0][0], obstacleTextures[0][1],obstacleTextures[0][2],obstacleTextures[0][3]);
-        animation.setPlayMode(Animation.PlayMode.LOOP);
+        this.bossLevel = bossLevel;
+        if(!bossLevel){
+            TextureRegion[][] obstacleTextures = new TextureRegion(obstacleTexture).split(TILE_WIDTH, TILE_HEIGHT);
+            animation = new Animation(FRAME_DURATION, obstacleTextures[0][0], obstacleTextures[0][1],obstacleTextures[0][2],obstacleTextures[0][3]);
+            animation.setPlayMode(Animation.PlayMode.LOOP);
+        }else{
+            TextureRegion[][] obstacleTextures = new TextureRegion(obstacleTexture).split(TILE_WIDTH, TILE_HEIGHT);
+            animation = new Animation(FRAME_DURATION, obstacleTextures[0][0], obstacleTextures[0][1],obstacleTextures[0][2],obstacleTextures[0][3],obstacleTextures[0][4],obstacleTextures[0][5],obstacleTextures[0][6],obstacleTextures[0][7],obstacleTextures[0][8],obstacleTextures[0][9],obstacleTextures[0][10],obstacleTextures[0][11]);
+            animation.setPlayMode(Animation.PlayMode.LOOP);
+        }
+
 
         collisionRectangle = new Rectangle(x,y,COLLISION_SQUARE_WIDTH, COLLISION_SQUARE_WIDTH);
 
