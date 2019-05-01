@@ -328,10 +328,9 @@ public class level extends ScreenAdapter {
         InputMultiplexer multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(stageUI);
         multiplexer.addProcessor(stage);
-        multiplexer.addProcessor(stagePause);
-        multiplexer.addProcessor(stageGameOver);
         multiplexer.addProcessor(new GestureDetector(new GestureHandler()));
         Gdx.input.setInputProcessor(multiplexer);
+
     }
 
     private void loadPreferences() {
@@ -415,10 +414,13 @@ public class level extends ScreenAdapter {
         stageUI.draw();
         if(state== STATE.PAUSED){
             stagePause.draw();
+            Gdx.input.setInputProcessor(stagePause);
         }
         if (state == STATE.GAMEOVER){
             music.stop();
             stageGameOver.draw();
+            Gdx.input.setInputProcessor(stageGameOver);
+
         }
     }
 
@@ -738,7 +740,11 @@ public class level extends ScreenAdapter {
         }
         Obstacle newObstacle = new Obstacle(bossLevel, isGrass, obstacleTexture, obstacleWidth, obstacleHeight);
         float y = PADS[RandomPad];
-        newObstacle.setPosition(WORLD_WIDTH + Obstacle.WIDTH,  y + newObstacle.WIDTH/2);
+        if(LEVEL == 4){
+            newObstacle.setPosition(WORLD_WIDTH + Obstacle.WIDTH,  y-newObstacle.WIDTH);
+        }else{
+            newObstacle.setPosition(WORLD_WIDTH + Obstacle.WIDTH,  y + newObstacle.WIDTH/2);
+        }
         obstacles.add(newObstacle);
     }
 
