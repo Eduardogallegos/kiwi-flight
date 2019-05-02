@@ -26,6 +26,7 @@ class LevelsScreen extends ScreenAdapter {
     private static final float FRAME_DURATION = 0.1F;
     private static final int TILE_WIDTH = 1275;
     private static final int TILE_HEIGHT = 710;
+    private static final boolean LEVEL_DEFAULT = true;
     private final MenuDemo menuDemo;
     private static final float WORLD_WIDTH = 1280;
     private static final float WORLD_HEIGHT = 720;
@@ -54,6 +55,9 @@ class LevelsScreen extends ScreenAdapter {
     private float animationTimer = 0;
     private SpriteBatch batch;
     private Camera camera;
+    private boolean level2Blocked;
+    private boolean level3Blocked;
+    private boolean level4Blocked;
 
     public LevelsScreen(MenuDemo menuDemo) {
         this.menuDemo =menuDemo;
@@ -106,53 +110,78 @@ class LevelsScreen extends ScreenAdapter {
             }
         });
 
-        levelTwoTexture = new Texture(Gdx.files.internal("levels/2.png"));
-        levelTwoPressTexture = new Texture(Gdx.files.internal("levels/2Press.png"));
-        ImageButton level2 = new ImageButton(new TextureRegionDrawable(new TextureRegion(levelTwoTexture)), new TextureRegionDrawable(new TextureRegion(levelTwoPressTexture)));
-        level2.addListener(new ActorGestureListener() {
-            @Override
-            public void tap(InputEvent event, float x, float y, int count, int button) {
-                music.stop();
-                super.tap(event, x, y, count, button);
-                menuDemo.setScreen(new LoadingScreen( menuDemo, 2));
-                dispose();
-            }
-        });
+        if(level2Blocked){
+            levelTwoTexture = new Texture(Gdx.files.internal("levels/2Blocked.png"));
+            levelTwoPressTexture = new Texture(Gdx.files.internal("levels/2Blocked.png"));
+            ImageButton level2 = new ImageButton(new TextureRegionDrawable(new TextureRegion(levelTwoTexture)), new TextureRegionDrawable(new TextureRegion(levelTwoPressTexture)));
+            level2.setPosition(400,200);
+            stage.addActor(level2);
+        }else{
+            levelTwoTexture = new Texture(Gdx.files.internal("levels/2.png"));
+            levelTwoPressTexture = new Texture(Gdx.files.internal("levels/2Press.png"));
+            ImageButton level2 = new ImageButton(new TextureRegionDrawable(new TextureRegion(levelTwoTexture)), new TextureRegionDrawable(new TextureRegion(levelTwoPressTexture)));
+            level2.addListener(new ActorGestureListener() {
+                @Override
+                public void tap(InputEvent event, float x, float y, int count, int button) {
+                    music.stop();
+                    super.tap(event, x, y, count, button);
+                    menuDemo.setScreen(new LoadingScreen( menuDemo, 2));
+                    dispose();
+                }
+            });
+            level2.setPosition(400,200);
+            stage.addActor(level2);
+        }
 
-        levelThreeTexture = new Texture(Gdx.files.internal("levels/3.png"));
-        levelThreePressTexture = new Texture(Gdx.files.internal("levels/3Press.png"));
-        ImageButton level3 = new ImageButton(new TextureRegionDrawable(new TextureRegion(levelThreeTexture)), new TextureRegionDrawable(new TextureRegion(levelThreePressTexture)));
-        level3.addListener(new ActorGestureListener() {
-            @Override
-            public void tap(InputEvent event, float x, float y, int count, int button) {
-                music.stop();
-                super.tap(event, x, y, count, button);
-                menuDemo.setScreen(new LoadingScreen(menuDemo, 3));
-                dispose();
-            }
-        });
+        if(level3Blocked){
+            levelThreeTexture = new Texture(Gdx.files.internal("levels/3Blocked.png"));
+            levelThreePressTexture = new Texture(Gdx.files.internal("levels/3Blocked.png"));
+            ImageButton level3 = new ImageButton(new TextureRegionDrawable(new TextureRegion(levelThreeTexture)), new TextureRegionDrawable(new TextureRegion(levelThreePressTexture)));
+            level3.setPosition(730,200);
+            stage.addActor(level3);
+        }else{
+            levelThreeTexture = new Texture(Gdx.files.internal("levels/3.png"));
+            levelThreePressTexture = new Texture(Gdx.files.internal("levels/3Press.png"));
+            ImageButton level3 = new ImageButton(new TextureRegionDrawable(new TextureRegion(levelThreeTexture)), new TextureRegionDrawable(new TextureRegion(levelThreePressTexture)));
+            level3.addListener(new ActorGestureListener() {
+                @Override
+                public void tap(InputEvent event, float x, float y, int count, int button) {
+                    music.stop();
+                    super.tap(event, x, y, count, button);
+                    menuDemo.setScreen(new LoadingScreen(menuDemo, 3));
+                    dispose();
+                }
+            });
+            level3.setPosition(730,200);
+            stage.addActor(level3);
+        }
 
-        bossTexture = new Texture(Gdx.files.internal("levels/boss.png"));
-        bossPressTexture = new Texture(Gdx.files.internal("levels/bossPress.png"));
-        ImageButton boss = new ImageButton(new TextureRegionDrawable(new TextureRegion(bossTexture)), new TextureRegionDrawable(new TextureRegion(bossPressTexture)));
-        boss.addListener(new ActorGestureListener() {
-            @Override
-            public void tap(InputEvent event, float x, float y, int count, int button) {
-                music.stop();
-                super.tap(event, x, y, count, button);
-                menuDemo.setScreen(new LoadingScreen( menuDemo,4));
-                dispose();
-            }
-        });
+        if(level4Blocked){
+            bossTexture = new Texture(Gdx.files.internal("levels/bossBlocked.png"));
+            bossPressTexture = new Texture(Gdx.files.internal("levels/bossBlocked.png"));
+            ImageButton boss = new ImageButton(new TextureRegionDrawable(new TextureRegion(bossTexture)), new TextureRegionDrawable(new TextureRegion(bossPressTexture)));
+            boss.setPosition(1030,375);
+            stage.addActor(boss);
+        }else{
+            bossTexture = new Texture(Gdx.files.internal("levels/boss.png"));
+            bossPressTexture = new Texture(Gdx.files.internal("levels/bossPress.png"));
+            ImageButton boss = new ImageButton(new TextureRegionDrawable(new TextureRegion(bossTexture)), new TextureRegionDrawable(new TextureRegion(bossPressTexture)));
+            boss.addListener(new ActorGestureListener() {
+                @Override
+                public void tap(InputEvent event, float x, float y, int count, int button) {
+                    music.stop();
+                    super.tap(event, x, y, count, button);
+                    menuDemo.setScreen(new LoadingScreen( menuDemo,4));
+                    dispose();
+                }
+            });
+            boss.setPosition(1030,375);
+            stage.addActor(boss);
+        }
 
         levelOne.setPosition(100,200);
-        level2.setPosition(400,200);
-        level3.setPosition(730,200);
-        boss.setPosition(1030,375);
+
         stage.addActor(levelOne);
-        stage.addActor(level2);
-        stage.addActor(level3);
-        stage.addActor(boss);
 
         table = new Table();
         table.pad(20);
@@ -170,7 +199,9 @@ class LevelsScreen extends ScreenAdapter {
 
     private void loadPreferences() {
         musicVolume = preferencias.getFloat("musicVolume", MUSIC_VOLUME_DEFAULT);
-        Gdx.app.log("LOG:","Music volume: " +  musicVolume + "/100");
+        level2Blocked = preferencias.getBoolean("level2", LEVEL_DEFAULT);
+        level3Blocked = preferencias.getBoolean("level3", LEVEL_DEFAULT);
+        level4Blocked = preferencias.getBoolean("level4", LEVEL_DEFAULT);
     }
 
 
@@ -186,7 +217,7 @@ class LevelsScreen extends ScreenAdapter {
         super.render(delta);
         clearScreen();
         updateVolume();
-        stage.act(delta);
+        stage.act();
         draw();
     }
 

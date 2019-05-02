@@ -26,10 +26,8 @@ public class Kiiw {
     private float animationTimer = 0;
     private float hitTimer = 1;
     private boolean isHit = false;
-    private boolean bossLevel = false;
 
     public Kiiw(Texture kiiwTexture, boolean bossLevel) {
-        this.bossLevel = bossLevel;
         if(!bossLevel){
             TextureRegion [][] kiiwTextures = new TextureRegion(kiiwTexture).split(TILE_WIDTH, TILE_HEIGHT);
             animation = new Animation(FRAME_DURATION, kiiwTextures[0][0], kiiwTextures[0][1],kiiwTextures[0][2],kiiwTextures[0][3]);
