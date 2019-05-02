@@ -35,7 +35,6 @@ class ShopScreen extends ScreenAdapter {
     private Texture backgroundTexture;
     private Texture returnTexture;
     private Texture returnPressTexture;
-    private Table table;
     private Texture codeTexture;
     private Texture codePressTexture;
     private BitmapFont bitmapFont;
@@ -47,6 +46,20 @@ class ShopScreen extends ScreenAdapter {
     private float musicVolume;
     private Texture coinsIndicatorTexture;
     private int coinsCollected = 0;
+    private Texture crownSkinButtonTexture;
+    private Texture crownSkinButtonPressTexture;
+    private Texture tieSkinButtonPressTexture;
+    private Texture tieSkinButtonTexture;
+    private Texture hulkSkinButtonPressTexture;
+    private Texture hulkSkinButtonTexture;
+    private Texture hatSkinButtonPressTexture;
+    private Texture hatSkinButtonTexture;
+
+    private enum STATE{
+        NORMAL, RUSURE, CODE
+    }
+
+    private STATE state = STATE.NORMAL;
 
     public ShopScreen(MenuDemo menuDemo) {
         this.menuDemo =menuDemo;
@@ -60,7 +73,6 @@ class ShopScreen extends ScreenAdapter {
         camera.position.set(WORLD_WIDTH / 2, WORLD_HEIGHT / 2, camera.position.z);
         camera.update();
         stage = new Stage(new FitViewport(WORLD_WIDTH, WORLD_HEIGHT));
-        Gdx.input.setInputProcessor(stage);
 
         music = Gdx.audio.newMusic(Gdx.files.internal("shop/song.mp3"));
         music.setLooping(true);
@@ -76,11 +88,12 @@ class ShopScreen extends ScreenAdapter {
 
         coinsIndicatorTexture = new Texture(Gdx.files.internal("defaultLevels/Coins.png"));
         Image coins = new Image(coinsIndicatorTexture);
-        coins.setPosition(3*WORLD_WIDTH/5+50, WORLD_HEIGHT-coins.getHeight()-10);
+        coins.setPosition(WORLD_WIDTH/6, 10);
 
         returnTexture = new Texture(Gdx.files.internal("shop/return.png"));
         returnPressTexture = new Texture(Gdx.files.internal("shop/returnPress.png"));
         ImageButton retur = new ImageButton(new TextureRegionDrawable(new TextureRegion(returnTexture)), new TextureRegionDrawable(new TextureRegion(returnPressTexture)));
+        retur.setPosition(20, 20);
         retur.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
@@ -95,32 +108,55 @@ class ShopScreen extends ScreenAdapter {
         codeTexture = new Texture(Gdx.files.internal("shop/code.png"));
         codePressTexture = new Texture(Gdx.files.internal("shop/codePress.png"));
         ImageButton code = new ImageButton(new TextureRegionDrawable(new TextureRegion(codeTexture)), new TextureRegionDrawable(new TextureRegion(codePressTexture)));
+        code.setPosition(200, 150);
         code.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
-                music.stop();
                 super.tap(event, x, y, count, button);
-                menuDemo.setScreen(new StartScreen(menuDemo));
-                dispose();
             }
         });
 
-        table = new Table();
-        table.pad(20);
-        //table.setDebug(true);
+        hatSkinButtonTexture = new Texture(Gdx.files.internal("shop/hatKiwi.png"));
+        hatSkinButtonPressTexture = new Texture(Gdx.files.internal("shop/hatKiwiPress.png"));
+        ImageButton hat = new ImageButton(new TextureRegionDrawable(new TextureRegion(hatSkinButtonTexture)), new TextureRegionDrawable(new TextureRegion(hatSkinButtonPressTexture)));
+        hat.setPosition(WORLD_WIDTH/2+100, WORLD_HEIGHT/2+10);
 
-        //table.add(title).padBottom(100).expand().top().colspan(3);
+        tieSkinButtonTexture = new Texture(Gdx.files.internal("shop/tieKiwi.png"));
+        tieSkinButtonPressTexture = new Texture(Gdx.files.internal("shop/tieKiwiPress.png"));
+        ImageButton tie = new ImageButton(new TextureRegionDrawable(new TextureRegion(tieSkinButtonTexture)), new TextureRegionDrawable(new TextureRegion(tieSkinButtonPressTexture)));
+        tie.setPosition(WORLD_WIDTH/2+350, WORLD_HEIGHT/2+10);
 
-        table.row();
-        table.add(code).bottom().expand();
+        crownSkinButtonTexture = new Texture(Gdx.files.internal("shop/crownKiwi.png"));
+        crownSkinButtonPressTexture = new Texture(Gdx.files.internal("shop/crownKiwiPress.png"));
+        ImageButton crown = new ImageButton(new TextureRegionDrawable(new TextureRegion(crownSkinButtonTexture)), new TextureRegionDrawable(new TextureRegion(crownSkinButtonPressTexture)));
+        crown.setPosition(WORLD_WIDTH/2+100, WORLD_HEIGHT/2-200);
 
-        table.row();
-        table.add(retur).bottom().left();
+        hulkSkinButtonTexture = new Texture(Gdx.files.internal("shop/hulkKiwi.png"));
+        hulkSkinButtonPressTexture = new Texture(Gdx.files.internal("shop/hulkKiwiPress.png"));
+        ImageButton hulk = new ImageButton(new TextureRegionDrawable(new TextureRegion(hulkSkinButtonTexture)), new TextureRegionDrawable(new TextureRegion(hulkSkinButtonPressTexture)));
+        hulk.setPosition(WORLD_WIDTH/2+350, WORLD_HEIGHT/2-200);
 
-        table.setFillParent(true);
-        table.pack();
-        stage.addActor(table);
+
+
+        /*crownSkinButtonTexture = new Texture(Gdx.files.internal("shop/crownKiwi.png"));
+        crownSkinButtonPressTexture = new Texture(Gdx.files.internal("shop/crownKiwiPress.png"));
+        ImageButton crown = new ImageButton(new TextureRegionDrawable(new TextureRegion(crownSkinButtonTexture)), new TextureRegionDrawable(new TextureRegion(crownSkinButtonPressTexture)));
+        crown.setPosition(WORLD_WIDTH/2+50, WORLD_HEIGHT/2+30);
+
+        crownSkinButtonTexture = new Texture(Gdx.files.internal("shop/crownKiwi.png"));
+        crownSkinButtonPressTexture = new Texture(Gdx.files.internal("shop/crownKiwiPress.png"));
+        ImageButton crown = new ImageButton(new TextureRegionDrawable(new TextureRegion(crownSkinButtonTexture)), new TextureRegionDrawable(new TextureRegion(crownSkinButtonPressTexture)));
+        crown.setPosition(WORLD_WIDTH/2+50, WORLD_HEIGHT/2+30);
+        */
+
         stage.addActor(coins);
+        stage.addActor(code);
+        stage.addActor(retur);
+        stage.addActor(background);
+        stage.addActor(crown);
+        stage.addActor(hat);
+        stage.addActor(hulk);
+        stage.addActor(tie);
     }
 
     private void savePreferences() {
@@ -156,6 +192,9 @@ class ShopScreen extends ScreenAdapter {
         batch.begin();
         drawCoinsCounter();
         batch.end();
+        if(state == STATE.NORMAL){
+            Gdx.input.setInputProcessor(stage);
+        }
     }
 
     private void updateVolume() {
