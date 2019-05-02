@@ -39,6 +39,7 @@ public class level extends ScreenAdapter {
     private static final float GAP_BETWEEN_COINS = 350f;
     private static final float MUSIC_VOLUME_DEFAULT = 1;
     private static final float EFFECTS_VOLUME_DEFAULT = 1;
+    private static final int COINS_DEFAULT = 0;
     private static int LEVEL;
     private static final float DEFAULT_CHUNCK_SIZE = 11 ;
 
@@ -53,6 +54,7 @@ public class level extends ScreenAdapter {
     private MenuDemo menuDemo;
     private SpriteBatch batch;
     private Kiiw kiiw;
+    private Hawk hawk;
     private int padCounter = 2;
     private int lifes = 2;
     private Texture kiiwTexture;
@@ -73,6 +75,7 @@ public class level extends ScreenAdapter {
     private Texture lifesBarTexture;
     private Texture coinsIndicatorTexture;
     private Texture pausePanelTexture;
+    private Texture hawkTexture = menuDemo.getAssetManager().get("level4/hawk.png");
 
     private BitmapFont bitmapFont;
     private GlyphLayout glyphLayout;
@@ -110,11 +113,21 @@ public class level extends ScreenAdapter {
     private Music winEffect;
     private int bgImagesNumber = 5;
     private boolean bossLevel = false;
+    private InputMultiplexer multiplexer = new InputMultiplexer();
+    private Texture beginPanelTexture;
+    private Stage stageBegin;
+    private Texture okButtonTexture;
+    private Texture okPressedButtonTexture;
+    private Stage stageTutorial;
+    private Texture obstaclesTutorialTexture;
+    private Texture nextButtonTexture;
+    private Texture nextPressedButtonTexture;
+    private int coinsCollected;
 
     private enum STATE {
-        PLAYING, PAUSED, GAMEOVER, WIN
+        PLAYING, PAUSED, GAMEOVER, WIN, PANELS, TUTORIAL
     }
-    private STATE state = STATE.PLAYING;
+    private STATE state = STATE.PANELS;
 
     public level(MenuDemo menuDemo, int level) {
         this.menuDemo = menuDemo;
@@ -156,20 +169,21 @@ public class level extends ScreenAdapter {
 
         shapeRenderer = new ShapeRenderer();
         batch = new SpriteBatch();
-        if (!bossLevel){
-            kiiwTexture = menuDemo.getAssetManager().get("defaultLevels/RunningKiwi.png");
 
-        }else{
-            kiiwTexture = menuDemo.getAssetManager().get("level4/FlyingKiwi.png");
-        }
-        kiiw = new Kiiw(kiiwTexture, bossLevel);
-        kiiw.setPosition(WORLD_WIDTH/4,97*padCounter+kiiw.RADIUS);
-
-        if(LEVEL==4){
+        if (LEVEL == 4){
             bgImagesNumber = 3;
             bossLevel = true;
+            kiiwTexture = menuDemo.getAssetManager().get("level4/FlyingKiwi.png");
+            hawk = new Hawk(hawkTexture);
+            hawk.setPosition(20, WORLD_HEIGHT/2);
+        }else{
+            kiiwTexture = menuDemo.getAssetManager().get("defaultLevels/RunningKiwi.png");
         }
+
+        kiiw = new Kiiw(kiiwTexture, bossLevel);
+        kiiw.setPosition(WORLD_WIDTH/4,97*padCounter+kiiw.RADIUS);
         Array<Texture> textures = new Array<Texture>();
+
         for(int i = 1; i <=bgImagesNumber;i++){
             textures.add(new Texture(Gdx.files.internal("level"+LEVEL+"/BG"+i+".png")));
             textures.get(textures.size-1).setWrap(Texture.TextureWrap.MirroredRepeat, Texture.TextureWrap.MirroredRepeat);
@@ -284,6 +298,40 @@ public class level extends ScreenAdapter {
 
         stageWin = new Stage(viewportHUD);
 
+        stageTutorial = new Stage(viewportHUD);
+        obstaclesTutorialTexture = menuDemo.getAssetManager().get("level1/obstacles.png");
+        Image obstaclesTutorial = new Image(obstaclesTutorialTexture);
+
+        nextButtonTexture = menuDemo.getAssetManager().get("level1/next.png");
+        nextPressedButtonTexture = menuDemo.getAssetManager().get("level1/nextPressed.png");
+        ImageButton nextButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(nextButtonTexture)), new TextureRegionDrawable(new TextureRegion(nextPressedButtonTexture)));
+        nextButton.setPosition(WORLD_WIDTH-1.2f*nextButton.getWidth(), nextButton.getHeight()/2);
+        nextButton.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                    state = STATE.PLAYING;
+            }
+        });
+
+        stageBegin = new Stage(viewportHUD);
+        beginPanelTexture = menuDemo.getAssetManager().get("level"+LEVEL+"/panel.png");
+        Image beginPanel = new Image(beginPanelTexture);
+
+        okButtonTexture = menuDemo.getAssetManager().get("defaultLevels/ok.png");
+        okPressedButtonTexture = menuDemo.getAssetManager().get("defaultLevels/okPressed.png");
+        ImageButton ok = new ImageButton(new TextureRegionDrawable(new TextureRegion(okButtonTexture)), new TextureRegionDrawable(new TextureRegion(okPressedButtonTexture)));
+        ok.setPosition(WORLD_WIDTH-1.2f*ok.getWidth(), ok.getHeight()/2);
+        ok.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                if(LEVEL == 1){
+                    state = STATE.TUTORIAL;
+                }else{
+                    state = STATE.PLAYING;
+                }
+            }
+        });
+
         stageGameOver = new Stage(viewportHUD);
         gameOverPanelTexture = menuDemo.getAssetManager().get("defaultLevels/gameOverPanel.png");
         Image gameOverPanel = new Image(gameOverPanelTexture);
@@ -319,30 +367,52 @@ public class level extends ScreenAdapter {
         stageGameOver.addActor(retry);
         stageGameOver.addActor(noRetry);
 
+        stageBegin.addActor(beginPanel);
+        stageBegin.addActor(ok);
+
+        stageTutorial.addActor(obstaclesTutorial);
+        stageTutorial.addActor(nextButton);
+
         stagePause.addActor(pausePanel);
         stagePause.addActor(resume);
         stagePause.addActor(settings);
         stagePause.addActor(restart);
         stagePause.addActor(exit);
 
-        InputMultiplexer multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(stageUI);
         multiplexer.addProcessor(stage);
         multiplexer.addProcessor(new GestureDetector(new GestureHandler()));
-        Gdx.input.setInputProcessor(multiplexer);
-
     }
 
     private void loadPreferences() {
         musicVolume = preferencias.getFloat("musicVolume", MUSIC_VOLUME_DEFAULT);
-        Gdx.app.log("LOG:","Music volume: " +  musicVolume + "/100");
         effectsVolume = preferencias.getFloat("effectsVolume", EFFECTS_VOLUME_DEFAULT);
-        Gdx.app.log("LOG:","Effects volume: " + effectsVolume + "/100");
+        coinsCollected = preferencias.getInteger("coins", COINS_DEFAULT);
+    }
+
+    @Override
+    public void pause(){
+        //se guardan las preferencias antes de salir
+        savePreferences();
+    }
+
+    private void savePreferences() {
+        preferencias.putInteger("coins", coinsCollected +=coinsCounter);
+        Gdx.app.log("LOG:","Coins: " +  coinsCollected);
+        if(LEVEL == 1){
+            preferencias.putBoolean("level2", false);
+        }else if(LEVEL == 2){
+            preferencias.putBoolean("level3", false);
+        }else if (LEVEL == 3){
+            preferencias.putBoolean("level4", false);
+        }
+        preferencias.flush();
     }
 
     @Override
     public void render(float delta) {
         if(state == STATE.PLAYING){
+            Gdx.input.setInputProcessor(multiplexer);
             update(delta);
             stage.act();
             levelTimer+=delta;
@@ -391,6 +461,9 @@ public class level extends ScreenAdapter {
         batch.setProjectionMatrix(camera.projection);
         batch.setTransformMatrix(camera.view);
         batch.begin();
+        if(bossLevel){
+            hawk.draw(batch);
+        }
         kiiw.draw(batch);
         drawCoin();
         drawObstacle();
@@ -412,6 +485,15 @@ public class level extends ScreenAdapter {
 
 
         stageUI.draw();
+
+        if(state == STATE.TUTORIAL){
+            stageTutorial.draw();
+            Gdx.input.setInputProcessor(stageTutorial);
+        }
+        if(state == STATE.PANELS){
+            stageBegin.draw();
+            Gdx.input.setInputProcessor(stageBegin);
+        }
         if(state== STATE.PAUSED){
             stagePause.draw();
             Gdx.input.setInputProcessor(stagePause);
@@ -421,6 +503,10 @@ public class level extends ScreenAdapter {
             stageGameOver.draw();
             Gdx.input.setInputProcessor(stageGameOver);
 
+        }
+        if(state == STATE.WIN){
+            savePreferences();
+            menuDemo.setScreen(new StartScreen(menuDemo));
         }
     }
 
@@ -698,7 +784,7 @@ public class level extends ScreenAdapter {
     private void createNewObstacle(){
         Random rnd = new Random();
         int RandomPad = rnd.nextInt(5);
-        int obstacleWidth=160;
+        int obstacleWidth=167;
         int obstacleHeight = 105;
         int obstacleType = rnd.nextInt(3);
         boolean isGrass = false;

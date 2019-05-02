@@ -146,10 +146,8 @@ class SettingsScreen extends ScreenAdapter {
 
     private void loadPreferences() {
         musicVolume = preferencias.getFloat("musicVolume", MUSIC_VOLUME_DEFAULT);
-        Gdx.app.log("LOG:","Music volume: " +  musicVolume + "/100");
 
         effectsVolume = preferencias.getFloat("effectsVolume", EFFECTS_VOLUME_DEFAULT);
-        Gdx.app.log("LOG:","Effects volume: " + effectsVolume + "/100");
     }
 
     @Override
@@ -166,10 +164,8 @@ class SettingsScreen extends ScreenAdapter {
 
     private void savePreferences() {
         preferencias.putFloat("musicVolume", musicVolume);
-        Gdx.app.log("LOG:","Music volume: " +  musicVolume + "/100");
 
         preferencias.putFloat("effectsVolume", effectsVolume);
-        Gdx.app.log("LOG:","Effects volume: " + effectsVolume + "/100");
 
         preferencias.flush();
     }

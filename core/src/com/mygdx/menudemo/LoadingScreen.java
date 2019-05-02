@@ -76,6 +76,20 @@ public class LoadingScreen extends ScreenAdapter {
         menuDemo.getAssetManager().load("defaultLevels/no.png", Texture.class);
         menuDemo.getAssetManager().load("defaultLevels/noPressed.png", Texture.class);
         menuDemo.getAssetManager().load("level4/FlyingKiwi.png", Texture.class);
+        menuDemo.getAssetManager().load("defaultLevels/ok.png", Texture.class);
+        menuDemo.getAssetManager().load("level"+LEVEL+"/panel.png", Texture.class);
+        menuDemo.getAssetManager().load("defaultLevels/okPressed.png", Texture.class);
+        menuDemo.getAssetManager().load("level1/next.png", Texture.class);
+        menuDemo.getAssetManager().load("level1/nextPressed.png", Texture.class);
+        menuDemo.getAssetManager().load("level1/obstacles.png", Texture.class);
+        menuDemo.getAssetManager().load("level1/got.png", Texture.class);
+        menuDemo.getAssetManager().load("level1/gotPressed.png", Texture.class);
+        menuDemo.getAssetManager().load("level1/back.png", Texture.class);
+        menuDemo.getAssetManager().load("level1/backPressed.png", Texture.class);
+        menuDemo.getAssetManager().load("level1/speed.png", Texture.class);
+        menuDemo.getAssetManager().load("level1/time.png", Texture.class);
+        menuDemo.getAssetManager().load("level1/coins.png", Texture.class);
+        menuDemo.getAssetManager().load("level4/hawk.png", Texture.class);
     }
 
     @Override
