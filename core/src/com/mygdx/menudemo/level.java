@@ -392,15 +392,8 @@ public class level extends ScreenAdapter {
         coinsCollected = preferencias.getInteger("coins", COINS_DEFAULT);
     }
 
-    @Override
-    public void pause(){
-        //se guardan las preferencias antes de salir
-        savePreferences();
-    }
-
     private void savePreferences() {
         preferencias.putInteger("coins", coinsCollected +=coinsCounter);
-        Gdx.app.log("LOG:","Coins: " +  coinsCollected);
         if(LEVEL == 1){
             preferencias.putBoolean("level2", false);
         }else if(LEVEL == 2){
@@ -491,22 +484,18 @@ public class level extends ScreenAdapter {
         if(state == STATE.TUTORIAL){
             stageTutorial.draw();
             Gdx.input.setInputProcessor(stageTutorial);
-        }
-        if(state == STATE.PANELS){
+        }else if(state == STATE.PANELS){
             stageBegin.draw();
             Gdx.input.setInputProcessor(stageBegin);
-        }
-        if(state== STATE.PAUSED){
+        }else if(state== STATE.PAUSED){
             stagePause.draw();
             Gdx.input.setInputProcessor(stagePause);
-        }
-        if (state == STATE.GAMEOVER){
+        }else if (state == STATE.GAMEOVER){
             music.stop();
             stageGameOver.draw();
             Gdx.input.setInputProcessor(stageGameOver);
 
-        }
-        if(state == STATE.WIN){
+        }else if(state == STATE.WIN){
             savePreferences();
             menuDemo.setScreen(new StartScreen(menuDemo));
         }
@@ -600,7 +589,6 @@ public class level extends ScreenAdapter {
         if (culprit != null){
             if(culprit.isGrass()){
                 substractSpeed();
-                Gdx.app.log("LOG: ", "Collided with grass!!!");
             }else{
                 substractLife();
                 substractSpeed();
@@ -651,7 +639,6 @@ public class level extends ScreenAdapter {
         else{
             lifes--;
             hitEffect.play();
-            Gdx.app.log("LOG", String.valueOf(lifes));
         }
     }
 

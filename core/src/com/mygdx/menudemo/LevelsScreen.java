@@ -24,8 +24,8 @@ class LevelsScreen extends ScreenAdapter {
 
     private static final float MUSIC_VOLUME_DEFAULT = 1;
     private static final float FRAME_DURATION = 0.2F;
-    private static final int TILE_WIDTH = 1275;
-    private static final int TILE_HEIGHT = 710;
+    private static final int TILE_WIDTH = 1280;
+    private static final int TILE_HEIGHT = 720;
     private static final boolean LEVEL_DEFAULT = true;
     private final MenuDemo menuDemo;
     private static final float WORLD_WIDTH = 1280;

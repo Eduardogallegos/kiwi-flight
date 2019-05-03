@@ -192,8 +192,6 @@ class StartScreen extends ScreenAdapter {
 
     private void loadPreferences() {
         musicVolume = preferencias.getFloat("musicVolume", MUSIC_VOLUME_DEFAULT);
-        Gdx.app.log("LOG:","Music volume: " +  musicVolume + "/100");
-
     }
 
     private void updateVolume() {
