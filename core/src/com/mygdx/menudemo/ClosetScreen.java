@@ -1,6 +1,5 @@
 package com.mygdx.menudemo;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.ScreenAdapter;
@@ -44,12 +43,12 @@ class ClosetScreen extends ScreenAdapter {
 
     public void show() {
         loadPreferences();
-        super.show();
 
         stage = new Stage(new FitViewport(WORLD_WIDTH, WORLD_HEIGHT));
         Gdx.input.setInputProcessor(stage);
 
         music = Gdx.audio.newMusic(Gdx.files.internal("closet/song.mp3"));
+        updateVolume();
         music.setLooping(true);
         music.play();
 
@@ -93,18 +92,15 @@ class ClosetScreen extends ScreenAdapter {
 
     private void loadPreferences() {
         musicVolume = preferencias.getFloat("musicVolume", MUSIC_VOLUME_DEFAULT);
-        Gdx.app.log("LOG:","Music volume: " +  musicVolume + "/100");
     }
 
     @Override
     public void resize(int width, int height) {
-        super.resize(width, height);
         stage.getViewport().update(width, height, true);
     }
 
     @Override
     public void render(float delta) {
-        super.render(delta);
         clearScreen();
         updateVolume();
         stage.act(delta);
@@ -117,7 +113,6 @@ class ClosetScreen extends ScreenAdapter {
 
     @Override
     public void dispose() {
-        super.dispose();
         stage.dispose();
         music.dispose();
         backgroundTexture.dispose();

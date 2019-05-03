@@ -68,7 +68,6 @@ class LevelsScreen extends ScreenAdapter {
     @Override
     public void show(){
         loadPreferences();
-        super.show();
 
         batch = new SpriteBatch();
         camera = new OrthographicCamera();
@@ -81,6 +80,7 @@ class LevelsScreen extends ScreenAdapter {
         Gdx.input.setInputProcessor(stage);
 
         music = Gdx.audio.newMusic(Gdx.files.internal("levels/song.mp3"));
+        updateVolume();
         music.setLooping(true);
         music.play();
 

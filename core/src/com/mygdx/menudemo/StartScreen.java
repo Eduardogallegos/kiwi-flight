@@ -56,11 +56,11 @@ class StartScreen extends ScreenAdapter {
     public void show() {
         loadPreferences();
 
-        super.show();
         stage = new Stage(new FitViewport(WORLD_WIDTH, WORLD_HEIGHT));
         Gdx.input.setInputProcessor(stage);
 
         music = Gdx.audio.newMusic(Gdx.files.internal("principal/song.mp3"));
+        updateVolume();
         music.setLooping(true);
         music.play();
 

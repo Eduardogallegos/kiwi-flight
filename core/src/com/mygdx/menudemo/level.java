@@ -146,6 +146,7 @@ public class level extends ScreenAdapter {
     @Override
     public void show() {
         loadPreferences();
+
         camera = new OrthographicCamera();
         viewport = new FitViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
         camera.position.set(WORLD_WIDTH / 2, WORLD_HEIGHT / 2, camera.position.z);
@@ -155,9 +156,7 @@ public class level extends ScreenAdapter {
         bitmapFont = new BitmapFont(Gdx.files.internal("defaultLevels/numbers.fnt"));
         glyphLayout = new GlyphLayout();
 
-        music = MenuDemo.getAssetManager().get("level"+LEVEL+"/song.mp3");
-        music.setLooping(true);
-        music.play();
+
 
         hitEffect = MenuDemo.getAssetManager().get("defaultLevels/hit.mp3");
 
@@ -167,6 +166,11 @@ public class level extends ScreenAdapter {
         loseMusic = menuDemo.getAssetManager().get("defaultLevels/KiiwLose.mp3");
 
         winEffect = menuDemo.getAssetManager().get("defaultLevels/KiiwWin.mp3");
+
+        music = MenuDemo.getAssetManager().get("level"+LEVEL+"/song.mp3");
+        updateVolume();
+        music.setLooping(true);
+        music.play();
 
         shapeRenderer = new ShapeRenderer();
         batch = new SpriteBatch();

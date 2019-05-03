@@ -96,8 +96,6 @@ class ShopScreen extends ScreenAdapter {
 
     public void show() {
         loadPreferences();
-        super.show();
-
 
         camera = new OrthographicCamera();
         camera.position.set(WORLD_WIDTH / 2, WORLD_HEIGHT / 2, camera.position.z);
@@ -108,6 +106,7 @@ class ShopScreen extends ScreenAdapter {
         stage = new Stage(new FitViewport(WORLD_WIDTH, WORLD_HEIGHT));
 
         music = Gdx.audio.newMusic(Gdx.files.internal("shop/song.mp3"));
+        updateVolume();
         music.setLooping(true);
         music.play();
 

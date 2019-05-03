@@ -30,14 +30,10 @@ class SettingsScreen extends ScreenAdapter {
     private Stage stage;
 
     private Texture backgroundTexture;
-    private Texture titleTexture;
     private Texture returnTexture;
     private Texture returnPressTexture;
-    private Texture musicLabel;
-    private Texture soundLabel;
     private Slider musicSlider;
     private Slider soundSlider;
-    private Table table;
 
     private Music music;
     private float musicVolume;
@@ -56,11 +52,11 @@ class SettingsScreen extends ScreenAdapter {
     public void show() {
         loadPreferences();
 
-        super.show();
         stage = new Stage(new FitViewport(WORLD_WIDTH, WORLD_HEIGHT));
         Gdx.input.setInputProcessor(stage);
 
         music = Gdx.audio.newMusic(Gdx.files.internal("settings/song.mp3"));
+        updateVolume();
         music.setLooping(true);
         music.play();
 
@@ -68,18 +64,10 @@ class SettingsScreen extends ScreenAdapter {
         Image background = new Image(backgroundTexture);
         stage.addActor(background);
 
-        titleTexture = new Texture(Gdx.files.internal("settings/ajustes.png"));
-        Image title = new Image(titleTexture);
-
-        musicLabel = new Texture(Gdx.files.internal("settings/musica.png"));
-        Image musicTitle = new Image(musicLabel);
-
-        soundLabel = new Texture(Gdx.files.internal("settings/sonido.png"));
-        Image soundTitle = new Image(soundLabel);
-
         returnTexture = new Texture(Gdx.files.internal("settings/return.png"));
         returnPressTexture = new Texture(Gdx.files.internal("settings/returnPress.png"));
         ImageButton retur = new ImageButton(new TextureRegionDrawable(new TextureRegion(returnTexture)), new TextureRegionDrawable(new TextureRegion(returnPressTexture)));
+        retur.setPosition(20, 20);
         retur.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
@@ -96,11 +84,11 @@ class SettingsScreen extends ScreenAdapter {
         ss.knob = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("settings/slider_knob.png"))));
 
         musicSlider = new Slider(0f, 1f, 0.1f, false, ss);
+        musicSlider.setPosition(WORLD_WIDTH/2, WORLD_HEIGHT/2);
         musicSlider.addListener(new InputListener(){
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button){
                 musicVolume = musicSlider.getValue();
-                Gdx.app.log("EVENT", "slider changed to " + musicSlider.getValue());
             }
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button){
@@ -109,11 +97,11 @@ class SettingsScreen extends ScreenAdapter {
         });
 
         soundSlider = new Slider(0f, 1f, 0.1f, false, ss);
+        soundSlider.setPosition(WORLD_WIDTH/2, WORLD_HEIGHT/3+15);
         soundSlider.addListener(new InputListener(){
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button){
                 effectsVolume = soundSlider.getValue();
-                Gdx.app.log("EVENT", "slider changed to " + soundSlider.getValue());
             }
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button){
@@ -121,26 +109,9 @@ class SettingsScreen extends ScreenAdapter {
             }
         });
 
-        table = new Table();
-        table.pad(20);
-        //table.setDebug(true);
-
-        table.add(title).expand().colspan(3);
-
-        table.row();
-        table.add(musicTitle).expand();
-        table.add(musicSlider).expand();
-
-        table.row();
-        table.add(soundTitle).expand();
-        table.add(soundSlider).expand();
-
-        table.row();
-        table.add(retur).bottom().left();
-
-        table.setFillParent(true);
-        table.pack();
-        stage.addActor(table);
+        stage.addActor(soundSlider);
+        stage.addActor(musicSlider);
+        stage.addActor(retur);
 
     }
 
@@ -188,7 +159,6 @@ class SettingsScreen extends ScreenAdapter {
         super.dispose();
         stage.dispose();
         backgroundTexture.dispose();
-        titleTexture.dispose();
         music.dispose();
         returnTexture.dispose();
         returnPressTexture.dispose();
