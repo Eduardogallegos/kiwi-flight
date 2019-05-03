@@ -90,6 +90,7 @@ public class LoadingScreen extends ScreenAdapter {
         menuDemo.getAssetManager().load("level1/time.png", Texture.class);
         menuDemo.getAssetManager().load("level1/coins.png", Texture.class);
         menuDemo.getAssetManager().load("level4/hawk.png", Texture.class);
+        menuDemo.getAssetManager().load("defaultLevels/pausaPress.png", Texture.class);
     }
 
     @Override

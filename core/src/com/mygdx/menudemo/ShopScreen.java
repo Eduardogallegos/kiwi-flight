@@ -50,10 +50,12 @@ class ShopScreen extends ScreenAdapter {
     private Texture crownSkinButtonPressTexture;
     private Texture tieSkinButtonPressTexture;
     private Texture tieSkinButtonTexture;
-    private Texture hulkSkinButtonPressTexture;
-    private Texture hulkSkinButtonTexture;
+    //private Texture hulkSkinButtonPressTexture;
+    //private Texture hulkSkinButtonTexture;
     private Texture hatSkinButtonPressTexture;
     private Texture hatSkinButtonTexture;
+    private Texture partySkinButtonTexture;
+    private Texture partySkinButtonPressTexture;
 
     private enum STATE{
         NORMAL, RUSURE, CODE
@@ -115,33 +117,34 @@ class ShopScreen extends ScreenAdapter {
                 super.tap(event, x, y, count, button);
             }
         });
+        partySkinButtonTexture = new Texture(Gdx.files.internal("shop/partyKiwi.png"));
+        partySkinButtonPressTexture = new Texture(Gdx.files.internal("shop/partyKiwiPress.png"));
+        ImageButton party = new ImageButton(new TextureRegionDrawable(new TextureRegion(partySkinButtonTexture)), new TextureRegionDrawable(new TextureRegion(partySkinButtonPressTexture)));
+        party.setPosition(WORLD_WIDTH/2+100, WORLD_HEIGHT/2+10);
+
 
         hatSkinButtonTexture = new Texture(Gdx.files.internal("shop/hatKiwi.png"));
         hatSkinButtonPressTexture = new Texture(Gdx.files.internal("shop/hatKiwiPress.png"));
         ImageButton hat = new ImageButton(new TextureRegionDrawable(new TextureRegion(hatSkinButtonTexture)), new TextureRegionDrawable(new TextureRegion(hatSkinButtonPressTexture)));
-        hat.setPosition(WORLD_WIDTH/2+100, WORLD_HEIGHT/2+10);
+        hat.setPosition(WORLD_WIDTH/2+350, WORLD_HEIGHT/2+10);
 
         tieSkinButtonTexture = new Texture(Gdx.files.internal("shop/tieKiwi.png"));
         tieSkinButtonPressTexture = new Texture(Gdx.files.internal("shop/tieKiwiPress.png"));
         ImageButton tie = new ImageButton(new TextureRegionDrawable(new TextureRegion(tieSkinButtonTexture)), new TextureRegionDrawable(new TextureRegion(tieSkinButtonPressTexture)));
-        tie.setPosition(WORLD_WIDTH/2+350, WORLD_HEIGHT/2+10);
+        tie.setPosition(WORLD_WIDTH/2+100, WORLD_HEIGHT/2-180);
 
         crownSkinButtonTexture = new Texture(Gdx.files.internal("shop/crownKiwi.png"));
         crownSkinButtonPressTexture = new Texture(Gdx.files.internal("shop/crownKiwiPress.png"));
         ImageButton crown = new ImageButton(new TextureRegionDrawable(new TextureRegion(crownSkinButtonTexture)), new TextureRegionDrawable(new TextureRegion(crownSkinButtonPressTexture)));
-        crown.setPosition(WORLD_WIDTH/2+100, WORLD_HEIGHT/2-200);
+        crown.setPosition(WORLD_WIDTH/2+350, WORLD_HEIGHT/2-180);
 
+
+
+        /*
         hulkSkinButtonTexture = new Texture(Gdx.files.internal("shop/hulkKiwi.png"));
         hulkSkinButtonPressTexture = new Texture(Gdx.files.internal("shop/hulkKiwiPress.png"));
         ImageButton hulk = new ImageButton(new TextureRegionDrawable(new TextureRegion(hulkSkinButtonTexture)), new TextureRegionDrawable(new TextureRegion(hulkSkinButtonPressTexture)));
         hulk.setPosition(WORLD_WIDTH/2+350, WORLD_HEIGHT/2-200);
-
-
-
-        /*crownSkinButtonTexture = new Texture(Gdx.files.internal("shop/crownKiwi.png"));
-        crownSkinButtonPressTexture = new Texture(Gdx.files.internal("shop/crownKiwiPress.png"));
-        ImageButton crown = new ImageButton(new TextureRegionDrawable(new TextureRegion(crownSkinButtonTexture)), new TextureRegionDrawable(new TextureRegion(crownSkinButtonPressTexture)));
-        crown.setPosition(WORLD_WIDTH/2+50, WORLD_HEIGHT/2+30);
 
         crownSkinButtonTexture = new Texture(Gdx.files.internal("shop/crownKiwi.png"));
         crownSkinButtonPressTexture = new Texture(Gdx.files.internal("shop/crownKiwiPress.png"));
@@ -155,7 +158,7 @@ class ShopScreen extends ScreenAdapter {
         stage.addActor(background);
         stage.addActor(crown);
         stage.addActor(hat);
-        stage.addActor(hulk);
+        stage.addActor(party);
         stage.addActor(tie);
     }
 

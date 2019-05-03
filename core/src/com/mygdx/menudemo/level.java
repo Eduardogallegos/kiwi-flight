@@ -123,6 +123,7 @@ public class level extends ScreenAdapter {
     private Texture nextButtonTexture;
     private Texture nextPressedButtonTexture;
     private int coinsCollected;
+    private Texture playPressedButtonTexture;
 
     private enum STATE {
         PLAYING, PAUSED, GAMEOVER, WIN, PANELS, TUTORIAL
@@ -200,7 +201,8 @@ public class level extends ScreenAdapter {
 
         stageUI = new Stage(viewportHUD);
         playButtonTexture = menuDemo.getAssetManager().get("defaultLevels/pausa.png");
-        ImageButton pause = new ImageButton(new TextureRegionDrawable(new TextureRegion(playButtonTexture)), new TextureRegionDrawable(new TextureRegion(playButtonTexture)));
+        playPressedButtonTexture = menuDemo.getAssetManager().get("defaultLevels/pausaPress.png");
+        ImageButton pause = new ImageButton(new TextureRegionDrawable(new TextureRegion(playButtonTexture)), new TextureRegionDrawable(new TextureRegion(playPressedButtonTexture)));
         pause.setPosition(WORLD_WIDTH - pause.getWidth()*1.1f, WORLD_HEIGHT- pause.getHeight()*1.1f);
         pause.addListener(new ClickListener() {
             @Override
