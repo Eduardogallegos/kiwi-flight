@@ -23,7 +23,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 class LevelsScreen extends ScreenAdapter {
 
     private static final float MUSIC_VOLUME_DEFAULT = 1;
-    private static final float FRAME_DURATION = 0.1F;
+    private static final float FRAME_DURATION = 0.2F;
     private static final int TILE_WIDTH = 1275;
     private static final int TILE_HEIGHT = 710;
     private static final boolean LEVEL_DEFAULT = true;
@@ -58,6 +58,7 @@ class LevelsScreen extends ScreenAdapter {
     private boolean level2Blocked;
     private boolean level3Blocked;
     private boolean level4Blocked;
+    private FitViewport viewport;
 
     public LevelsScreen(MenuDemo menuDemo) {
         this.menuDemo =menuDemo;
@@ -68,10 +69,14 @@ class LevelsScreen extends ScreenAdapter {
     public void show(){
         loadPreferences();
         super.show();
+
         batch = new SpriteBatch();
         camera = new OrthographicCamera();
+        viewport = new FitViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
+
         camera.position.set(WORLD_WIDTH / 2, WORLD_HEIGHT / 2, camera.position.z);
         camera.update();
+
         stage = new Stage(new FitViewport(WORLD_WIDTH, WORLD_HEIGHT));
         Gdx.input.setInputProcessor(stage);
 
@@ -207,14 +212,15 @@ class LevelsScreen extends ScreenAdapter {
 
     @Override
     public void resize(int width, int height) {
-        super.resize(width, height);
+        //super.resize(width, height);
+        viewport.update(width, height);
         stage.getViewport().update(width, height, true);
     }
 
     @Override
     public void render(float delta) {
         animationTimer+=delta;
-        super.render(delta);
+        //super.render(delta);
         clearScreen();
         updateVolume();
         stage.act();
@@ -222,13 +228,14 @@ class LevelsScreen extends ScreenAdapter {
     }
 
     public void draw(){
-        stage.draw();
         batch.setProjectionMatrix(camera.projection);
         batch.setTransformMatrix(camera.view);
         batch.begin();
         background = (TextureRegion) animation.getKeyFrame(animationTimer);
         batch.draw(background, 0, 0);
         batch.end();
+
+        stage.draw();
     }
 
     private void updateVolume() {
