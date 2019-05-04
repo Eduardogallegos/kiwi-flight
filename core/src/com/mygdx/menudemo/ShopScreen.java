@@ -130,7 +130,6 @@ class ShopScreen extends ScreenAdapter {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 music.stop();
-                super.tap(event, x, y, count, button);
                 menuDemo.setScreen(new StartScreen(menuDemo));
                 dispose();
             }
@@ -257,6 +256,8 @@ class ShopScreen extends ScreenAdapter {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 buySkin(costo);
+                dispose();
+                music.stop();
                 menuDemo.setScreen(new ShopScreen(menuDemo));
             }
         });

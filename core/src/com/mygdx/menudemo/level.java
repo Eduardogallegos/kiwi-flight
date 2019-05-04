@@ -45,7 +45,6 @@ public class level extends ScreenAdapter {
 
     private float[] PADS = {0,97,194,291,388};
     private Array<Obstacle> obstacles = new Array<Obstacle>();
-    private Array<Texture> lifeTextures = new Array<Texture>();
     private Array<Coin> coins = new Array<Coin>();
     private ShapeRenderer shapeRenderer;
     private Viewport viewport;
@@ -63,7 +62,6 @@ public class level extends ScreenAdapter {
     private float secondsTimer = 60;
     private int minutes;
     private int seconds;
-    private int coinsCounter = 0;
     private float nonCollisionTimer=0;
     private int actualSpeed = 0;
 
@@ -72,7 +70,6 @@ public class level extends ScreenAdapter {
     private Stage stageUI;
     private Texture playButtonTexture;
     private Texture speedBarTexture;
-    private Texture lifesBarTexture;
     private Texture coinsIndicatorTexture;
     private Texture pausePanelTexture;
     private Texture hawkTexture = menuDemo.getAssetManager().get("level4/hawk.png");
@@ -124,6 +121,18 @@ public class level extends ScreenAdapter {
     private Texture nextPressedButtonTexture;
     private int coinsCollected;
     private Texture playPressedButtonTexture;
+    private int coinsAtBegining;
+    private Texture lifesBarTexture1;
+    private Texture lifesBarTexture2;
+    private Texture lifesBarTexture3;
+    private Image lifesBar;
+    private Stage stageLifes;
+    private Texture speedTutorialTexture;
+    private Texture timeTutorialTexture;
+    private Texture coinsTutorialTexture;
+    private Image tutorialPanel;
+    private Texture backButtonTexture;
+    private Texture backPressedButtonTexture;
 
     private enum STATE {
         PLAYING, PAUSED, GAMEOVER, WIN, PANELS, TUTORIAL
@@ -156,21 +165,7 @@ public class level extends ScreenAdapter {
         bitmapFont = new BitmapFont(Gdx.files.internal("defaultLevels/numbers.fnt"));
         glyphLayout = new GlyphLayout();
 
-
-
-        hitEffect = MenuDemo.getAssetManager().get("defaultLevels/hit.mp3");
-
-        coinEffect = menuDemo.getAssetManager().get("defaultLevels/coin.mp3");
-
-        loseEffect = menuDemo.getAssetManager().get("defaultLevels/Kiwhine.mp3");
-        loseMusic = menuDemo.getAssetManager().get("defaultLevels/KiiwLose.mp3");
-
-        winEffect = menuDemo.getAssetManager().get("defaultLevels/KiiwWin.mp3");
-
-        music = MenuDemo.getAssetManager().get("level"+LEVEL+"/song.mp3");
-        updateVolume();
-        music.setLooping(true);
-        music.play();
+        loadMusic();
 
         shapeRenderer = new ShapeRenderer();
         batch = new SpriteBatch();
@@ -187,6 +182,7 @@ public class level extends ScreenAdapter {
 
         kiiw = new Kiiw(kiiwTexture, bossLevel);
         kiiw.setPosition(WORLD_WIDTH/4,97*padCounter+kiiw.RADIUS);
+
         Array<Texture> textures = new Array<Texture>();
 
         for(int i = 1; i <=bgImagesNumber;i++){
@@ -233,12 +229,13 @@ public class level extends ScreenAdapter {
         speedBarRectangle.height = 35;
         speedBarRectangle.width = 0;
 
-        for(int i = 0; i <=2;i++){
-            lifeTextures.add((Texture) menuDemo.getAssetManager().get("defaultLevels/lifes"+i+".png"));
-        }
-        lifesBarTexture = (Texture) lifeTextures.get(lifes);
-        Image lifesBar = new Image(lifesBarTexture);
+        stageLifes = new Stage(viewportHUD);
+        lifesBarTexture3 = menuDemo.getAssetManager().get("defaultLevels/lifes2.png");
+        lifesBarTexture2 = menuDemo.getAssetManager().get("defaultLevels/lifes1.png");
+        lifesBarTexture1 = menuDemo.getAssetManager().get("defaultLevels/lifes0.png");
+        lifesBar = new Image(lifesBarTexture3);
         lifesBar.setPosition(1*WORLD_WIDTH/3+50, WORLD_HEIGHT-lifesBar.getHeight()*1.1f);
+        stageLifes.addActor(lifesBar);
 
         coinsIndicatorTexture = menuDemo.getAssetManager().get("defaultLevels/Coins.png");
         Image coins = new Image(coinsIndicatorTexture);
@@ -246,7 +243,6 @@ public class level extends ScreenAdapter {
 
         stageUI.addActor(pause);
         stageUI.addActor(speedBar);
-        stageUI.addActor(lifesBar);
         stageUI.addActor(coins);
 
         stagePause = new Stage(viewportHUD);
@@ -306,7 +302,10 @@ public class level extends ScreenAdapter {
 
         stageTutorial = new Stage(viewportHUD);
         obstaclesTutorialTexture = menuDemo.getAssetManager().get("level1/obstacles.png");
-        Image obstaclesTutorial = new Image(obstaclesTutorialTexture);
+        speedTutorialTexture = menuDemo.getAssetManager().get("level1/speed.png");
+        timeTutorialTexture = menuDemo.getAssetManager().get("level1/time.png");
+        coinsTutorialTexture = menuDemo.getAssetManager().get("level1/coins.png");
+        tutorialPanel = new Image(obstaclesTutorialTexture);
 
         nextButtonTexture = menuDemo.getAssetManager().get("level1/next.png");
         nextPressedButtonTexture = menuDemo.getAssetManager().get("level1/nextPressed.png");
@@ -315,9 +314,12 @@ public class level extends ScreenAdapter {
         nextButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
-                    state = STATE.PLAYING;
+                updateTutorial(1);
             }
         });
+
+        stageTutorial.addActor(tutorialPanel);
+        stageTutorial.addActor(nextButton);
 
         stageBegin = new Stage(viewportHUD);
         beginPanelTexture = menuDemo.getAssetManager().get("level"+LEVEL+"/panel.png");
@@ -376,9 +378,6 @@ public class level extends ScreenAdapter {
         stageBegin.addActor(beginPanel);
         stageBegin.addActor(ok);
 
-        stageTutorial.addActor(obstaclesTutorial);
-        stageTutorial.addActor(nextButton);
-
         stagePause.addActor(pausePanel);
         stagePause.addActor(resume);
         stagePause.addActor(settings);
@@ -390,14 +389,130 @@ public class level extends ScreenAdapter {
         multiplexer.addProcessor(new GestureDetector(new GestureHandler()));
     }
 
+    private void updateTutorial(int tutorialIndex) {
+        stageTutorial.clear();
+        if(tutorialIndex == 0){
+            tutorialPanel = new Image(obstaclesTutorialTexture);
+
+            nextButtonTexture = menuDemo.getAssetManager().get("level1/next.png");
+            nextPressedButtonTexture = menuDemo.getAssetManager().get("level1/nextPressed.png");
+            ImageButton nextButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(nextButtonTexture)), new TextureRegionDrawable(new TextureRegion(nextPressedButtonTexture)));
+            nextButton.setPosition(WORLD_WIDTH-1.2f*nextButton.getWidth(), nextButton.getHeight()/2);
+            nextButton.addListener(new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y){
+                    updateTutorial(1);
+                }
+            });
+
+            stageTutorial.addActor(tutorialPanel);
+            stageTutorial.addActor(nextButton);
+        }else if(tutorialIndex == 1){
+            tutorialPanel = new Image(speedTutorialTexture);
+            nextButtonTexture = menuDemo.getAssetManager().get("level1/next.png");
+            nextPressedButtonTexture = menuDemo.getAssetManager().get("level1/nextPressed.png");
+            ImageButton nextButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(nextButtonTexture)), new TextureRegionDrawable(new TextureRegion(nextPressedButtonTexture)));
+            nextButton.setPosition(WORLD_WIDTH-1.2f*nextButton.getWidth(), nextButton.getHeight()/2);
+            nextButton.addListener(new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y){
+                    updateTutorial(2);
+                }
+            });
+            backButtonTexture = menuDemo.getAssetManager().get("level1/back.png");
+            backPressedButtonTexture = menuDemo.getAssetManager().get("level1/backPressed.png");
+            ImageButton backButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(backButtonTexture)), new TextureRegionDrawable(new TextureRegion(backPressedButtonTexture)));
+            backButton.setPosition(backButton.getWidth()*.2f, nextButton.getHeight()/2);
+            backButton.addListener(new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y){
+                    updateTutorial(0);
+                }
+            });
+            stageTutorial.addActor(tutorialPanel);
+            stageTutorial.addActor(nextButton);
+            stageTutorial.addActor(backButton);
+        }else if(tutorialIndex == 2){
+            tutorialPanel = new Image(timeTutorialTexture);
+
+            nextButtonTexture = menuDemo.getAssetManager().get("level1/next.png");
+            nextPressedButtonTexture = menuDemo.getAssetManager().get("level1/nextPressed.png");
+            ImageButton nextButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(nextButtonTexture)), new TextureRegionDrawable(new TextureRegion(nextPressedButtonTexture)));
+            nextButton.setPosition(WORLD_WIDTH-1.2f*nextButton.getWidth(), nextButton.getHeight()/2);
+            nextButton.addListener(new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y){
+                    updateTutorial(3);
+                }
+            });
+
+            backButtonTexture = menuDemo.getAssetManager().get("level1/back.png");
+            backPressedButtonTexture = menuDemo.getAssetManager().get("level1/backPressed.png");
+            ImageButton backButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(backButtonTexture)), new TextureRegionDrawable(new TextureRegion(backPressedButtonTexture)));
+            backButton.setPosition(backButton.getWidth()*.2f, nextButton.getHeight()/2);
+            backButton.addListener(new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y){
+                    updateTutorial(1);
+                }
+            });
+
+            stageTutorial.addActor(tutorialPanel);
+            stageTutorial.addActor(nextButton);
+            stageTutorial.addActor(backButton);
+
+        }else if(tutorialIndex == 3){
+            tutorialPanel = new Image(coinsTutorialTexture);
+
+            nextButtonTexture = menuDemo.getAssetManager().get("level1/got.png");
+            nextPressedButtonTexture = menuDemo.getAssetManager().get("level1/gotPressed.png");
+            ImageButton nextButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(nextButtonTexture)), new TextureRegionDrawable(new TextureRegion(nextPressedButtonTexture)));
+            nextButton.setPosition(WORLD_WIDTH-1.2f*nextButton.getWidth(), nextButton.getHeight()/2);
+            nextButton.addListener(new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y){
+                    state = STATE.PLAYING;
+                }
+            });
+
+            backButtonTexture = menuDemo.getAssetManager().get("level1/back.png");
+            backPressedButtonTexture = menuDemo.getAssetManager().get("level1/backPressed.png");
+            ImageButton backButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(backButtonTexture)), new TextureRegionDrawable(new TextureRegion(backPressedButtonTexture)));
+            backButton.setPosition(backButton.getWidth()*.2f, nextButton.getHeight()/2);
+            backButton.addListener(new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y){
+                    updateTutorial(2);
+                }
+            });
+
+            stageTutorial.addActor(tutorialPanel);
+            stageTutorial.addActor(nextButton);
+            stageTutorial.addActor(backButton);
+        }
+    }
+
+    private void loadMusic() {
+        hitEffect = menuDemo.getAssetManager().get("defaultLevels/hit.mp3");
+        coinEffect = menuDemo.getAssetManager().get("defaultLevels/coin.mp3");
+        loseEffect = menuDemo.getAssetManager().get("defaultLevels/Kiwhine.mp3");
+        loseMusic = menuDemo.getAssetManager().get("defaultLevels/KiiwLose.mp3");
+        winEffect = menuDemo.getAssetManager().get("defaultLevels/KiiwWin.mp3");
+        music = menuDemo.getAssetManager().get("level"+LEVEL+"/song.mp3");
+        updateVolume();
+        music.setLooping(true);
+        music.play();
+    }
+
     private void loadPreferences() {
         musicVolume = preferencias.getFloat("musicVolume", MUSIC_VOLUME_DEFAULT);
         effectsVolume = preferencias.getFloat("effectsVolume", EFFECTS_VOLUME_DEFAULT);
         coinsCollected = preferencias.getInteger("coins", COINS_DEFAULT);
+        coinsAtBegining = preferencias.getInteger("coins", COINS_DEFAULT);
     }
 
     private void savePreferences() {
-        preferencias.putInteger("coins", coinsCollected +=coinsCounter);
+        preferencias.putInteger("coins", coinsCollected);
         if(LEVEL == 1){
             preferencias.putBoolean("level2", false);
         }else if(LEVEL == 2){
@@ -472,7 +587,6 @@ public class level extends ScreenAdapter {
         drawCoinsCounter();
         drawNeededSpeedIndicator();
         drawActualSpeedIndicator();
-        drawLifeIndicator();
         batch.end();
 
         shapeRenderer.setProjectionMatrix(camera.projection);
@@ -482,7 +596,7 @@ public class level extends ScreenAdapter {
         shapeRenderer.rect(speedBarRectangle.x,speedBarRectangle.y,speedBarRectangle.width,speedBarRectangle.height);
         shapeRenderer.end();
 
-
+        stageLifes.draw();
         stageUI.draw();
 
         if(state == STATE.TUTORIAL){
@@ -503,12 +617,6 @@ public class level extends ScreenAdapter {
             savePreferences();
             menuDemo.setScreen(new StartScreen(menuDemo));
         }
-    }
-
-    private void drawLifeIndicator() {
-        String lifesAsString = Integer.toString(lifes + 1);
-        glyphLayout.setText(bitmapFont, lifesAsString);
-        bitmapFont.draw(batch, lifesAsString, WORLD_WIDTH/2, WORLD_HEIGHT-5);
     }
 
     private void drawActualSpeedIndicator() {
@@ -536,7 +644,7 @@ public class level extends ScreenAdapter {
     }
 
     private void drawCoinsCounter() {
-        String coinsAsString = Integer.toString(coinsCounter);
+        String coinsAsString = Integer.toString(coinsCollected);
         glyphLayout.setText(bitmapFont, coinsAsString);
         bitmapFont.draw(batch, coinsAsString, 3*WORLD_WIDTH/5+145, WORLD_HEIGHT-coinsIndicatorTexture.getHeight()+50);
     }
@@ -579,10 +687,7 @@ public class level extends ScreenAdapter {
         updateMinuteTimer();
         updateSecondTimer();
         updateActualSpeed();
-        updateLifesIndicator();
-
         handleCollisions();
-
         updateSpeedBarRectangle();
     }
 
@@ -631,7 +736,14 @@ public class level extends ScreenAdapter {
     }
 
     private void updateLifesIndicator() {
-            lifesBarTexture = (Texture) lifeTextures.get(lifes);
+        stageLifes.clear();
+        if(lifes == 1){
+            lifesBar = new Image(lifesBarTexture2);
+        }else if (lifes == 0){
+            lifesBar = new Image(lifesBarTexture1);
+        }
+        lifesBar.setPosition(1*WORLD_WIDTH/3+50, WORLD_HEIGHT-lifesBar.getHeight()*1.1f);
+        stageLifes.addActor(lifesBar);
     }
 
     private void substractLife() {
@@ -642,6 +754,7 @@ public class level extends ScreenAdapter {
         }
         else{
             lifes--;
+            updateLifesIndicator();
             hitEffect.play();
         }
     }
@@ -707,7 +820,7 @@ public class level extends ScreenAdapter {
         coins.clear();
         lifes = 2;
         kiiw.setHit(false);
-        coinsCounter = 0;
+        coinsCollected = coinsAtBegining;
         actualSpeed = 0;
         nonCollisionTimer = 0;
     }
@@ -765,7 +878,7 @@ public class level extends ScreenAdapter {
             if(!kiiw.isHit()){
                 for (Coin coin: coins){
                     if (coin.isKiiwColecting(kiiw)){
-                        coinsCounter++;
+                        coinsCollected++;
                         coinEffect.play();
                         coins.removeValue(coin, true);
                     }

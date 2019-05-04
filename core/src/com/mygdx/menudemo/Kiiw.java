@@ -13,7 +13,7 @@ public class Kiiw {
     private static final float COLLISION_RADIUS=30F;
     private static final float FRAME_DURATION = 0.1F;
     private static final int TILE_WIDTH = 200;
-    private static final int TILE_HEIGHT = 120;
+    private static final int TILE_HEIGHT = 136;
 
     public static final float RADIUS = COLLISION_RADIUS;
 
@@ -33,7 +33,7 @@ public class Kiiw {
             animation = new Animation(FRAME_DURATION, kiiwTextures[0][0], kiiwTextures[0][1],kiiwTextures[0][2],kiiwTextures[0][3]);
             animation.setPlayMode(Animation.PlayMode.LOOP);
         }else{
-            TextureRegion [][] kiiwTextures = new TextureRegion(kiiwTexture).split(TILE_WIDTH, TILE_HEIGHT);
+            TextureRegion [][] kiiwTextures = new TextureRegion(kiiwTexture).split(190, 96);
             animation = new Animation(FRAME_DURATION, kiiwTextures[0][0], kiiwTextures[0][1]);
             animation.setPlayMode(Animation.PlayMode.LOOP);
         }
