@@ -20,6 +20,8 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 class ClosetScreen extends ScreenAdapter {
 
     private static final float MUSIC_VOLUME_DEFAULT = 1;
+    private static final boolean SKIN_BOUGHT = false;
+    private static final String ACTUAL_SKIN = "default";
     private final MenuDemo menuDemo;
     private static final float WORLD_WIDTH = 1280;
     private static final float WORLD_HEIGHT = 720;
@@ -27,14 +29,26 @@ class ClosetScreen extends ScreenAdapter {
     private Stage stage;
 
     private Texture backgroundTexture;
-    private Texture closetkiwi;
+    //private Texture closetkiwi;
     private Texture flecha;
     private Texture flechaPress;
-    private Table table;
 
     private Music music;
     private Preferences preferencias;
     private float musicVolume;
+    private Texture partySkinButtonTexture;
+    private boolean partyBought;
+    private boolean hatBought;
+    private boolean tieBought;
+    private boolean crownBought;
+    private boolean hulkBought;
+    private boolean ricardoBought;
+    private Texture hatSkinButtonTexture;
+    private Texture tieSkinButtonTexture;
+    private Texture crownSkinButtonTexture;
+    private Texture hulkSkinButtonTexture;
+    private Texture ricardoSkinButtonTexture;
+    private String actualSkin;
 
     public ClosetScreen(MenuDemo menuDemo) {
         this.menuDemo = menuDemo;
@@ -56,42 +70,118 @@ class ClosetScreen extends ScreenAdapter {
         Image background = new Image(backgroundTexture);
         stage.addActor(background);
 
-        closetkiwi = new Texture(Gdx.files.internal("closet/closet kiwi.png"));
-        Image kiwi = new Image(closetkiwi);
+        /*closetkiwi = new Texture(Gdx.files.internal("closet/closet kiwi.png"));
+        Image kiwi = new Image(closetkiwi);*/
 
         flecha = new Texture(Gdx.files.internal("closet/closet flecha.png"));
         flechaPress = new Texture(Gdx.files.internal("closet/closet flecha pressed.png"));
-        ImageButton button = new ImageButton(new TextureRegionDrawable(new TextureRegion(flecha)), new TextureRegionDrawable(new TextureRegion(flechaPress)));
-        button.addListener(new ActorGestureListener() {
+        ImageButton retur = new ImageButton(new TextureRegionDrawable(new TextureRegion(flecha)), new TextureRegionDrawable(new TextureRegion(flechaPress)));
+        retur.setPosition(15,15);
+        retur.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 music.stop();
-                super.tap(event, x, y, count, button);
+                savePreferences();
                 menuDemo.setScreen(new StartScreen(menuDemo));
                 dispose();
             }
         });
+        stage.addActor(retur);
 
-        table = new Table();
-        //table.setDebug(true);
+        if(partyBought){
+            partySkinButtonTexture = new Texture(Gdx.files.internal("closet/partyButton.png"));
+            ImageButton partySkin = new ImageButton(new TextureRegionDrawable(new TextureRegion(partySkinButtonTexture)), new TextureRegionDrawable(new TextureRegion(partySkinButtonTexture)));
+            partySkin.setPosition(135, WORLD_HEIGHT/2+15);
+            partySkin.addListener(new ActorGestureListener() {
+                @Override
+                public void tap(InputEvent event, float x, float y, int count, int button) {
+                    actualSkin = "party";
+                }
+            });
+            stage.addActor(partySkin);
+        }
 
+        if(hatBought){
+            hatSkinButtonTexture = new Texture(Gdx.files.internal("closet/hatButton.png"));
+            ImageButton hatSkin = new ImageButton(new TextureRegionDrawable(new TextureRegion(hatSkinButtonTexture)), new TextureRegionDrawable(new TextureRegion(hatSkinButtonTexture)));
+            hatSkin.setPosition(285, WORLD_HEIGHT/2+15);
+            hatSkin.addListener(new ActorGestureListener() {
+                @Override
+                public void tap(InputEvent event, float x, float y, int count, int button) {
+                    actualSkin = "hat";
+                }
+            });
+            stage.addActor(hatSkin);
+        }
 
-        table.row();
-        table.add();
-        table.add(kiwi).padLeft(500F).padTop(200F);
-        table.row();
-        table.add(button).padTop(10F);
+        if(tieBought){
+            tieSkinButtonTexture = new Texture(Gdx.files.internal("closet/tieButton.png"));
+            ImageButton tieSkin = new ImageButton(new TextureRegionDrawable(new TextureRegion(tieSkinButtonTexture)), new TextureRegionDrawable(new TextureRegion(tieSkinButtonTexture)));
+            //tieSkin.setPosition(435, WORLD_HEIGHT/2+15);
+            tieSkin.setPosition(135, WORLD_HEIGHT/2-tieSkin.getWidth());
+            tieSkin.addListener(new ActorGestureListener() {
+                @Override
+                public void tap(InputEvent event, float x, float y, int count, int button) {
+                    actualSkin = "tie";
+                }
+            });
+            stage.addActor(tieSkin);
+        }
 
+        if(crownBought){
+            crownSkinButtonTexture = new Texture(Gdx.files.internal("closet/tieButton.png"));
+            ImageButton crownSkin = new ImageButton(new TextureRegionDrawable(new TextureRegion(crownSkinButtonTexture)), new TextureRegionDrawable(new TextureRegion(crownSkinButtonTexture)));
+            crownSkin.setPosition(135, WORLD_HEIGHT/2-crownSkin.getWidth());
+            crownSkin.addListener(new ActorGestureListener() {
+                @Override
+                public void tap(InputEvent event, float x, float y, int count, int button) {
+                    actualSkin = "crown";
+                }
+            });
+            stage.addActor(crownSkin);
+        }
 
+        if(hulkBought){
+            hulkSkinButtonTexture = new Texture(Gdx.files.internal("closet/tieButton.png"));
+            ImageButton hulkSkin = new ImageButton(new TextureRegionDrawable(new TextureRegion(hulkSkinButtonTexture)), new TextureRegionDrawable(new TextureRegion(hulkSkinButtonTexture)));
+            hulkSkin.setPosition(285, WORLD_HEIGHT/2-hulkSkin.getWidth());
+            hulkSkin.addListener(new ActorGestureListener() {
+                @Override
+                public void tap(InputEvent event, float x, float y, int count, int button) {
+                    actualSkin = "hulk";
+                }
+            });
+            stage.addActor(hulkSkin);
+        }
 
-        table.setFillParent(true);
-        table.pack();
-        stage.addActor(table);
+        if (ricardoBought){
+            ricardoSkinButtonTexture = new Texture(Gdx.files.internal("closet/tieButton.png"));
+            ImageButton ricardoSkin = new ImageButton(new TextureRegionDrawable(new TextureRegion(ricardoSkinButtonTexture)), new TextureRegionDrawable(new TextureRegion(ricardoSkinButtonTexture)));
+            ricardoSkin.setPosition(435, WORLD_HEIGHT/2-ricardoSkin.getWidth());
+            ricardoSkin.addListener(new ActorGestureListener() {
+                @Override
+                public void tap(InputEvent event, float x, float y, int count, int button) {
+                    actualSkin = "ricardo";
+                }
+            });
+            stage.addActor(ricardoSkin);
+        }
 
+    }
+
+    private void savePreferences() {
+        preferencias.putString("actualSkin", actualSkin);
     }
 
     private void loadPreferences() {
         musicVolume = preferencias.getFloat("musicVolume", MUSIC_VOLUME_DEFAULT);
+        partyBought = preferencias.getBoolean("partyBought", SKIN_BOUGHT);
+        hatBought = preferencias.getBoolean("hatBought", SKIN_BOUGHT);
+        tieBought = preferencias.getBoolean("tieBought", SKIN_BOUGHT);
+        crownBought = preferencias.getBoolean("crownBought", SKIN_BOUGHT);
+        hulkBought = preferencias.getBoolean("crownBought", SKIN_BOUGHT);
+        ricardoBought = preferencias.getBoolean("ricardoBought", SKIN_BOUGHT);
+        actualSkin = preferencias.getString("actualSkin", ACTUAL_SKIN);
     }
 
     @Override
@@ -116,7 +206,6 @@ class ClosetScreen extends ScreenAdapter {
         stage.dispose();
         music.dispose();
         backgroundTexture.dispose();
-        closetkiwi.dispose();
         flecha.dispose();
         flechaPress.dispose();
     }

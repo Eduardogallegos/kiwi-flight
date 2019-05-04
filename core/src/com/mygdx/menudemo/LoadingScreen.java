@@ -51,6 +51,12 @@ public class LoadingScreen extends ScreenAdapter {
         menuDemo.getAssetManager().load("defaultLevels/KiiwWin.mp3", Music.class);
         menuDemo.getAssetManager().load("defaultLevels/Kiwhine.mp3", Music.class);
         menuDemo.getAssetManager().load("defaultLevels/RunningKiwi.png", Texture.class);
+        menuDemo.getAssetManager().load("defaultLevels/CrownKiwi.png", Texture.class);
+        menuDemo.getAssetManager().load("defaultLevels/HatKiwi.png", Texture.class);
+        menuDemo.getAssetManager().load("defaultLevels/HulkKiwi.png", Texture.class);
+        menuDemo.getAssetManager().load("defaultLevels/partyKiwi.png", Texture.class);
+        menuDemo.getAssetManager().load("defaultLevels/TieKiwi.png", Texture.class);
+        menuDemo.getAssetManager().load("defaultLevels/ricardoKiwi.png", Texture.class);
         menuDemo.getAssetManager().load("defaultLevels/pausa.png", Texture.class);
         menuDemo.getAssetManager().load("defaultLevels/Barra.png", Texture.class);
         menuDemo.getAssetManager().load("defaultLevels/lifes0.png", Texture.class);
@@ -90,7 +96,10 @@ public class LoadingScreen extends ScreenAdapter {
         menuDemo.getAssetManager().load("level1/time.png", Texture.class);
         menuDemo.getAssetManager().load("level1/coins.png", Texture.class);
         menuDemo.getAssetManager().load("level4/hawk.png", Texture.class);
+        menuDemo.getAssetManager().load("defaultLevels/settingsPanel.png", Texture.class);
         menuDemo.getAssetManager().load("defaultLevels/pausaPress.png", Texture.class);
+        menuDemo.getAssetManager().load("defaultLevels/flecha.png", Texture.class);
+        menuDemo.getAssetManager().load("defaultLevels/flechaPress.png", Texture.class);
     }
 
     @Override

@@ -20,9 +20,12 @@ import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Slider;
+import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
@@ -40,6 +43,7 @@ public class level extends ScreenAdapter {
     private static final float MUSIC_VOLUME_DEFAULT = 1;
     private static final float EFFECTS_VOLUME_DEFAULT = 1;
     private static final int COINS_DEFAULT = 0;
+    private static final String ACTUAL_SKIN = "default";
     private static int LEVEL;
     private static final float DEFAULT_CHUNCK_SIZE = 11 ;
 
@@ -133,9 +137,16 @@ public class level extends ScreenAdapter {
     private Image tutorialPanel;
     private Texture backButtonTexture;
     private Texture backPressedButtonTexture;
+    private String skin;
+    private Stage stageSettings;
+    private Texture settingsPanelTexture;
+    private Texture returnTexture;
+    private Texture returnPressTexture;
+    private Slider musicSlider;
+    private Slider soundSlider;
 
     private enum STATE {
-        PLAYING, PAUSED, GAMEOVER, WIN, PANELS, TUTORIAL
+        PLAYING, PAUSED, GAMEOVER, WIN, PANELS, TUTORIAL, SETTINGS
     }
     private STATE state = STATE.PANELS;
 
@@ -177,7 +188,22 @@ public class level extends ScreenAdapter {
             hawk = new Hawk(hawkTexture);
             hawk.setPosition(20, WORLD_HEIGHT/2);
         }else{
-            kiiwTexture = menuDemo.getAssetManager().get("defaultLevels/RunningKiwi.png");
+            if(skin.compareTo("default") == 0){
+                kiiwTexture = menuDemo.getAssetManager().get("defaultLevels/RunningKiwi.png");
+            }else if(skin.compareTo("party") == 0){
+                kiiwTexture = menuDemo.getAssetManager().get("defaultLevels/partyKiwi.png");
+            }else if(skin.compareTo("hat") == 0){
+                kiiwTexture = menuDemo.getAssetManager().get("defaultLevels/HatKiwi.png");
+            }else if(skin.compareTo("tie") == 0){
+                kiiwTexture = menuDemo.getAssetManager().get("defaultLevels/TieKiwi.png");
+            }else if(skin.compareTo("crown") == 0){
+                kiiwTexture = menuDemo.getAssetManager().get("defaultLevels/CrownKiwi.png");
+            }else if(skin.compareTo("hulk") == 0){
+                kiiwTexture = menuDemo.getAssetManager().get("defaultLevels/HulkKiwi.png");
+            }else if(skin.compareTo("ricardo") == 0){
+                kiiwTexture = menuDemo.getAssetManager().get("defaultLevels/RicardoKiwi.png");
+            }
+
         }
 
         kiiw = new Kiiw(kiiwTexture, bossLevel);
@@ -268,8 +294,7 @@ public class level extends ScreenAdapter {
         settings.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                //music.stop();
-                //menuDemo.setScreen(new SettingsScreen(menuDemo));
+                state = STATE.SETTINGS;
             }
         });
 
@@ -298,6 +323,58 @@ public class level extends ScreenAdapter {
             }
         });
 
+        stageSettings = new Stage(viewportHUD);
+
+        settingsPanelTexture = menuDemo.getAssetManager().get("defaultLevels/settingsPanel.png");
+        Image settingsPanel = new Image(settingsPanelTexture);
+
+        returnTexture = menuDemo.getAssetManager().get("defaultLevels/flecha.png");
+        returnPressTexture = menuDemo.getAssetManager().get("defaultLevels/flechaPress.png");
+        ImageButton retur = new ImageButton(new TextureRegionDrawable(new TextureRegion(returnTexture)), new TextureRegionDrawable(new TextureRegion(returnPressTexture)));
+        retur.setPosition(20, 20);
+        retur.addListener(new ActorGestureListener() {
+            @Override
+            public void tap(InputEvent event, float x, float y, int count, int button) {
+                saveVolume();
+                state = STATE.PAUSED;
+            }
+        });
+
+        Slider.SliderStyle ss = new Slider.SliderStyle();
+        ss.background = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("defaultLevels/sliderBarra.png"))));
+        ss.knob = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("defaultLevels/circle.png"))));
+
+        musicSlider = new Slider(0f, 1f, 0.1f, false, ss);
+        musicSlider.setPosition(WORLD_WIDTH/2, WORLD_HEIGHT/2);
+        musicSlider.addListener(new InputListener(){
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button){
+                musicVolume = musicSlider.getValue();
+            }
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button){
+                return true;
+            }
+        });
+
+        soundSlider = new Slider(0f, 1f, 0.1f, false, ss);
+        soundSlider.setPosition(WORLD_WIDTH/2, WORLD_HEIGHT/3+15);
+        soundSlider.addListener(new InputListener(){
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button){
+                effectsVolume = soundSlider.getValue();
+            }
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button){
+                return true;
+            }
+        });
+
+        stageSettings.addActor(settingsPanel);
+        stageSettings.addActor(soundSlider);
+        stageSettings.addActor(musicSlider);
+        stageSettings.addActor(retur);
+
         stageWin = new Stage(viewportHUD);
 
         stageTutorial = new Stage(viewportHUD);
@@ -305,21 +382,7 @@ public class level extends ScreenAdapter {
         speedTutorialTexture = menuDemo.getAssetManager().get("level1/speed.png");
         timeTutorialTexture = menuDemo.getAssetManager().get("level1/time.png");
         coinsTutorialTexture = menuDemo.getAssetManager().get("level1/coins.png");
-        tutorialPanel = new Image(obstaclesTutorialTexture);
-
-        nextButtonTexture = menuDemo.getAssetManager().get("level1/next.png");
-        nextPressedButtonTexture = menuDemo.getAssetManager().get("level1/nextPressed.png");
-        ImageButton nextButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(nextButtonTexture)), new TextureRegionDrawable(new TextureRegion(nextPressedButtonTexture)));
-        nextButton.setPosition(WORLD_WIDTH-1.2f*nextButton.getWidth(), nextButton.getHeight()/2);
-        nextButton.addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y){
-                updateTutorial(1);
-            }
-        });
-
-        stageTutorial.addActor(tutorialPanel);
-        stageTutorial.addActor(nextButton);
+        updateTutorial(0);
 
         stageBegin = new Stage(viewportHUD);
         beginPanelTexture = menuDemo.getAssetManager().get("level"+LEVEL+"/panel.png");
@@ -509,6 +572,13 @@ public class level extends ScreenAdapter {
         effectsVolume = preferencias.getFloat("effectsVolume", EFFECTS_VOLUME_DEFAULT);
         coinsCollected = preferencias.getInteger("coins", COINS_DEFAULT);
         coinsAtBegining = preferencias.getInteger("coins", COINS_DEFAULT);
+        skin = preferencias.getString("actualSkin", ACTUAL_SKIN);
+    }
+
+    private void saveVolume(){
+        preferencias.putFloat("musicVolume", musicVolume);
+        preferencias.putFloat("effectsVolume", effectsVolume);
+        preferencias.flush();
     }
 
     private void savePreferences() {
@@ -616,6 +686,9 @@ public class level extends ScreenAdapter {
         }else if(state == STATE.WIN){
             savePreferences();
             menuDemo.setScreen(new StartScreen(menuDemo));
+        }else if( state == STATE.SETTINGS){
+            stageSettings.draw();
+            Gdx.input.setInputProcessor(stageSettings);
         }
     }
 
@@ -737,7 +810,10 @@ public class level extends ScreenAdapter {
 
     private void updateLifesIndicator() {
         stageLifes.clear();
-        if(lifes == 1){
+        if(lifes == 2){
+            lifesBar = new Image(lifesBarTexture3);
+        }
+        else if(lifes == 1){
             lifesBar = new Image(lifesBarTexture2);
         }else if (lifes == 0){
             lifesBar = new Image(lifesBarTexture1);
@@ -823,7 +899,8 @@ public class level extends ScreenAdapter {
         coinsCollected = coinsAtBegining;
         actualSpeed = 0;
         nonCollisionTimer = 0;
-    }
+        updateLifesIndicator();
+        }
 
     private void updateObstacles(float delta) {
         for (Obstacle obstacle : obstacles){
