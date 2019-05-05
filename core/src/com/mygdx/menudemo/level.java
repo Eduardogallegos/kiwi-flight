@@ -583,6 +583,7 @@ public class level extends ScreenAdapter {
 
     private void savePreferences() {
         preferencias.putInteger("coins", coinsCollected);
+        preferencias.putString("actualSkin", skin);
         if(LEVEL == 1){
             preferencias.putBoolean("level2", false);
         }else if(LEVEL == 2){
@@ -591,6 +592,11 @@ public class level extends ScreenAdapter {
             preferencias.putBoolean("level4", false);
         }
         preferencias.flush();
+    }
+
+    @Override
+    public void pause() {
+        saveVolume();
     }
 
     @Override

@@ -4,9 +4,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -22,6 +26,9 @@ class ClosetScreen extends ScreenAdapter {
     private static final float MUSIC_VOLUME_DEFAULT = 1;
     private static final boolean SKIN_BOUGHT = false;
     private static final String ACTUAL_SKIN = "default";
+    private static final int TILE_WIDTH = 239;
+    private static final int TILE_HEIGHT = 196;
+    private static final float FRAME_DURATION = 0.1f;
     private final MenuDemo menuDemo;
     private static final float WORLD_WIDTH = 1280;
     private static final float WORLD_HEIGHT = 720;
@@ -29,7 +36,6 @@ class ClosetScreen extends ScreenAdapter {
     private Stage stage;
 
     private Texture backgroundTexture;
-    //private Texture closetkiwi;
     private Texture flecha;
     private Texture flechaPress;
 
@@ -49,6 +55,13 @@ class ClosetScreen extends ScreenAdapter {
     private Texture hulkSkinButtonTexture;
     private Texture ricardoSkinButtonTexture;
     private String actualSkin;
+    private SpriteBatch batch;
+    private FitViewport viewport;
+    private Camera camera;
+    private Texture kiiwTexture;
+    private Animation animation;
+    private TextureRegion kiiw;
+    private float animationTimer = 0;
 
     public ClosetScreen(MenuDemo menuDemo) {
         this.menuDemo = menuDemo;
@@ -57,6 +70,13 @@ class ClosetScreen extends ScreenAdapter {
 
     public void show() {
         loadPreferences();
+
+        batch = new SpriteBatch();
+        camera = new OrthographicCamera();
+        viewport = new FitViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
+
+        camera.position.set(WORLD_WIDTH / 2, WORLD_HEIGHT / 2, camera.position.z);
+        camera.update();
 
         stage = new Stage(new FitViewport(WORLD_WIDTH, WORLD_HEIGHT));
         Gdx.input.setInputProcessor(stage);
@@ -70,8 +90,7 @@ class ClosetScreen extends ScreenAdapter {
         Image background = new Image(backgroundTexture);
         stage.addActor(background);
 
-        /*closetkiwi = new Texture(Gdx.files.internal("closet/closet kiwi.png"));
-        Image kiwi = new Image(closetkiwi);*/
+        updateKiiwAnimation(actualSkin);
 
         flecha = new Texture(Gdx.files.internal("closet/closet flecha.png"));
         flechaPress = new Texture(Gdx.files.internal("closet/closet flecha pressed.png"));
@@ -96,6 +115,7 @@ class ClosetScreen extends ScreenAdapter {
                 @Override
                 public void tap(InputEvent event, float x, float y, int count, int button) {
                     actualSkin = "party";
+                    updateKiiwAnimation(actualSkin);
                 }
             });
             stage.addActor(partySkin);
@@ -109,6 +129,7 @@ class ClosetScreen extends ScreenAdapter {
                 @Override
                 public void tap(InputEvent event, float x, float y, int count, int button) {
                     actualSkin = "hat";
+                    updateKiiwAnimation(actualSkin);
                 }
             });
             stage.addActor(hatSkin);
@@ -123,6 +144,7 @@ class ClosetScreen extends ScreenAdapter {
                 @Override
                 public void tap(InputEvent event, float x, float y, int count, int button) {
                     actualSkin = "tie";
+                    updateKiiwAnimation(actualSkin);
                 }
             });
             stage.addActor(tieSkin);
@@ -136,6 +158,7 @@ class ClosetScreen extends ScreenAdapter {
                 @Override
                 public void tap(InputEvent event, float x, float y, int count, int button) {
                     actualSkin = "crown";
+                    updateKiiwAnimation(actualSkin);
                 }
             });
             stage.addActor(crownSkin);
@@ -149,6 +172,7 @@ class ClosetScreen extends ScreenAdapter {
                 @Override
                 public void tap(InputEvent event, float x, float y, int count, int button) {
                     actualSkin = "hulk";
+                    updateKiiwAnimation(actualSkin);
                 }
             });
             stage.addActor(hulkSkin);
@@ -162,6 +186,7 @@ class ClosetScreen extends ScreenAdapter {
                 @Override
                 public void tap(InputEvent event, float x, float y, int count, int button) {
                     actualSkin = "ricardo";
+                    updateKiiwAnimation(actualSkin);
                 }
             });
             stage.addActor(ricardoSkin);
@@ -169,8 +194,31 @@ class ClosetScreen extends ScreenAdapter {
 
     }
 
+    private void updateKiiwAnimation(String actualSkin) {
+        if(actualSkin.compareTo("default") == 0){
+            kiiwTexture = new Texture(Gdx.files.internal("closet/DefaultKiwi.png"));
+        }else if(actualSkin.compareTo("party") == 0){
+            kiiwTexture = new Texture(Gdx.files.internal("closet/PartyKiwiStill.png"));
+        }else if(actualSkin.compareTo("hat") == 0){
+            kiiwTexture = new Texture(Gdx.files.internal("closet/hatKiwiStill.png"));
+        }else if(actualSkin.compareTo("tie") == 0){
+            kiiwTexture = new Texture(Gdx.files.internal("closet/TieKiwiStill.png"));
+        }else if(actualSkin.compareTo("crown") == 0){
+            kiiwTexture = new Texture(Gdx.files.internal("closet/CrownKiwiStill.png"));
+        }else if(actualSkin.compareTo("hulk") == 0){
+            kiiwTexture = new Texture(Gdx.files.internal("closet/HulkKiwiStill.png"));
+        }else if(actualSkin.compareTo("ricardo") == 0){
+            kiiwTexture = new Texture(Gdx.files.internal("closet/DancingKiwiStill.png"));
+        }
+
+        TextureRegion [][] kiwiTextures = new TextureRegion(kiiwTexture).split(TILE_WIDTH, TILE_HEIGHT);
+        animation = new Animation(FRAME_DURATION, kiwiTextures[0][0], kiwiTextures[0][1],kiwiTextures[0][2],kiwiTextures[0][3],kiwiTextures[0][4],kiwiTextures[0][5],kiwiTextures[0][6],kiwiTextures[0][7]);
+        animation.setPlayMode(Animation.PlayMode.LOOP);
+    }
+
     private void savePreferences() {
         preferencias.putString("actualSkin", actualSkin);
+        preferencias.flush();
     }
 
     private void loadPreferences() {
@@ -186,15 +234,29 @@ class ClosetScreen extends ScreenAdapter {
 
     @Override
     public void resize(int width, int height) {
+        viewport.update(width, height);
         stage.getViewport().update(width, height, true);
     }
 
     @Override
     public void render(float delta) {
+        animationTimer+=delta;
         clearScreen();
         updateVolume();
         stage.act(delta);
+        draw();
+
+    }
+
+    private void draw() {
         stage.draw();
+        batch.setProjectionMatrix(camera.projection);
+        batch.setTransformMatrix(camera.view);
+        batch.begin();
+        kiiw = (TextureRegion) animation.getKeyFrame(animationTimer) ;
+        batch.draw(kiiw, 2*WORLD_WIDTH/3, 150);
+        batch.end();
+
     }
 
     private void updateVolume() {

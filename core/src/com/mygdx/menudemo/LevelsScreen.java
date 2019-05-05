@@ -218,7 +218,6 @@ class LevelsScreen extends ScreenAdapter {
     @Override
     public void render(float delta) {
         animationTimer+=delta;
-        //super.render(delta);
         clearScreen();
         updateVolume();
         stage.act();
