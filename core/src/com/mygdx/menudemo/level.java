@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -44,6 +45,12 @@ public class level extends ScreenAdapter {
     private static final float EFFECTS_VOLUME_DEFAULT = 1;
     private static final int COINS_DEFAULT = 0;
     private static final String ACTUAL_SKIN = "default";
+    private static final float FRAME_DURATION = 0.4f;
+    private static final int WINNING_TILE_HEIGHT = 119;
+    private static final int WINNING_TILE_WIDTH = 199;
+    private static final int LOOSING_TILE_HEIGHT = 120;
+    private static final int LOOSING_TILE_WIDTH = 236;
+    private static final float LOOSE_FRAME_DURATION = 0.2F;
     private static int LEVEL;
     private static final float DEFAULT_CHUNCK_SIZE = 11 ;
 
@@ -144,6 +151,16 @@ public class level extends ScreenAdapter {
     private Texture returnPressTexture;
     private Slider musicSlider;
     private Slider soundSlider;
+    private Texture kiiwWinningTexture;
+    private Texture kiiwLoosingTexture;
+    private Animation winningAnimation;
+    private float animationTimer = 0;
+    private TextureRegion winningKiiw;
+    private TextureRegion loosingKiiw;
+    private float winingKiiwX ;
+    private float winingKiiwY = WORLD_HEIGHT/2;
+    private Animation loosingAnimation;
+    private float looseKiiwX = 20;
 
     private enum STATE {
         PLAYING, PAUSED, GAMEOVER, WIN, PANELS, TUTORIAL, SETTINGS
@@ -185,6 +202,8 @@ public class level extends ScreenAdapter {
             bgImagesNumber = 3;
             bossLevel = true;
             kiiwTexture = menuDemo.getAssetManager().get("level4/FlyingKiwi.png");
+            kiiwWinningTexture = menuDemo.getAssetManager().get("defaultLevels/WinningKiwi.png");
+            kiiwLoosingTexture = menuDemo.getAssetManager().get("defaultLevels/LosingKiwi.png");
             hawk = new Hawk(hawkTexture);
             actualSpeed = 15;
             //hawk.setPosition(20, WORLD_HEIGHT/2);
@@ -192,24 +211,46 @@ public class level extends ScreenAdapter {
             actualSpeed = 0;
             if(skin.compareTo("default") == 0){
                 kiiwTexture = menuDemo.getAssetManager().get("defaultLevels/RunningKiwi.png");
+                kiiwWinningTexture = menuDemo.getAssetManager().get("defaultLevels/WinningKiwi.png");
+                kiiwLoosingTexture = menuDemo.getAssetManager().get("defaultLevels/LosingKiwi.png");
             }else if(skin.compareTo("party") == 0){
                 kiiwTexture = menuDemo.getAssetManager().get("defaultLevels/partyKiwi.png");
+                kiiwWinningTexture = menuDemo.getAssetManager().get("defaultLevels/WinningKiwi.png");
+                kiiwLoosingTexture = menuDemo.getAssetManager().get("defaultLevels/LosingKiwi.png");
             }else if(skin.compareTo("hat") == 0){
                 kiiwTexture = menuDemo.getAssetManager().get("defaultLevels/HatKiwi.png");
+                kiiwWinningTexture = menuDemo.getAssetManager().get("defaultLevels/WinningKiwi.png");
+                kiiwLoosingTexture = menuDemo.getAssetManager().get("defaultLevels/LosingKiwi.png");
             }else if(skin.compareTo("tie") == 0){
                 kiiwTexture = menuDemo.getAssetManager().get("defaultLevels/TieKiwi.png");
+                kiiwWinningTexture = menuDemo.getAssetManager().get("defaultLevels/WinningKiwi.png");
+                kiiwLoosingTexture = menuDemo.getAssetManager().get("defaultLevels/LosingKiwi.png");
             }else if(skin.compareTo("crown") == 0){
                 kiiwTexture = menuDemo.getAssetManager().get("defaultLevels/CrownKiwi.png");
+                kiiwWinningTexture = menuDemo.getAssetManager().get("defaultLevels/WinningKiwi.png");
+                kiiwLoosingTexture = menuDemo.getAssetManager().get("defaultLevels/LosingKiwi.png");
             }else if(skin.compareTo("hulk") == 0){
                 kiiwTexture = menuDemo.getAssetManager().get("defaultLevels/HulkKiwi.png");
+                kiiwWinningTexture = menuDemo.getAssetManager().get("defaultLevels/WinningKiwi.png");
+                kiiwLoosingTexture = menuDemo.getAssetManager().get("defaultLevels/LosingKiwi.png");
             }else if(skin.compareTo("ricardo") == 0){
                 kiiwTexture = menuDemo.getAssetManager().get("defaultLevels/RicardoKiwi.png");
+                kiiwWinningTexture = menuDemo.getAssetManager().get("defaultLevels/WinningKiwi.png");
+                kiiwLoosingTexture = menuDemo.getAssetManager().get("defaultLevels/LosingKiwi.png");
             }
 
         }
 
         kiiw = new Kiiw(kiiwTexture, bossLevel);
         kiiw.setPosition(WORLD_WIDTH/4,97*padCounter+kiiw.RADIUS);
+
+        TextureRegion [][] kiwiWinningTextures = new TextureRegion(kiiwWinningTexture).split(WINNING_TILE_WIDTH, WINNING_TILE_HEIGHT);
+        winningAnimation = new Animation(FRAME_DURATION, kiwiWinningTextures[0][0], kiwiWinningTextures[0][1],kiwiWinningTextures[0][2],kiwiWinningTextures[0][3],kiwiWinningTextures[0][4],kiwiWinningTextures[0][5],kiwiWinningTextures[0][6],kiwiWinningTextures[0][7],kiwiWinningTextures[0][8],kiwiWinningTextures[0][9],kiwiWinningTextures[0][10],kiwiWinningTextures[0][11],kiwiWinningTextures[0][12],kiwiWinningTextures[0][13],kiwiWinningTextures[0][14],kiwiWinningTextures[0][15]);
+        winningAnimation.setPlayMode(Animation.PlayMode.LOOP);
+
+        TextureRegion [][] kiwiLoosingTextures = new TextureRegion(kiiwLoosingTexture).split(LOOSING_TILE_WIDTH, LOOSING_TILE_HEIGHT);
+        loosingAnimation = new Animation(LOOSE_FRAME_DURATION, kiwiLoosingTextures[0][0], kiwiLoosingTextures[0][1],kiwiLoosingTextures[0][2],kiwiLoosingTextures[0][3],kiwiLoosingTextures[0][4],kiwiLoosingTextures[0][5],kiwiLoosingTextures[0][6],kiwiLoosingTextures[0][7],kiwiLoosingTextures[0][8],kiwiLoosingTextures[0][9],kiwiLoosingTextures[0][10],kiwiLoosingTextures[0][11],kiwiLoosingTextures[0][12],kiwiLoosingTextures[0][13],kiwiLoosingTextures[0][14],kiwiLoosingTextures[0][15]);
+        loosingAnimation.setPlayMode(Animation.PlayMode.LOOP);
 
         Array<Texture> textures = new Array<Texture>();
 
@@ -219,7 +260,6 @@ public class level extends ScreenAdapter {
         }
         ParallaxBackground parallaxBackground = new ParallaxBackground(textures, WORLD_WIDTH, WORLD_HEIGHT);
         parallaxBackground.setSize(WORLD_WIDTH,WORLD_HEIGHT);
-        //int parallaxSpeed = 1+(int)(levelTimer);
         parallaxBackground.setSpeed(1);
         stage.addActor(parallaxBackground);
 
@@ -616,10 +656,24 @@ public class level extends ScreenAdapter {
             }else{
                 nonCollisionTimer+=delta;
             }
+        }else if(state == STATE.WIN || state == STATE.GAMEOVER) {
+            animationTimer += delta;
+            stage.act();
+            updateKiiwWinAnimation();
+            updtaeKiiwLooseAnimation();
         }
         clearScreen();
         updateVolume();
         draw();
+    }
+
+    private void updateKiiwWinAnimation() {
+        winingKiiwX += 4;
+        winingKiiwY += 0.4;
+    }
+
+    private void updtaeKiiwLooseAnimation() {
+       looseKiiwX -= 2;
     }
 
     private void updateVolume() {
@@ -635,7 +689,7 @@ public class level extends ScreenAdapter {
         if(actualSpeed == speedNeeded){
             winEffect.play();
             state = STATE.WIN;
-            dispose();
+//            dispose();
         }
     }
 
@@ -644,7 +698,7 @@ public class level extends ScreenAdapter {
             loseEffect.play();
             loseMusic.play();
             state = STATE.GAMEOVER;
-            dispose();
+           // dispose();
         }
     }
 
@@ -656,7 +710,14 @@ public class level extends ScreenAdapter {
         if(bossLevel){
             hawk.draw(batch);
         }
-        kiiw.draw(batch);
+        if( state != STATE.GAMEOVER) kiiw.draw(batch);
+        if(state == STATE.WIN) {
+            winningKiiw = (TextureRegion) winningAnimation.getKeyFrame(animationTimer);
+            batch.draw(winningKiiw, winingKiiwX, winingKiiwY);
+        }else if(state == STATE.GAMEOVER){
+            loosingKiiw = (TextureRegion) loosingAnimation.getKeyFrame(animationTimer);
+            batch.draw(loosingKiiw, kiiw.getX(), kiiw.getY());
+        }
         drawCoin();
         drawObstacle();
         drawTimerString();
@@ -666,7 +727,6 @@ public class level extends ScreenAdapter {
         drawNeededSpeedIndicator();
         drawActualSpeedIndicator();
         batch.end();
-
         shapeRenderer.setProjectionMatrix(camera.projection);
         shapeRenderer.setTransformMatrix(camera.view);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
@@ -688,15 +748,19 @@ public class level extends ScreenAdapter {
             Gdx.input.setInputProcessor(stagePause);
         }else if (state == STATE.GAMEOVER){
             music.stop();
-            stageGameOver.draw();
-            Gdx.input.setInputProcessor(stageGameOver);
-
+            obstacles.clear();
+            if(animationTimer>=2.5){
+                stageGameOver.draw();
+                Gdx.input.setInputProcessor(stageGameOver);
+            }
         }else if(state == STATE.WIN){
             savePreferences();
-            if(bossLevel){
-                menuDemo.setScreen(new EndingTransitionScreen(menuDemo));
-            }else {
-                menuDemo.setScreen(new StartScreen(menuDemo));
+            if(animationTimer>=4.5){
+                if(bossLevel){
+                    menuDemo.setScreen(new EndingTransitionScreen(menuDemo));
+                }else {
+                    menuDemo.setScreen(new LevelsScreen(menuDemo));
+                }
             }
         }else if( state == STATE.SETTINGS){
             stageSettings.draw();
@@ -767,7 +831,7 @@ public class level extends ScreenAdapter {
 
     private void update(float delta){
         updateKiiw(delta);
-        hawk.update(delta);
+        if(bossLevel) hawk.update(delta);
         updateObstacles(delta);
         updateCoins(delta);
         updateMinuteTimer();
@@ -863,7 +927,6 @@ public class level extends ScreenAdapter {
             secondsTimer=60;
         }
         seconds = (int) secondsTimer;
-
     }
 
     private void updateMinuteTimer() {

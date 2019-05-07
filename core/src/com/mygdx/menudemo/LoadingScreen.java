@@ -100,6 +100,8 @@ public class LoadingScreen extends ScreenAdapter {
         menuDemo.getAssetManager().load("defaultLevels/pausaPress.png", Texture.class);
         menuDemo.getAssetManager().load("defaultLevels/flecha.png", Texture.class);
         menuDemo.getAssetManager().load("defaultLevels/flechaPress.png", Texture.class);
+        menuDemo.getAssetManager().load("defaultLevels/WinningKiwi.png", Texture.class);
+        menuDemo.getAssetManager().load("defaultLevels/LosingKiwi.png", Texture.class);
     }
 
     @Override
@@ -133,7 +135,7 @@ public class LoadingScreen extends ScreenAdapter {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(Color.WHITE);
         shapeRenderer.rect(
-                (WORLD_WIDTH  - PROGRESS_BAR_WIDTH) / 2, (WORLD_HEIGHT  - PROGRESS_BAR_HEIGHT / 2),
+                (WORLD_WIDTH) / 2, (WORLD_HEIGHT/ 2),
                 progress * PROGRESS_BAR_WIDTH, PROGRESS_BAR_HEIGHT);
         shapeRenderer.end();
     }

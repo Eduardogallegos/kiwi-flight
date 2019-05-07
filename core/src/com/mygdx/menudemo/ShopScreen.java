@@ -84,7 +84,7 @@ class ShopScreen extends ScreenAdapter {
     private Texture whiteSpaceTexture;
 
     private enum STATE{
-        NORMAL, RUSURE, NOCOINS, CODE
+        NORMAL, RUSURE, NOCOINS, CODE, WRITE
     }
 
     private STATE state = STATE.NORMAL;
@@ -315,8 +315,14 @@ class ShopScreen extends ScreenAdapter {
         });
 
         whiteSpaceTexture = new Texture(Gdx.files.internal("shop/whiteSpace.png"));
-        Image whiteSpace = new Image(whiteSpaceTexture);
+        ImageButton whiteSpace = new ImageButton(new TextureRegionDrawable(new TextureRegion(whiteSpaceTexture)), new TextureRegionDrawable(new TextureRegion(whiteSpaceTexture)));
         whiteSpace.setPosition(WORLD_WIDTH/2-whiteSpace.getWidth()/2, WORLD_HEIGHT/2-whiteSpace.getHeight()/2);
+        whiteSpace.addListener(new ActorGestureListener() {
+            @Override
+            public void tap(InputEvent event, float x, float y, int count, int button) {
+                state = STATE.WRITE;
+            }
+        });
 
         stageCode.addActor(codePanel);
         stageCode.addActor(cross);
@@ -408,7 +414,6 @@ class ShopScreen extends ScreenAdapter {
         }else if(state == STATE.CODE){
             stageCode.draw();
             Gdx.input.setInputProcessor(stageCode);
-            Gdx.input.setOnscreenKeyboardVisible(true);
         }
     }
 
