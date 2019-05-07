@@ -246,12 +246,12 @@ public class level extends ScreenAdapter {
 
         speedBarTexture = menuDemo.getAssetManager().get("defaultLevels/Barra.png");
         Image speedBar = new Image(speedBarTexture);
-        speedBar.setPosition(30, WORLD_HEIGHT - speedBar.getHeight()*1.1f);
+        speedBar.setPosition(30, WORLD_HEIGHT - speedBar.getHeight()*1.5f);
         speedBarChunkSize = 275 / speedNeeded;
 
         speedBarRectangle = new Rectangle();
         speedBarRectangle.x = 31;
-        speedBarRectangle.y = WORLD_HEIGHT - speedBar.getHeight()*1f;
+        speedBarRectangle.y = WORLD_HEIGHT - speedBar.getHeight()*1.4f;
         speedBarRectangle.height = 35;
         speedBarRectangle.width = 0;
 
@@ -260,12 +260,12 @@ public class level extends ScreenAdapter {
         lifesBarTexture2 = menuDemo.getAssetManager().get("defaultLevels/lifes1.png");
         lifesBarTexture1 = menuDemo.getAssetManager().get("defaultLevels/lifes0.png");
         lifesBar = new Image(lifesBarTexture3);
-        lifesBar.setPosition(1*WORLD_WIDTH/3+50, WORLD_HEIGHT-lifesBar.getHeight()*1.1f);
+        lifesBar.setPosition(1*WORLD_WIDTH/3+80, WORLD_HEIGHT-lifesBar.getHeight()*1.1f);
         stageLifes.addActor(lifesBar);
 
         coinsIndicatorTexture = menuDemo.getAssetManager().get("defaultLevels/Coins.png");
         Image coins = new Image(coinsIndicatorTexture);
-        coins.setPosition(3*WORLD_WIDTH/5+50, WORLD_HEIGHT-coins.getHeight()-10);
+        coins.setPosition(3*WORLD_WIDTH/5+70, WORLD_HEIGHT-coins.getHeight()-10);
 
         stageUI.addActor(pause);
         stageUI.addActor(speedBar);
@@ -319,7 +319,7 @@ public class level extends ScreenAdapter {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 music.stop();
-                menuDemo.setScreen(new StartScreen(menuDemo));
+                menuDemo.setScreen(new LevelsScreen(menuDemo));
             }
         });
 

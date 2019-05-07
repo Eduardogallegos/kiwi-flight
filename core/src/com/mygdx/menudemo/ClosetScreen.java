@@ -26,8 +26,8 @@ class ClosetScreen extends ScreenAdapter {
     private static final float MUSIC_VOLUME_DEFAULT = 1;
     private static final boolean SKIN_BOUGHT = false;
     private static final String ACTUAL_SKIN = "default";
-    private static final int TILE_WIDTH = 239;
-    private static final int TILE_HEIGHT = 196;
+    private static final int TILE_WIDTH = 473;
+    private static final int TILE_HEIGHT = 387;
     private static final float FRAME_DURATION = 0.1f;
     private final MenuDemo menuDemo;
     private static final float WORLD_WIDTH = 1280;
@@ -254,7 +254,7 @@ class ClosetScreen extends ScreenAdapter {
         batch.setTransformMatrix(camera.view);
         batch.begin();
         kiiw = (TextureRegion) animation.getKeyFrame(animationTimer) ;
-        batch.draw(kiiw, 2*WORLD_WIDTH/3, 150);
+        batch.draw(kiiw, 750, 120);
         batch.end();
 
     }

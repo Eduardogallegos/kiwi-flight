@@ -65,6 +65,7 @@ class StartScreen extends ScreenAdapter {
         music.play();
 
         backgroundTexture = new Texture(Gdx.files.internal("principal/MenuBackground.png"));
+        //backgroundTexture = new Texture(Gdx.files.internal("principal/menu fondo.png"));
         Image background = new Image(backgroundTexture);
         stage.addActor(background);
 
