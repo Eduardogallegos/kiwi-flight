@@ -691,7 +691,11 @@ public class level extends ScreenAdapter {
 
         }else if(state == STATE.WIN){
             savePreferences();
-            menuDemo.setScreen(new StartScreen(menuDemo));
+            if(bossLevel){
+                menuDemo.setScreen(new EndingTransitionScreen(menuDemo));
+            }else {
+                menuDemo.setScreen(new StartScreen(menuDemo));
+            }
         }else if( state == STATE.SETTINGS){
             stageSettings.draw();
             Gdx.input.setInputProcessor(stageSettings);

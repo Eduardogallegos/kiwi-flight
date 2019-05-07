@@ -174,7 +174,7 @@ class LevelsScreen extends ScreenAdapter {
                 @Override
                 public void tap(InputEvent event, float x, float y, int count, int button) {
                     music.stop();
-                    menuDemo.setScreen(new LoadingScreen( menuDemo,4));
+                    menuDemo.setScreen(new BossTransitionScreen(menuDemo));
                     dispose();
                 }
             });
