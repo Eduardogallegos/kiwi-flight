@@ -699,9 +699,9 @@ public class level extends ScreenAdapter {
     }
 
     private void drawActualSpeedIndicator() {
-        String actualSpeedAsString = Integer.toString(actualSpeed);
+        String actualSpeedAsString = Integer.toString(actualSpeed) + " km/h";
         glyphLayout.setText(bitmapFont, actualSpeedAsString);
-        bitmapFont.draw(batch, actualSpeedAsString, 25, WORLD_HEIGHT-speedBarTexture.getHeight()-15);
+        bitmapFont.draw(batch, actualSpeedAsString, 25, WORLD_HEIGHT-speedBarTexture.getHeight()-25);
     }
 
     private void drawCoin() {
@@ -713,19 +713,19 @@ public class level extends ScreenAdapter {
     private void drawTimerString() {
         String timerString = "time left";
         glyphLayout.setText(bitmapFont, timerString);
-        bitmapFont.draw(batch, timerString, 25, 7*viewport.getWorldHeight()/8);
+        bitmapFont.draw(batch, timerString, 25, 7*viewport.getWorldHeight()/8-18);
     }
 
     private void drawNeededSpeedIndicator() {
-        String speedNeededAsString = Integer.toString(speedNeeded) ;
+        String speedNeededAsString = Integer.toString(speedNeeded) + " km/h";
         glyphLayout.setText(bitmapFont, speedNeededAsString);
-        bitmapFont.draw(batch, speedNeededAsString, 30+speedBarTexture.getWidth()+20,WORLD_HEIGHT-5 );
+        bitmapFont.draw(batch, speedNeededAsString, 30+speedBarTexture.getWidth()+20,WORLD_HEIGHT-25 );
     }
 
     private void drawCoinsCounter() {
         String coinsAsString = Integer.toString(coinsCollected);
         glyphLayout.setText(bitmapFont, coinsAsString);
-        bitmapFont.draw(batch, coinsAsString, 3*WORLD_WIDTH/5+145, WORLD_HEIGHT-coinsIndicatorTexture.getHeight()+50);
+        bitmapFont.draw(batch, coinsAsString, 3*WORLD_WIDTH/5+170, WORLD_HEIGHT-coinsIndicatorTexture.getHeight()+50);
     }
 
     //https://learning.oreilly.com/library/view/libgdx-game-development/9781785281440/ch05s03.html
@@ -738,13 +738,13 @@ public class level extends ScreenAdapter {
             secondsAsString = Integer.toString(seconds);
         }
         glyphLayout.setText(bitmapFont, secondsAsString);
-        bitmapFont.draw(batch, secondsAsString,80, (7 * viewport.getWorldHeight() / 8)-bitmapFont.getCapHeight());
+        bitmapFont.draw(batch, secondsAsString,65, (7 * viewport.getWorldHeight() / 8)-2*bitmapFont.getCapHeight());
     }
 
     private void drawMinuteTimer() {
-        String minutesAsString = Integer.toString(minutes)+ ":";
+        String minutesAsString = Integer.toString(minutes)+ " : ";
         glyphLayout.setText(bitmapFont, minutesAsString);
-        bitmapFont.draw(batch, minutesAsString ,30, (7 * viewport.getWorldHeight() / 8)-bitmapFont.getCapHeight());
+        bitmapFont.draw(batch, minutesAsString ,30, (7 * viewport.getWorldHeight() / 8)-2*bitmapFont.getCapHeight());
     }
 
     private void drawObstacle() {
