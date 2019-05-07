@@ -6,9 +6,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 class Hawk {
-    private static final int TILE_WIDTH = 200;
-    private static final int TILE_HEIGHT = 200;
-    private static final float FRAME_DURATION = 0.1F;
+    private static final int TILE_WIDTH = 250;
+    private static final int TILE_HEIGHT = 197;
+    private static final float FRAME_DURATION = 0.3F;
     private final Animation animation;
     private TextureRegion hawkTexture;
     private float animationTimer = 0;
@@ -23,6 +23,7 @@ class Hawk {
 
     public void draw(SpriteBatch batch) {
         hawkTexture = (TextureRegion) animation.getKeyFrame(animationTimer);
+        batch.draw(hawkTexture, 0, 420);
     }
 
     public void setPosition(float x, float y) {

@@ -11,7 +11,7 @@ import com.badlogic.gdx.math.Circle;
 public class Kiiw {
 
     private static final float COLLISION_RADIUS=30F;
-    private static final float FRAME_DURATION = 0.1F;
+    private static final float FRAME_DURATION = 0.2F;
     private static final int TILE_WIDTH = 200;
     private static final int TILE_HEIGHT = 136;
 

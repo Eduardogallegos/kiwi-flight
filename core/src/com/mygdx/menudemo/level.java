@@ -67,7 +67,7 @@ public class level extends ScreenAdapter {
     private int minutes;
     private int seconds;
     private float nonCollisionTimer=0;
-    private int actualSpeed = 0;
+    private int actualSpeed;
 
     private OrthographicCamera cameraHUD;
     private FitViewport viewportHUD;
@@ -186,8 +186,10 @@ public class level extends ScreenAdapter {
             bossLevel = true;
             kiiwTexture = menuDemo.getAssetManager().get("level4/FlyingKiwi.png");
             hawk = new Hawk(hawkTexture);
-            hawk.setPosition(20, WORLD_HEIGHT/2);
+            actualSpeed = 15;
+            //hawk.setPosition(20, WORLD_HEIGHT/2);
         }else{
+            actualSpeed = 0;
             if(skin.compareTo("default") == 0){
                 kiiwTexture = menuDemo.getAssetManager().get("defaultLevels/RunningKiwi.png");
             }else if(skin.compareTo("party") == 0){
@@ -765,6 +767,7 @@ public class level extends ScreenAdapter {
 
     private void update(float delta){
         updateKiiw(delta);
+        hawk.update(delta);
         updateObstacles(delta);
         updateCoins(delta);
         updateMinuteTimer();
@@ -907,7 +910,11 @@ public class level extends ScreenAdapter {
         lifes = 2;
         kiiw.setHit(false);
         coinsCollected = coinsAtBegining;
-        actualSpeed = 0;
+        if(bossLevel){
+            actualSpeed = 15;
+        }else{
+            actualSpeed = 0;
+        }
         nonCollisionTimer = 0;
         updateLifesIndicator();
         }

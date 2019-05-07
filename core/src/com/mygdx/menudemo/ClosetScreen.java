@@ -110,7 +110,7 @@ class ClosetScreen extends ScreenAdapter {
         if(partyBought){
             partySkinButtonTexture = new Texture(Gdx.files.internal("closet/partyButton.png"));
             ImageButton partySkin = new ImageButton(new TextureRegionDrawable(new TextureRegion(partySkinButtonTexture)), new TextureRegionDrawable(new TextureRegion(partySkinButtonTexture)));
-            partySkin.setPosition(135, WORLD_HEIGHT/2+15);
+            partySkin.setPosition(115, WORLD_HEIGHT/2+25);
             partySkin.addListener(new ActorGestureListener() {
                 @Override
                 public void tap(InputEvent event, float x, float y, int count, int button) {
@@ -124,7 +124,7 @@ class ClosetScreen extends ScreenAdapter {
         if(hatBought){
             hatSkinButtonTexture = new Texture(Gdx.files.internal("closet/hatButton.png"));
             ImageButton hatSkin = new ImageButton(new TextureRegionDrawable(new TextureRegion(hatSkinButtonTexture)), new TextureRegionDrawable(new TextureRegion(hatSkinButtonTexture)));
-            hatSkin.setPosition(285, WORLD_HEIGHT/2+15);
+            hatSkin.setPosition(275, WORLD_HEIGHT/2+25);
             hatSkin.addListener(new ActorGestureListener() {
                 @Override
                 public void tap(InputEvent event, float x, float y, int count, int button) {
@@ -138,8 +138,7 @@ class ClosetScreen extends ScreenAdapter {
         if(tieBought){
             tieSkinButtonTexture = new Texture(Gdx.files.internal("closet/tieButton.png"));
             ImageButton tieSkin = new ImageButton(new TextureRegionDrawable(new TextureRegion(tieSkinButtonTexture)), new TextureRegionDrawable(new TextureRegion(tieSkinButtonTexture)));
-            //tieSkin.setPosition(435, WORLD_HEIGHT/2+15);
-            tieSkin.setPosition(135, WORLD_HEIGHT/2-tieSkin.getWidth());
+            tieSkin.setPosition(435, WORLD_HEIGHT/2+25);
             tieSkin.addListener(new ActorGestureListener() {
                 @Override
                 public void tap(InputEvent event, float x, float y, int count, int button) {
@@ -153,7 +152,7 @@ class ClosetScreen extends ScreenAdapter {
         if(crownBought){
             crownSkinButtonTexture = new Texture(Gdx.files.internal("closet/tieButton.png"));
             ImageButton crownSkin = new ImageButton(new TextureRegionDrawable(new TextureRegion(crownSkinButtonTexture)), new TextureRegionDrawable(new TextureRegion(crownSkinButtonTexture)));
-            crownSkin.setPosition(135, WORLD_HEIGHT/2-crownSkin.getWidth());
+            crownSkin.setPosition(115, WORLD_HEIGHT/2-crownSkin.getHeight()+15);
             crownSkin.addListener(new ActorGestureListener() {
                 @Override
                 public void tap(InputEvent event, float x, float y, int count, int button) {
@@ -167,7 +166,7 @@ class ClosetScreen extends ScreenAdapter {
         if(hulkBought){
             hulkSkinButtonTexture = new Texture(Gdx.files.internal("closet/tieButton.png"));
             ImageButton hulkSkin = new ImageButton(new TextureRegionDrawable(new TextureRegion(hulkSkinButtonTexture)), new TextureRegionDrawable(new TextureRegion(hulkSkinButtonTexture)));
-            hulkSkin.setPosition(285, WORLD_HEIGHT/2-hulkSkin.getWidth());
+            hulkSkin.setPosition(275, WORLD_HEIGHT/2-hulkSkin.getWidth()+15);
             hulkSkin.addListener(new ActorGestureListener() {
                 @Override
                 public void tap(InputEvent event, float x, float y, int count, int button) {
@@ -181,7 +180,7 @@ class ClosetScreen extends ScreenAdapter {
         if (ricardoBought){
             ricardoSkinButtonTexture = new Texture(Gdx.files.internal("closet/tieButton.png"));
             ImageButton ricardoSkin = new ImageButton(new TextureRegionDrawable(new TextureRegion(ricardoSkinButtonTexture)), new TextureRegionDrawable(new TextureRegion(ricardoSkinButtonTexture)));
-            ricardoSkin.setPosition(435, WORLD_HEIGHT/2-ricardoSkin.getWidth());
+            ricardoSkin.setPosition(435, WORLD_HEIGHT/2-ricardoSkin.getWidth()+15);
             ricardoSkin.addListener(new ActorGestureListener() {
                 @Override
                 public void tap(InputEvent event, float x, float y, int count, int button) {
@@ -198,9 +197,9 @@ class ClosetScreen extends ScreenAdapter {
         if(actualSkin.compareTo("default") == 0){
             kiiwTexture = new Texture(Gdx.files.internal("closet/DefaultKiwi.png"));
         }else if(actualSkin.compareTo("party") == 0){
-            kiiwTexture = new Texture(Gdx.files.internal("closet/PartyKiwiStill.png"));
+            kiiwTexture = new Texture(Gdx.files.internal("closet/PartyHatKiwiStill.png"));
         }else if(actualSkin.compareTo("hat") == 0){
-            kiiwTexture = new Texture(Gdx.files.internal("closet/hatKiwiStill.png"));
+            kiiwTexture = new Texture(Gdx.files.internal("closet/TopHatKiwiStill.png"));
         }else if(actualSkin.compareTo("tie") == 0){
             kiiwTexture = new Texture(Gdx.files.internal("closet/TieKiwiStill.png"));
         }else if(actualSkin.compareTo("crown") == 0){
@@ -214,6 +213,11 @@ class ClosetScreen extends ScreenAdapter {
         TextureRegion [][] kiwiTextures = new TextureRegion(kiiwTexture).split(TILE_WIDTH, TILE_HEIGHT);
         animation = new Animation(FRAME_DURATION, kiwiTextures[0][0], kiwiTextures[0][1],kiwiTextures[0][2],kiwiTextures[0][3],kiwiTextures[0][4],kiwiTextures[0][5],kiwiTextures[0][6],kiwiTextures[0][7]);
         animation.setPlayMode(Animation.PlayMode.LOOP);
+    }
+
+    @Override
+    public void pause() {
+        savePreferences();
     }
 
     private void savePreferences() {
