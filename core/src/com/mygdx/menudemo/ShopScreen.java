@@ -408,6 +408,7 @@ class ShopScreen extends ScreenAdapter {
         }else if(state == STATE.CODE){
             stageCode.draw();
             Gdx.input.setInputProcessor(stageCode);
+            Gdx.input.setOnscreenKeyboardVisible(true);
         }
     }
 
