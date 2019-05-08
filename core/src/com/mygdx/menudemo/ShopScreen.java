@@ -17,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -106,6 +107,8 @@ class ShopScreen extends ScreenAdapter {
     private Texture nineButtonPressedTexture;
     private Texture eraseButtonPressedTexture;
     private Texture eraseButtonTexture;
+
+    private Label inputLabel;
 
     private enum STATE{
         NORMAL, RUSURE, NOCOINS, CODE
@@ -361,6 +364,13 @@ class ShopScreen extends ScreenAdapter {
         Image whiteSpace = new Image(whiteSpaceTexture);
         whiteSpace.setPosition(WORLD_WIDTH/3-whiteSpace.getWidth()/2, WORLD_HEIGHT/2-whiteSpace.getHeight()/2);
 
+        //use a Label widget
+        Label.LabelStyle labelStyle = new Label.LabelStyle();
+        labelStyle.font = bitmapFont;
+        inputLabel = new Label("", labelStyle);
+        inputLabel.setPosition(WORLD_WIDTH/3-inputLabel.getWidth()/2, WORLD_HEIGHT/2-inputLabel.getHeight()/2);
+
+
         ceroButtonTexture = new Texture(Gdx.files.internal("shop/0.png"));
         ceroButtonPressedTexture = new Texture(Gdx.files.internal("shop/0Press.png"));
         ImageButton number0 = new ImageButton(new TextureRegionDrawable(new TextureRegion(ceroButtonTexture)), new TextureRegionDrawable(new TextureRegion(ceroButtonPressedTexture)));
@@ -486,6 +496,7 @@ class ShopScreen extends ScreenAdapter {
         stageCode.addActor(cross);
         stageCode.addActor(submit);
         stageCode.addActor(whiteSpace);
+        stageCode.addActor(inputLabel);
         stageCode.addActor(number0);
         stageCode.addActor(number1);
         stageCode.addActor(number2);
@@ -684,8 +695,9 @@ class ShopScreen extends ScreenAdapter {
     }
 
     private void drawCodeInput() {
-        glyphLayout.setText(bitmapFont,code);
-        bitmapFont.draw(batch, code, WORLD_WIDTH/4, 80);
+        //glyphLayout.setText(bitmapFont,code);
+        //bitmapFont.draw(batch, code, WORLD_WIDTH/4, 80);
+        inputLabel.setText(code);
     }
 
     @Override

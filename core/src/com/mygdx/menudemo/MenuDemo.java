@@ -18,7 +18,7 @@ public class MenuDemo extends Game {
 		setScreen(new TransitionScreen(this));
 	}
 
-	
+
 	public static AssetManager getAssetManager() {
 		return assetManager;
 	}
