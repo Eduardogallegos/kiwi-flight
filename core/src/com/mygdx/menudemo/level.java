@@ -477,7 +477,7 @@ public class level extends ScreenAdapter {
             public void clicked(InputEvent event, float x, float y){
                 loseMusic.stop();
                 loseEffect.stop();
-                menuDemo.setScreen(new StartScreen(menuDemo));
+                menuDemo.setScreen(new LevelsScreen(menuDemo));
             }
         });
 

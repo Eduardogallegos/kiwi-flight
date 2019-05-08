@@ -82,9 +82,33 @@ class ShopScreen extends ScreenAdapter {
     private Texture submitButtonTexture;
     private Texture submitButtonPressedTexture;
     private Texture whiteSpaceTexture;
+    private Texture ceroButtonPressedTexture;
+    private Texture ceroButtonTexture;
+    private int inputSpaces = 4;
+    private String code = "";
+    private Texture oneButtonTexture;
+    private Texture oneButtonPressedTexture;
+    private Texture twoButtonTexture;
+    private Texture twoButtonPressedTexture;
+    private Texture threeButtonTexture;
+    private Texture threeButtonPressedTexture;
+    private Texture fourButtonTexture;
+    private Texture fourButtonPressedTexture;
+    private Texture sevenButtonTexture;
+    private Texture sevenButtonPressedTexture;
+    private Texture fiveButtonTexture;
+    private Texture fiveButtonPressedTexture;
+    private Texture sixButtonTexture;
+    private Texture sixButtonPressedTexture;
+    private Texture eightButtonTexture;
+    private Texture eightButtonPressedTexture;
+    private Texture nineButtonTexture;
+    private Texture nineButtonPressedTexture;
+    private Texture eraseButtonPressedTexture;
+    private Texture eraseButtonTexture;
 
     private enum STATE{
-        NORMAL, RUSURE, NOCOINS, CODE, WRITE
+        NORMAL, RUSURE, NOCOINS, CODE
     }
 
     private STATE state = STATE.NORMAL;
@@ -137,11 +161,14 @@ class ShopScreen extends ScreenAdapter {
 
         codeTexture = new Texture(Gdx.files.internal("shop/code.png"));
         codePressTexture = new Texture(Gdx.files.internal("shop/codePress.png"));
-        ImageButton code = new ImageButton(new TextureRegionDrawable(new TextureRegion(codeTexture)), new TextureRegionDrawable(new TextureRegion(codePressTexture)));
-        code.setPosition(200, 150);
-        code.addListener(new ActorGestureListener() {
+        ImageButton codeButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(codeTexture)), new TextureRegionDrawable(new TextureRegion(codePressTexture)));
+        codeButton.setPosition(200, 150);
+        codeButton.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
+                code = "";
+                inputSpaces = 4;
+                createStageCode();
                 state = STATE.CODE;
             }
         });
@@ -289,13 +316,29 @@ class ShopScreen extends ScreenAdapter {
         });
 
         stageCode = new Stage(viewport);
+        createStageCode();
+
+        stageNoCoins.addActor(noCoins);
+        stageNoCoins.addActor(ok);
+
+        stageBuy.addActor(buyPanel);
+        stageBuy.addActor(yesBuy);
+        stageBuy.addActor(noBuy);
+
+        stage.addActor(coins);
+        stage.addActor(codeButton);
+        stage.addActor(retur);
+        stage.addActor(background);
+    }
+
+    private void createStageCode() {
         codePanelTexture = new Texture(Gdx.files.internal("shop/codePanel.png"));
         Image codePanel = new Image(codePanelTexture);
 
         crossButtonTexture = new Texture(Gdx.files.internal("shop/cross.png"));
         crossButtonPressedTexture = new Texture(Gdx.files.internal("shop/crossPress.png"));
         ImageButton cross = new ImageButton(new TextureRegionDrawable(new TextureRegion(crossButtonTexture)), new TextureRegionDrawable(new TextureRegion(crossButtonPressedTexture)));
-        cross.setPosition(2*WORLD_WIDTH/3+20, 2*WORLD_HEIGHT/3-10);
+        cross.setPosition(WORLD_WIDTH/3+230, 2*WORLD_HEIGHT/3-10);
         cross.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
@@ -306,21 +349,136 @@ class ShopScreen extends ScreenAdapter {
         submitButtonTexture = new Texture(Gdx.files.internal("shop/submit.png"));
         submitButtonPressedTexture = new Texture(Gdx.files.internal("shop/submitPress.png"));
         ImageButton submit = new ImageButton(new TextureRegionDrawable(new TextureRegion(submitButtonTexture)), new TextureRegionDrawable(new TextureRegion(submitButtonPressedTexture)));
-        submit.setPosition(WORLD_WIDTH/3+80, WORLD_HEIGHT/3-50);
+        submit.setPosition(WORLD_WIDTH/3-150, WORLD_HEIGHT/3-50);
         submit.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
-                state = STATE.NORMAL;
+                checkCode();
             }
         });
 
         whiteSpaceTexture = new Texture(Gdx.files.internal("shop/whiteSpace.png"));
-        ImageButton whiteSpace = new ImageButton(new TextureRegionDrawable(new TextureRegion(whiteSpaceTexture)), new TextureRegionDrawable(new TextureRegion(whiteSpaceTexture)));
-        whiteSpace.setPosition(WORLD_WIDTH/2-whiteSpace.getWidth()/2, WORLD_HEIGHT/2-whiteSpace.getHeight()/2);
-        whiteSpace.addListener(new ActorGestureListener() {
+        Image whiteSpace = new Image(whiteSpaceTexture);
+        whiteSpace.setPosition(WORLD_WIDTH/3-whiteSpace.getWidth()/2, WORLD_HEIGHT/2-whiteSpace.getHeight()/2);
+
+        ceroButtonTexture = new Texture(Gdx.files.internal("shop/0.png"));
+        ceroButtonPressedTexture = new Texture(Gdx.files.internal("shop/0Press.png"));
+        ImageButton number0 = new ImageButton(new TextureRegionDrawable(new TextureRegion(ceroButtonTexture)), new TextureRegionDrawable(new TextureRegion(ceroButtonPressedTexture)));
+        number0.setPosition(2*WORLD_WIDTH/3, WORLD_HEIGHT/3-80);
+        number0.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
-                state = STATE.WRITE;
+                doCode("0");
+            }
+        });
+
+        oneButtonTexture = new Texture(Gdx.files.internal("shop/1.png"));
+        oneButtonPressedTexture = new Texture(Gdx.files.internal("shop/1Press.png"));
+        ImageButton number1 = new ImageButton(new TextureRegionDrawable(new TextureRegion(oneButtonTexture)), new TextureRegionDrawable(new TextureRegion(oneButtonPressedTexture)));
+        number1.setPosition(2*WORLD_WIDTH/3, 2*WORLD_HEIGHT/3-20);
+        number1.addListener(new ActorGestureListener() {
+            @Override
+            public void tap(InputEvent event, float x, float y, int count, int button) {
+                doCode("1");
+            }
+        });
+
+        twoButtonTexture = new Texture(Gdx.files.internal("shop/2.png"));
+        twoButtonPressedTexture = new Texture(Gdx.files.internal("shop/2Press.png"));
+        ImageButton number2 = new ImageButton(new TextureRegionDrawable(new TextureRegion(twoButtonTexture)), new TextureRegionDrawable(new TextureRegion(twoButtonPressedTexture)));
+        number2.setPosition(2*WORLD_WIDTH/3+150, 2*WORLD_HEIGHT/3-20);
+        number2.addListener(new ActorGestureListener() {
+            @Override
+            public void tap(InputEvent event, float x, float y, int count, int button) {
+                doCode("2");
+            }
+        });
+
+        threeButtonTexture = new Texture(Gdx.files.internal("shop/3.png"));
+        threeButtonPressedTexture = new Texture(Gdx.files.internal("shop/3Press.png"));
+        ImageButton number3 = new ImageButton(new TextureRegionDrawable(new TextureRegion(threeButtonTexture)), new TextureRegionDrawable(new TextureRegion(threeButtonPressedTexture)));
+        number3.setPosition(2*WORLD_WIDTH/3+300, 2*WORLD_HEIGHT/3-20);
+        number3.addListener(new ActorGestureListener() {
+            @Override
+            public void tap(InputEvent event, float x, float y, int count, int button) {
+                doCode("3");
+            }
+        });
+
+        fourButtonTexture = new Texture(Gdx.files.internal("shop/4.png"));
+        fourButtonPressedTexture = new Texture(Gdx.files.internal("shop/4Press.png"));
+        ImageButton number4 = new ImageButton(new TextureRegionDrawable(new TextureRegion(fourButtonTexture)), new TextureRegionDrawable(new TextureRegion(fourButtonPressedTexture)));
+        number4.setPosition(2*WORLD_WIDTH/3, 2*WORLD_HEIGHT/3-120);
+        number4.addListener(new ActorGestureListener() {
+            @Override
+            public void tap(InputEvent event, float x, float y, int count, int button) {
+                doCode("4");
+            }
+        });
+
+        fiveButtonTexture = new Texture(Gdx.files.internal("shop/5.png"));
+        fiveButtonPressedTexture = new Texture(Gdx.files.internal("shop/5Press.png"));
+        ImageButton number5 = new ImageButton(new TextureRegionDrawable(new TextureRegion(fiveButtonTexture)), new TextureRegionDrawable(new TextureRegion(fiveButtonPressedTexture)));
+        number5.setPosition(2*WORLD_WIDTH/3+150, 2*WORLD_HEIGHT/3-120);
+        number5.addListener(new ActorGestureListener() {
+            @Override
+            public void tap(InputEvent event, float x, float y, int count, int button) {
+                doCode("5");
+            }
+        });
+
+        sixButtonTexture = new Texture(Gdx.files.internal("shop/6.png"));
+        sixButtonPressedTexture = new Texture(Gdx.files.internal("shop/6Press.png"));
+        ImageButton number6 = new ImageButton(new TextureRegionDrawable(new TextureRegion(sixButtonTexture)), new TextureRegionDrawable(new TextureRegion(sixButtonPressedTexture)));
+        number6.setPosition(2*WORLD_WIDTH/3+300, 2*WORLD_HEIGHT/3-120);
+        number6.addListener(new ActorGestureListener() {
+            @Override
+            public void tap(InputEvent event, float x, float y, int count, int button) {
+                doCode("6");
+            }
+        });
+
+        sevenButtonTexture = new Texture(Gdx.files.internal("shop/7.png"));
+        sevenButtonPressedTexture = new Texture(Gdx.files.internal("shop/7Press.png"));
+        ImageButton number7 = new ImageButton(new TextureRegionDrawable(new TextureRegion(sevenButtonTexture)), new TextureRegionDrawable(new TextureRegion(sevenButtonPressedTexture)));
+        number7.setPosition(2*WORLD_WIDTH/3, 2*WORLD_HEIGHT/3-220);
+        number7.addListener(new ActorGestureListener() {
+            @Override
+            public void tap(InputEvent event, float x, float y, int count, int button) {
+                doCode("7");
+            }
+        });
+
+        eightButtonTexture = new Texture(Gdx.files.internal("shop/8.png"));
+        eightButtonPressedTexture = new Texture(Gdx.files.internal("shop/8Press.png"));
+        ImageButton number8 = new ImageButton(new TextureRegionDrawable(new TextureRegion(eightButtonTexture)), new TextureRegionDrawable(new TextureRegion(eightButtonPressedTexture)));
+        number8.setPosition(2*WORLD_WIDTH/3+150, 2*WORLD_HEIGHT/3-220);
+        number8.addListener(new ActorGestureListener() {
+            @Override
+            public void tap(InputEvent event, float x, float y, int count, int button) {
+                doCode("8");
+            }
+        });
+
+        nineButtonTexture = new Texture(Gdx.files.internal("shop/9.png"));
+        nineButtonPressedTexture = new Texture(Gdx.files.internal("shop/9Press.png"));
+        ImageButton number9 = new ImageButton(new TextureRegionDrawable(new TextureRegion(nineButtonTexture)), new TextureRegionDrawable(new TextureRegion(nineButtonPressedTexture)));
+        number9.setPosition(2*WORLD_WIDTH/3+300, 2*WORLD_HEIGHT/3-220);
+        number9.addListener(new ActorGestureListener() {
+            @Override
+            public void tap(InputEvent event, float x, float y, int count, int button) {
+                doCode("9");
+            }
+        });
+
+        eraseButtonTexture = new Texture(Gdx.files.internal("shop/back.png"));
+        eraseButtonPressedTexture = new Texture(Gdx.files.internal("shop/backPress.png"));
+        ImageButton erase = new ImageButton(new TextureRegionDrawable(new TextureRegion(eraseButtonTexture)), new TextureRegionDrawable(new TextureRegion(eraseButtonPressedTexture)));
+        erase.setPosition(2*WORLD_WIDTH/3 + 150, WORLD_HEIGHT/3-80);
+        erase.addListener(new ActorGestureListener() {
+            @Override
+            public void tap(InputEvent event, float x, float y, int count, int button) {
+                eraseCode();
             }
         });
 
@@ -328,19 +486,119 @@ class ShopScreen extends ScreenAdapter {
         stageCode.addActor(cross);
         stageCode.addActor(submit);
         stageCode.addActor(whiteSpace);
-
-        stageNoCoins.addActor(noCoins);
-        stageNoCoins.addActor(ok);
-
-        stageBuy.addActor(buyPanel);
-        stageBuy.addActor(yesBuy);
-        stageBuy.addActor(noBuy);
-
-        stage.addActor(coins);
-        stage.addActor(code);
-        stage.addActor(retur);
-        stage.addActor(background);
+        stageCode.addActor(number0);
+        stageCode.addActor(number1);
+        stageCode.addActor(number2);
+        stageCode.addActor(number3);
+        stageCode.addActor(number4);
+        stageCode.addActor(number5);
+        stageCode.addActor(number6);
+        stageCode.addActor(number7);
+        stageCode.addActor(number8);
+        stageCode.addActor(number9);
+        stageCode.addActor(erase);
     }
+
+    private void checkCode() {
+        if (code.compareTo("1234") == 0 && !hulkBought){
+            createCodeValidationPanel(true);
+            costo = 150;
+            savePreferences();
+        }else if (code.compareTo("4928") == 0 && !ricardoBought){
+            createCodeValidationPanel(true);
+            costo = 400;
+            savePreferences();
+        }else{
+            createCodeValidationPanel(false);
+        }
+    }
+
+    private void createCodeValidationPanel(boolean validation) {
+        stageCode.clear();
+        if(validation){
+            codePanelTexture = new Texture(Gdx.files.internal("shop/validCode.png"));
+
+        }else{
+            codePanelTexture = new Texture(Gdx.files.internal("shop/invalidCode.png"));
+        }
+
+        crossButtonTexture = new Texture(Gdx.files.internal("shop/cross.png"));
+        crossButtonPressedTexture = new Texture(Gdx.files.internal("shop/crossPress.png"));
+        ImageButton cross = new ImageButton(new TextureRegionDrawable(new TextureRegion(crossButtonTexture)), new TextureRegionDrawable(new TextureRegion(crossButtonPressedTexture)));
+        cross.setPosition(WORLD_WIDTH/3+230, 2*WORLD_HEIGHT/3-10);
+        cross.addListener(new ActorGestureListener() {
+            @Override
+            public void tap(InputEvent event, float x, float y, int count, int button) {
+                state = STATE.NORMAL;
+            }
+        });
+
+        ceroButtonTexture = new Texture(Gdx.files.internal("shop/0.png"));
+        oneButtonTexture = new Texture(Gdx.files.internal("shop/1.png"));
+        twoButtonTexture = new Texture(Gdx.files.internal("shop/2.png"));
+        threeButtonTexture = new Texture(Gdx.files.internal("shop/3.png"));
+        fourButtonTexture = new Texture(Gdx.files.internal("shop/4.png"));
+        fiveButtonTexture = new Texture(Gdx.files.internal("shop/5.png"));
+        sixButtonTexture = new Texture(Gdx.files.internal("shop/6.png"));
+        sevenButtonTexture = new Texture(Gdx.files.internal("shop/7.png"));
+        eightButtonTexture = new Texture(Gdx.files.internal("shop/8.png"));
+        nineButtonTexture = new Texture(Gdx.files.internal("shop/9.png"));
+        eraseButtonTexture = new Texture(Gdx.files.internal("shop/back.png"));
+
+        Image codePanel = new Image(codePanelTexture);
+        Image number0 = new Image(ceroButtonTexture);
+        number0.setPosition(2*WORLD_WIDTH/3, WORLD_HEIGHT/3-80);
+        Image number1 = new Image(oneButtonTexture);
+        number1.setPosition(2*WORLD_WIDTH/3, 2*WORLD_HEIGHT/3-20);
+        Image number2 = new Image(twoButtonTexture);
+        number2.setPosition(2*WORLD_WIDTH/3+150, 2*WORLD_HEIGHT/3-20);
+        Image number3 = new Image(threeButtonTexture);
+        number3.setPosition(2*WORLD_WIDTH/3+300, 2*WORLD_HEIGHT/3-20);
+        Image number4 = new Image(fourButtonTexture);
+        number4.setPosition(2*WORLD_WIDTH/3, 2*WORLD_HEIGHT/3-120);
+        Image number5 = new Image(fiveButtonTexture);
+        number5.setPosition(2*WORLD_WIDTH/3+150, 2*WORLD_HEIGHT/3-120);
+        Image number6 = new Image(sixButtonTexture);
+        number6.setPosition(2*WORLD_WIDTH/3+300, 2*WORLD_HEIGHT/3-120);
+        Image number7 = new Image(sevenButtonTexture);
+        number7.setPosition(2*WORLD_WIDTH/3, 2*WORLD_HEIGHT/3-220);
+        Image number8 = new Image(eightButtonTexture);
+        number8.setPosition(2*WORLD_WIDTH/3+150, 2*WORLD_HEIGHT/3-220);
+        Image number9 = new Image(nineButtonTexture);
+        number9.setPosition(2*WORLD_WIDTH/3+300, 2*WORLD_HEIGHT/3-220);
+        Image erase = new Image(eraseButtonTexture);
+        erase.setPosition(2*WORLD_WIDTH/3 + 150, WORLD_HEIGHT/3-80);
+
+        stageCode.addActor(codePanel);
+        stageCode.addActor(cross);
+        stageCode.addActor(number0);
+        stageCode.addActor(number1);
+        stageCode.addActor(number2);
+        stageCode.addActor(number3);
+        stageCode.addActor(number4);
+        stageCode.addActor(number5);
+        stageCode.addActor(number6);
+        stageCode.addActor(number7);
+        stageCode.addActor(number8);
+        stageCode.addActor(number9);
+        stageCode.addActor(erase);
+    }
+
+    private void eraseCode() {
+        if(inputSpaces<4){
+            int index = 3-inputSpaces;
+            code = code.substring(0, index);
+            inputSpaces++;
+        }
+    }
+
+    private void doCode(String input) {
+        if(inputSpaces > 0) {
+            inputSpaces--;
+            code += input;
+        }
+    }
+
 
     private void buySkin(int costo) {
         coinsCollected -= costo;
@@ -357,15 +615,12 @@ class ShopScreen extends ScreenAdapter {
 
     private void savePreferences() {
         preferencias.putInteger("coins", coinsCollected);
-        if(costo == 30){
-            preferencias.putBoolean("partyBought", true);
-        }else if (costo==35){
-            preferencias.putBoolean("hatBought", true);
-        }else if(costo == 40){
-            preferencias.putBoolean("tieBought", true);
-        }else if (costo == 50){
-            preferencias.putBoolean("crownBought", true);
-        }
+        if(costo == 30)preferencias.putBoolean("partyBought", true);
+        else if (costo==35)preferencias.putBoolean("hatBought", true);
+        else if(costo == 40)preferencias.putBoolean("tieBought", true);
+        else if (costo == 50)preferencias.putBoolean("crownBought", true);
+        else if(costo == 150)preferencias.putBoolean("hulkBought",  true);
+        else if(costo == 400)preferencias.putBoolean("ricardoBought", true);
         preferencias.flush();
     }
 
@@ -376,7 +631,7 @@ class ShopScreen extends ScreenAdapter {
         hatBought = preferencias.getBoolean("hatBought", SKIN_BOUGHT);
         tieBought = preferencias.getBoolean("tieBought", SKIN_BOUGHT);
         crownBought = preferencias.getBoolean("crownBought", SKIN_BOUGHT);
-        hulkBought = preferencias.getBoolean("crownBought", SKIN_BOUGHT);
+        hulkBought = preferencias.getBoolean("hulkBought", SKIN_BOUGHT);
         ricardoBought = preferencias.getBoolean("ricardoBought", SKIN_BOUGHT);
     }
 
@@ -401,7 +656,8 @@ class ShopScreen extends ScreenAdapter {
         batch.setProjectionMatrix(camera.projection);
         batch.setTransformMatrix(camera.view);
         batch.begin();
-        drawCoinsCounter();
+        if(state == STATE.NORMAL) drawCoinsCounter();
+        else if (state == STATE.CODE)drawCodeInput();
         batch.end();
         if(state == STATE.NORMAL){
             Gdx.input.setInputProcessor(stage);
@@ -425,6 +681,11 @@ class ShopScreen extends ScreenAdapter {
         String coinsAsString = Integer.toString(coinsCollected);
         glyphLayout.setText(bitmapFont, coinsAsString);
         bitmapFont.draw(batch, coinsAsString, WORLD_WIDTH/4, 80);
+    }
+
+    private void drawCodeInput() {
+        glyphLayout.setText(bitmapFont,code);
+        bitmapFont.draw(batch, code, WORLD_WIDTH/4, 80);
     }
 
     @Override

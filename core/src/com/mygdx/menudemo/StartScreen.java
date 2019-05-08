@@ -155,7 +155,7 @@ class StartScreen extends ScreenAdapter {
 
         table.add(kiwi).colspan(2);
 
-        table.add(closet);
+        table.add(shop);
 
         // ROW 3
         table.row();
@@ -163,7 +163,7 @@ class StartScreen extends ScreenAdapter {
 
         table.add(play).colspan(2);
 
-        table.add(shop);
+        table.add(closet);
 
         // Pack table
         table.setFillParent(true);
