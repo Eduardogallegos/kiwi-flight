@@ -46,10 +46,10 @@ public class level extends ScreenAdapter {
     private static final int COINS_DEFAULT = 0;
     private static final String ACTUAL_SKIN = "default";
     private static final float FRAME_DURATION = 0.4f;
-    private static final int WINNING_TILE_HEIGHT = 119;
-    private static final int WINNING_TILE_WIDTH = 199;
-    private static final int LOOSING_TILE_HEIGHT = 120;
-    private static final int LOOSING_TILE_WIDTH = 236;
+    private static final int WINNING_TILE_HEIGHT = 133;
+    private static final int WINNING_TILE_WIDTH = 200;
+    private static final int LOOSING_TILE_HEIGHT = 140;
+    private static final int LOOSING_TILE_WIDTH = 237;
     private static final float LOOSE_FRAME_DURATION = 0.2F;
     private static int LEVEL;
     private static final float DEFAULT_CHUNCK_SIZE = 11 ;
@@ -238,7 +238,7 @@ public class level extends ScreenAdapter {
                 kiiwWinningTexture = menuDemo.getAssetManager().get("defaultLevels/WinningKiwi.png");
                 kiiwLoosingTexture = menuDemo.getAssetManager().get("defaultLevels/LosingKiwi.png");
             }else if(skin.compareTo("ricardo") == 0){
-                kiiwTexture = menuDemo.getAssetManager().get("defaultLevels/RicardoKiwi.png");
+                kiiwTexture = menuDemo.getAssetManager().get("defaultLevels/ricardoKiwi.png");
                 kiiwWinningTexture = menuDemo.getAssetManager().get("defaultLevels/WinningKiwi.png");
                 kiiwLoosingTexture = menuDemo.getAssetManager().get("defaultLevels/LosingKiwi.png");
             }
@@ -526,8 +526,8 @@ public class level extends ScreenAdapter {
                 }
             });
 
-            skipButtonTexture=menuDemo.getAssetManager().get("level1/skip.png");
-            buttonPressTexture=menuDemo.getAssetManager().get("level1/skipPress.png");
+            skipButtonTexture=menuDemo.getAssetManager().get("defaultLevels/panelSkip.png");
+            buttonPressTexture=menuDemo.getAssetManager().get("defaultLevels/skipPress.png");
 
             ImageButton skipButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(skipButtonTexture)), new TextureRegionDrawable(new TextureRegion(buttonPressTexture)));
             skipButton.setPosition(WORLD_WIDTH-1.1f*skipButton.getWidth(),WORLD_HEIGHT-1.1f*skipButton.getHeight());
@@ -564,8 +564,8 @@ public class level extends ScreenAdapter {
                     updateTutorial(0);
                 }
             });
-            skipButtonTexture=menuDemo.getAssetManager().get("level1/skip.png");
-            buttonPressTexture=menuDemo.getAssetManager().get("level1/skipPress.png");
+            skipButtonTexture=menuDemo.getAssetManager().get("defaultLevels/panelSkip.png");
+            buttonPressTexture=menuDemo.getAssetManager().get("defaultLevels/skipPress.png");
 
             ImageButton skipButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(skipButtonTexture)), new TextureRegionDrawable(new TextureRegion(buttonPressTexture)));
             skipButton.setPosition(WORLD_WIDTH-1.1f*skipButton.getWidth(),WORLD_HEIGHT-1.1f*skipButton.getHeight());
@@ -603,8 +603,8 @@ public class level extends ScreenAdapter {
                     updateTutorial(1);
                 }
             });
-            skipButtonTexture=menuDemo.getAssetManager().get("level1/skip.png");
-            buttonPressTexture=menuDemo.getAssetManager().get("level1/skipPress.png");
+            skipButtonTexture=menuDemo.getAssetManager().get("defaultLevels/panelSkip.png");
+            buttonPressTexture=menuDemo.getAssetManager().get("defaultLevels/skipPress.png");
 
             ImageButton skipButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(skipButtonTexture)), new TextureRegionDrawable(new TextureRegion(buttonPressTexture)));
             skipButton.setPosition(WORLD_WIDTH-1.1f*skipButton.getWidth(),WORLD_HEIGHT-1.1f*skipButton.getHeight());
@@ -643,8 +643,8 @@ public class level extends ScreenAdapter {
                 }
             });
 
-            skipButtonTexture=menuDemo.getAssetManager().get("level1/skip.png");
-            buttonPressTexture=menuDemo.getAssetManager().get("level1/skipPress.png");
+            skipButtonTexture=menuDemo.getAssetManager().get("defaultLevels/panelSkip.png");
+            buttonPressTexture=menuDemo.getAssetManager().get("defaultLevels/skipPress.png");
             ImageButton skipButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(skipButtonTexture)), new TextureRegionDrawable(new TextureRegion(buttonPressTexture)));
             skipButton.setPosition(WORLD_WIDTH-1.1f*skipButton.getWidth(),WORLD_HEIGHT-1.1f*skipButton.getHeight());
             skipButton.addListener(new ActorGestureListener() {

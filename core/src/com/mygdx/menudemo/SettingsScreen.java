@@ -21,8 +21,8 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 
 class SettingsScreen extends ScreenAdapter {
 
-    private static final float MUSIC_VOLUME_DEFAULT = 1;
-    private static final float EFFECTS_VOLUME_DEFAULT = 1;
+    private static final float MUSIC_VOLUME_DEFAULT = 100;
+    private static final float EFFECTS_VOLUME_DEFAULT = 100;
     private final MenuDemo menuDemo;
     private static final float WORLD_WIDTH = 1280;
     private static final float WORLD_HEIGHT = 720;

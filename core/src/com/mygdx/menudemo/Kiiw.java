@@ -33,7 +33,7 @@ public class Kiiw {
             animation = new Animation(FRAME_DURATION, kiiwTextures[0][0], kiiwTextures[0][1],kiiwTextures[0][2],kiiwTextures[0][3]);
             animation.setPlayMode(Animation.PlayMode.LOOP);
         }else{
-            TextureRegion [][] kiiwTextures = new TextureRegion(kiiwTexture).split(190, 96);
+            TextureRegion [][] kiiwTextures = new TextureRegion(kiiwTexture).split(192, 119);
             animation = new Animation(FRAME_DURATION, kiiwTextures[0][0], kiiwTextures[0][1]);
             animation.setPlayMode(Animation.PlayMode.LOOP);
         }
