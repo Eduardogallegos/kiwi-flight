@@ -157,10 +157,14 @@ public class level extends ScreenAdapter {
     private float animationTimer = 0;
     private TextureRegion winningKiiw;
     private TextureRegion loosingKiiw;
-    private float winingKiiwX ;
+    private float winingKiiwX = WORLD_WIDTH/4;
     private float winingKiiwY = WORLD_HEIGHT/2;
     private Animation loosingAnimation;
     private float looseKiiwX = 20;
+    private boolean finish = false;
+    private Texture lifesBarTexture0;
+    private Texture skipButtonTexture;
+    private Texture buttonPressTexture;
 
     private enum STATE {
         PLAYING, PAUSED, GAMEOVER, WIN, PANELS, TUTORIAL, SETTINGS
@@ -301,6 +305,7 @@ public class level extends ScreenAdapter {
         lifesBarTexture3 = menuDemo.getAssetManager().get("defaultLevels/lifes2.png");
         lifesBarTexture2 = menuDemo.getAssetManager().get("defaultLevels/lifes1.png");
         lifesBarTexture1 = menuDemo.getAssetManager().get("defaultLevels/lifes0.png");
+        lifesBarTexture0 = menuDemo.getAssetManager().get("defaultLevels/lifesNull.png");
         lifesBar = new Image(lifesBarTexture3);
         lifesBar.setPosition(1*WORLD_WIDTH/3+80, WORLD_HEIGHT-lifesBar.getHeight()*1.1f);
         stageLifes.addActor(lifesBar);
@@ -510,8 +515,33 @@ public class level extends ScreenAdapter {
                 }
             });
 
+            backButtonTexture = menuDemo.getAssetManager().get("level1/back.png");
+            backPressedButtonTexture = menuDemo.getAssetManager().get("level1/backPressed.png");
+            ImageButton backButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(backButtonTexture)), new TextureRegionDrawable(new TextureRegion(backPressedButtonTexture)));
+            backButton.setPosition(backButton.getWidth()*.2f, nextButton.getHeight()/2);
+            backButton.addListener(new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y){
+                    state =  STATE.PANELS;
+                }
+            });
+
+            skipButtonTexture=menuDemo.getAssetManager().get("level1/skip.png");
+            buttonPressTexture=menuDemo.getAssetManager().get("level1/skipPress.png");
+
+            ImageButton skipButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(skipButtonTexture)), new TextureRegionDrawable(new TextureRegion(buttonPressTexture)));
+            skipButton.setPosition(WORLD_WIDTH-1.1f*skipButton.getWidth(),WORLD_HEIGHT-1.1f*skipButton.getHeight());
+            skipButton.addListener(new ActorGestureListener() {
+                @Override
+                public void tap(InputEvent event, float x, float y, int count, int button) {
+                    state = STATE.PLAYING;
+                }
+            });
+
             stageTutorial.addActor(tutorialPanel);
             stageTutorial.addActor(nextButton);
+            stageTutorial.addActor(backButton);
+            stageTutorial.addActor(skipButton);
         }else if(tutorialIndex == 1){
             tutorialPanel = new Image(speedTutorialTexture);
             nextButtonTexture = menuDemo.getAssetManager().get("level1/next.png");
@@ -534,9 +564,21 @@ public class level extends ScreenAdapter {
                     updateTutorial(0);
                 }
             });
+            skipButtonTexture=menuDemo.getAssetManager().get("level1/skip.png");
+            buttonPressTexture=menuDemo.getAssetManager().get("level1/skipPress.png");
+
+            ImageButton skipButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(skipButtonTexture)), new TextureRegionDrawable(new TextureRegion(buttonPressTexture)));
+            skipButton.setPosition(WORLD_WIDTH-1.1f*skipButton.getWidth(),WORLD_HEIGHT-1.1f*skipButton.getHeight());
+            skipButton.addListener(new ActorGestureListener() {
+                @Override
+                public void tap(InputEvent event, float x, float y, int count, int button) {
+                    state = STATE.PLAYING;
+                }
+            });
             stageTutorial.addActor(tutorialPanel);
             stageTutorial.addActor(nextButton);
             stageTutorial.addActor(backButton);
+            stageTutorial.addActor(skipButton);
         }else if(tutorialIndex == 2){
             tutorialPanel = new Image(timeTutorialTexture);
 
@@ -561,11 +603,21 @@ public class level extends ScreenAdapter {
                     updateTutorial(1);
                 }
             });
+            skipButtonTexture=menuDemo.getAssetManager().get("level1/skip.png");
+            buttonPressTexture=menuDemo.getAssetManager().get("level1/skipPress.png");
 
+            ImageButton skipButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(skipButtonTexture)), new TextureRegionDrawable(new TextureRegion(buttonPressTexture)));
+            skipButton.setPosition(WORLD_WIDTH-1.1f*skipButton.getWidth(),WORLD_HEIGHT-1.1f*skipButton.getHeight());
+            skipButton.addListener(new ActorGestureListener() {
+                @Override
+                public void tap(InputEvent event, float x, float y, int count, int button) {
+                    state = STATE.PLAYING;
+                }
+            });
             stageTutorial.addActor(tutorialPanel);
             stageTutorial.addActor(nextButton);
             stageTutorial.addActor(backButton);
-
+            stageTutorial.addActor(skipButton);
         }else if(tutorialIndex == 3){
             tutorialPanel = new Image(coinsTutorialTexture);
 
@@ -591,9 +643,20 @@ public class level extends ScreenAdapter {
                 }
             });
 
+            skipButtonTexture=menuDemo.getAssetManager().get("level1/skip.png");
+            buttonPressTexture=menuDemo.getAssetManager().get("level1/skipPress.png");
+            ImageButton skipButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(skipButtonTexture)), new TextureRegionDrawable(new TextureRegion(buttonPressTexture)));
+            skipButton.setPosition(WORLD_WIDTH-1.1f*skipButton.getWidth(),WORLD_HEIGHT-1.1f*skipButton.getHeight());
+            skipButton.addListener(new ActorGestureListener() {
+                @Override
+                public void tap(InputEvent event, float x, float y, int count, int button) {
+                    state = STATE.PLAYING;
+                }
+            });
             stageTutorial.addActor(tutorialPanel);
             stageTutorial.addActor(nextButton);
             stageTutorial.addActor(backButton);
+            stageTutorial.addActor(skipButton);
         }
     }
 
@@ -669,7 +732,7 @@ public class level extends ScreenAdapter {
 
     private void updateKiiwWinAnimation() {
         winingKiiwX += 4;
-        winingKiiwY += 0.4;
+        winingKiiwY += 0.7;
     }
 
     private void updtaeKiiwLooseAnimation() {
@@ -689,7 +752,7 @@ public class level extends ScreenAdapter {
         if(actualSpeed == speedNeeded){
             winEffect.play();
             state = STATE.WIN;
-//            dispose();
+            finish = true;
         }
     }
 
@@ -698,7 +761,7 @@ public class level extends ScreenAdapter {
             loseEffect.play();
             loseMusic.play();
             state = STATE.GAMEOVER;
-           // dispose();
+            finish = true;
         }
     }
 
@@ -710,7 +773,7 @@ public class level extends ScreenAdapter {
         if(bossLevel){
             hawk.draw(batch);
         }
-        if( state != STATE.GAMEOVER) kiiw.draw(batch);
+        if(!finish) kiiw.draw(batch);
         if(state == STATE.WIN) {
             winningKiiw = (TextureRegion) winningAnimation.getKeyFrame(animationTimer);
             batch.draw(winningKiiw, winingKiiwX, winingKiiwY);
@@ -749,17 +812,26 @@ public class level extends ScreenAdapter {
         }else if (state == STATE.GAMEOVER){
             music.stop();
             obstacles.clear();
+            coins.clear();
+            stageLifes.clear();
+            lifesBar = new Image(lifesBarTexture0);
+            lifesBar.setPosition(1*WORLD_WIDTH/3+80, WORLD_HEIGHT-lifesBar.getHeight()*1.1f);
+            stageLifes.addActor(lifesBar);
             if(animationTimer>=2.5){
                 stageGameOver.draw();
                 Gdx.input.setInputProcessor(stageGameOver);
             }
         }else if(state == STATE.WIN){
             savePreferences();
+            obstacles.clear();
+            coins.clear();
             if(animationTimer>=4.5){
                 if(bossLevel){
                     menuDemo.setScreen(new EndingTransitionScreen(menuDemo));
+                    music.stop();
                 }else {
                     menuDemo.setScreen(new LevelsScreen(menuDemo));
+                    music.stop();
                 }
             }
         }else if( state == STATE.SETTINGS){
@@ -895,7 +967,7 @@ public class level extends ScreenAdapter {
         }else if (lifes == 0){
             lifesBar = new Image(lifesBarTexture1);
         }
-        lifesBar.setPosition(1*WORLD_WIDTH/3+50, WORLD_HEIGHT-lifesBar.getHeight()*1.1f);
+        lifesBar.setPosition(1*WORLD_WIDTH/3+80, WORLD_HEIGHT-lifesBar.getHeight()*1.1f);
         stageLifes.addActor(lifesBar);
     }
 
@@ -904,6 +976,7 @@ public class level extends ScreenAdapter {
             loseEffect.play();
             loseMusic.play();
             state = STATE.GAMEOVER;
+            finish = true;
         }
         else{
             lifes--;
@@ -917,6 +990,7 @@ public class level extends ScreenAdapter {
         if(actualSpeed<=lowSpeedLimit && bossLevel){
             music.stop();
             state = STATE.GAMEOVER;
+            finish = true;
         }else {
             actualSpeed--;
         }
@@ -961,7 +1035,8 @@ public class level extends ScreenAdapter {
 
     private void restart() {
         loseMusic.stop();
-        music.play();
+        menuDemo.setScreen(new level(menuDemo, LEVEL));
+        /*music.play();
         padCounter = 2;
         levelTimer = 0;
         secondsTimer = 60;
@@ -980,6 +1055,7 @@ public class level extends ScreenAdapter {
         }
         nonCollisionTimer = 0;
         updateLifesIndicator();
+        finish = false;*/
         }
 
     private void updateObstacles(float delta) {

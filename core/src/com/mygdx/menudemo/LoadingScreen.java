@@ -102,6 +102,9 @@ public class LoadingScreen extends ScreenAdapter {
         menuDemo.getAssetManager().load("defaultLevels/flechaPress.png", Texture.class);
         menuDemo.getAssetManager().load("defaultLevels/WinningKiwi.png", Texture.class);
         menuDemo.getAssetManager().load("defaultLevels/LosingKiwi.png", Texture.class);
+        menuDemo.getAssetManager().load("defaultLevels/lifesNull.png", Texture.class);
+        menuDemo.getAssetManager().load("level1/skip.png", Texture.class);
+        menuDemo.getAssetManager().load("level1/skipPress.png", Texture.class);
     }
 
     @Override
