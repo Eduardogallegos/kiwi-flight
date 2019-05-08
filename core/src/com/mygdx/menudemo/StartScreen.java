@@ -1,6 +1,7 @@
 package com.mygdx.menudemo;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.audio.Music;
@@ -45,6 +46,12 @@ class StartScreen extends ScreenAdapter {
     private Music music;
     private Preferences preferencias;
     private float musicVolume;
+    private Texture quitPanelTexture;
+    private Texture yesQuitTexture;
+    private Texture yesQuitPressTexture;
+    private Texture noQuitTexture;
+    private Texture noQuitPressTexture;
+    private Stage quitStage;
 
 
     public StartScreen(MenuDemo menuDemo) {
@@ -143,6 +150,35 @@ class StartScreen extends ScreenAdapter {
             }
         });
 
+        quitStage = new Stage(new FitViewport(WORLD_WIDTH, WORLD_HEIGHT));
+
+        /*quitPanelTexture = new Texture(Gdx.files.internal("back/quitpanel.png"));
+        Image quitPanel = new Image(quitPanelTexture);
+
+        yesQuitTexture = new Texture(Gdx.files.internal("back/yes.png"));
+        yesQuitPressTexture = new Texture(Gdx.files.internal("back/yesPress.png"));
+        ImageButton yesQuit = new ImageButton(new TextureRegionDrawable(new TextureRegion(yesQuitTexture)), new TextureRegionDrawable(new TextureRegion(yesQuitPressTexture)));
+        yesQuit.addListener(new ActorGestureListener(){
+            @Override
+            public void tap(InputEvent event, float x, float y, int count, int button) {
+                Gdx.app.exit();
+            }
+        });
+
+        noQuitTexture = new Texture(Gdx.files.internal("back/no.png"));
+        noQuitPressTexture = new Texture(Gdx.files.internal("back/noPress.png"));
+        ImageButton noQuit = new ImageButton(new TextureRegionDrawable(new TextureRegion(noQuitTexture)), new TextureRegionDrawable(new TextureRegion(noQuitPressTexture)));
+        noQuit.addListener(new ActorGestureListener(){
+            @Override
+            public void tap(InputEvent event, float x, float y, int count, int button) {
+                quitStage.clear();
+            }
+        });
+
+        quitStage.addActor(quitPanel);
+        quitStage.addActor(yesQuit);
+        quitStage.addActor(noQuit);*/
+
         table = new Table();
         //table.debug(); //Enables debug
 
@@ -164,16 +200,12 @@ class StartScreen extends ScreenAdapter {
         table.add(play).colspan(2);
 
         table.add(closet);
-
-        // Pack table
         table.setFillParent(true);
         table.pack();
-
-        // Set titles's alpha to 0
-        //title.getColor().a = 0f;
-        // Adds created table to stage
         stage.addActor(table);
 
+        Gdx.input.setInputProcessor(stage);
+        Gdx.input.setCatchBackKey(true);
     }
 
     @Override
@@ -186,9 +218,16 @@ class StartScreen extends ScreenAdapter {
     public void render(float delta) {
         super.render(delta);
         clearScreen();
+        //backKey();
         updateVolume();
         stage.act(delta);
         stage.draw();
+    }
+
+    private void backKey() {
+        if(Gdx.input.isKeyPressed(Input.Keys.BACK)){
+            quitStage.draw();
+        }
     }
 
     private void loadPreferences() {

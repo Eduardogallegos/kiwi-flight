@@ -190,7 +190,7 @@ class ShopScreen extends ScreenAdapter {
             party.addListener(new ActorGestureListener() {
                 @Override
                 public void tap(InputEvent event, float x, float y, int count, int button) {
-                    costo = 30;
+                    costo = 100;
                     checkIfCanAfford(costo);
                 }
             });
@@ -211,7 +211,7 @@ class ShopScreen extends ScreenAdapter {
             hat.addListener(new ActorGestureListener() {
                 @Override
                 public void tap(InputEvent event, float x, float y, int count, int button) {
-                    costo = 35;
+                    costo = 75;
                     checkIfCanAfford(costo);
                 }
             });
@@ -232,7 +232,7 @@ class ShopScreen extends ScreenAdapter {
             tie.addListener(new ActorGestureListener() {
                 @Override
                 public void tap(InputEvent event, float x, float y, int count, int button) {
-                    costo = 40;
+                    costo = 85;
                     checkIfCanAfford(costo);
                 }
             });
@@ -253,7 +253,7 @@ class ShopScreen extends ScreenAdapter {
             crown.addListener(new ActorGestureListener() {
                 @Override
                 public void tap(InputEvent event, float x, float y, int count, int button) {
-                    costo = 50;
+                    costo = 120;
                     checkIfCanAfford(costo);
                 }
             });
@@ -626,10 +626,10 @@ class ShopScreen extends ScreenAdapter {
 
     private void savePreferences() {
         preferencias.putInteger("coins", coinsCollected);
-        if(costo == 30)preferencias.putBoolean("partyBought", true);
-        else if (costo==35)preferencias.putBoolean("hatBought", true);
-        else if(costo == 40)preferencias.putBoolean("tieBought", true);
-        else if (costo == 50)preferencias.putBoolean("crownBought", true);
+        if(costo == 100)preferencias.putBoolean("partyBought", true);
+        else if (costo==75)preferencias.putBoolean("hatBought", true);
+        else if(costo == 85)preferencias.putBoolean("tieBought", true);
+        else if (costo == 120)preferencias.putBoolean("crownBought", true);
         else if(costo == 150)preferencias.putBoolean("hulkBought",  true);
         else if(costo == 400)preferencias.putBoolean("ricardoBought", true);
         preferencias.flush();
