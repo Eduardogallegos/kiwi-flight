@@ -1123,28 +1123,28 @@ public class level extends ScreenAdapter {
     private void createNewObstacle(){
         Random rnd = new Random();
         int RandomPad = rnd.nextInt(5);
-        int obstacleWidth=167;
-        int obstacleHeight = 105;
+        int obstacleWidth=168;
+        int obstacleHeight = 107;
         int obstacleType = rnd.nextInt(3);
         boolean isGrass = false;
         switch (obstacleType){
             case 0:
                 obstacleTexture = new Texture(Gdx.files.internal("level"+LEVEL+"/roca.png"));
                 if(bossLevel){
-                    obstacleWidth = 170;
-                    obstacleHeight = 170;
+                    obstacleWidth = 168;
+                    obstacleHeight = 107;
                 }
                 break;
             case 1:
                 obstacleTexture = new Texture(Gdx.files.internal("level"+LEVEL+"/arbol.png"));
                 if(LEVEL==1) {
-                    obstacleWidth = 208;
-                    obstacleHeight = 270;
+                    obstacleWidth = 212;
+                    obstacleHeight = 272;
                 }else if(LEVEL == 2) {
-                    obstacleWidth = 135;
-                    obstacleHeight = 256;
+                    obstacleWidth = 137;
+                    obstacleHeight = 265;
                 }else if(LEVEL == 3){
-                    obstacleWidth = 480;
+                    obstacleWidth = 482;
                     obstacleHeight=258;
                 }else{
                     obstacleWidth = 170;
@@ -1157,8 +1157,8 @@ public class level extends ScreenAdapter {
                     obstacleWidth = 170;
                     obstacleHeight = 102;
                 }else{
-                    obstacleWidth = 116;
-                    obstacleHeight=170;
+                    obstacleWidth = 118;
+                    obstacleHeight=171;
                 }
                 isGrass=true;
                 break;

@@ -1,7 +1,9 @@
 package com.mygdx.menudemo;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -24,6 +26,7 @@ public class BossTransitionScreen extends ScreenAdapter {
     private final MenuDemo menuDemo;
     private static final float WORLD_WIDTH=1280;
     private static final float WORLD_HEIGHT=720;
+    private static final float MUSIC_VOLUME_DEFAULT = 1;
 
     private Stage stage;
     private Texture story8Texture;
@@ -33,13 +36,21 @@ public class BossTransitionScreen extends ScreenAdapter {
     private Texture buttonTexture;
     private Texture buttonPressTexture;
 
+    private Music music;
+    private float musicVolume;
+    private Preferences preferencias;
+
+
 
     public BossTransitionScreen(MenuDemo menuDemo){
+
         this.menuDemo =menuDemo;
+        this.preferencias = menuDemo.getPreferences();
     }
 
     public void show(){
         super.show();
+        loadPreferences();
         stage=new Stage(new FitViewport(WORLD_WIDTH,WORLD_HEIGHT));
         Gdx.input.setInputProcessor(stage);
 
@@ -49,12 +60,18 @@ public class BossTransitionScreen extends ScreenAdapter {
         buttonTexture=new Texture(Gdx.files.internal("loading/skip.png"));
         buttonPressTexture=new Texture(Gdx.files.internal("loading/skipPress.png"));
 
+        music = Gdx.audio.newMusic(Gdx.files.internal("loading/hawk.mp3"));
+        updateVolume();
+        music.setLooping(false);
+        music.play();
+
         ImageButton skipButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(buttonTexture)), new TextureRegionDrawable(new TextureRegion(buttonPressTexture)));
         skipButton.setPosition(1020,35);
         skipButton.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 super.tap(event, x, y, count, button);
+                music.stop();
                 menuDemo.setScreen(new LoadingScreen( menuDemo,4));
                 dispose();
             }
@@ -79,13 +96,21 @@ public class BossTransitionScreen extends ScreenAdapter {
 
         story9.addAction(sequence(delay(3), fadeIn(0),delay(2), fadeOut(1)));
 
-        story10.addAction(sequence(delay(5), fadeIn(1),delay(4), fadeOut(1), run(new Runnable() {
+        story10.addAction(sequence(delay(5), fadeIn(1),delay(3), fadeOut(1), run(new Runnable() {
             @Override
             public void run() {
                 menuDemo.setScreen(new LoadingScreen( menuDemo,4));
+                music.stop();
                 dispose();
             }
         })));
+    }
+    private void loadPreferences() {
+        musicVolume = preferencias.getFloat("musicVolume", MUSIC_VOLUME_DEFAULT);
+    }
+
+    private void updateVolume() {
+        music.setVolume(musicVolume);
     }
 
     @Override
@@ -111,6 +136,7 @@ public class BossTransitionScreen extends ScreenAdapter {
         story10Texture.dispose();
         buttonPressTexture.dispose();
         buttonTexture.dispose();
+        music.dispose();
 
     }
 
