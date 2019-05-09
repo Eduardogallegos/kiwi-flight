@@ -558,13 +558,16 @@ class ShopScreen extends ScreenAdapter {
             costo = 150;
             skinDecode = "hulk";
             savePreferences();
+            loadPreferences();
         }else if (code.compareTo("4928") == 0 && !ricardoBought){
             createCodeValidationPanel(true);
             costo = 400;
             skinDecode = "ricardo";
             savePreferences();
+            loadPreferences();
         }else{
             createCodeValidationPanel(false);
+            skinDecode = "";
         }
     }
 

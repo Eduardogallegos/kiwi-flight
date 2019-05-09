@@ -914,9 +914,9 @@ public class level extends ScreenAdapter {
     }
 
     private void updateHawkAnimation() {
-        if(hawk.getX() < kiiw.getX()){
+        if(hawk.getX() < kiiw.getX()-120){
             hawkX += 5;
-            hawk.setPosition(hawkX-50, kiiw.getY());
+            hawk.setPosition(hawkX, kiiw.getY());
         }
     }
 
