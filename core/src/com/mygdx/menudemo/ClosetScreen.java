@@ -145,6 +145,7 @@ class ClosetScreen extends ScreenAdapter {
                 public void tap(InputEvent event, float x, float y, int count, int button) {
                     actualSkin = "hat";
                     updateKiiwAnimation(actualSkin);
+                    updateButton(actualSkin);
                 }
             });
             stage.addActor(hatSkin);
@@ -206,6 +207,26 @@ class ClosetScreen extends ScreenAdapter {
             stage.addActor(ricardoSkin);
         }
 
+    }
+
+    private void updateButton(String actualSkin) {
+        if(actualSkin.compareTo("party") == 0){
+            partySkinButtonTexture = new Texture(Gdx.files.internal("closet/partyButton.png"));
+            ImageButton partySkin = new ImageButton(new TextureRegionDrawable(new TextureRegion(partySkinButtonTexture)), new TextureRegionDrawable(new TextureRegion(partySkinButtonTexture)));
+            partySkin.setPosition(115, WORLD_HEIGHT/2+25);
+        }else if(actualSkin.compareTo("hat") == 0){
+            hatSkinButtonTexture = new Texture(Gdx.files.internal("closet/hatButton.png"));
+            ImageButton hatSkin = new ImageButton(new TextureRegionDrawable(new TextureRegion(hatSkinButtonTexture)), new TextureRegionDrawable(new TextureRegion(hatSkinButtonTexture)));
+            hatSkin.setPosition(275, WORLD_HEIGHT/2+25);
+        }else if(actualSkin.compareTo("tie") == 0){
+            kiiwTexture = new Texture(Gdx.files.internal("closet/TieKiwiStill.png"));
+        }else if(actualSkin.compareTo("crown") == 0){
+            kiiwTexture = new Texture(Gdx.files.internal("closet/CrownKiwiStill.png"));
+        }else if(actualSkin.compareTo("hulk") == 0){
+            kiiwTexture = new Texture(Gdx.files.internal("closet/HulkKiwiStill.png"));
+        }else if(actualSkin.compareTo("ricardo") == 0){
+            kiiwTexture = new Texture(Gdx.files.internal("closet/DancingKiwiStill.png"));
+        }
     }
 
     private void updateKiiwAnimation(String actualSkin) {

@@ -52,8 +52,6 @@ class ShopScreen extends ScreenAdapter {
     private Texture crownSkinButtonPressTexture;
     private Texture tieSkinButtonPressTexture;
     private Texture tieSkinButtonTexture;
-    //private Texture hulkSkinButtonPressTexture;
-    //private Texture hulkSkinButtonTexture;
     private Texture hatSkinButtonPressTexture;
     private Texture hatSkinButtonTexture;
     private Texture partySkinButtonTexture;
@@ -111,7 +109,7 @@ class ShopScreen extends ScreenAdapter {
     private Label inputLabel;
 
     private enum STATE{
-        NORMAL, RUSURE, NOCOINS, CODE
+        NORMAL, RUSURE, NOCOINS, CODE, QUIT
     }
 
     private STATE state = STATE.NORMAL;
@@ -368,7 +366,7 @@ class ShopScreen extends ScreenAdapter {
         Label.LabelStyle labelStyle = new Label.LabelStyle();
         labelStyle.font = bitmapFont;
         inputLabel = new Label("", labelStyle);
-        inputLabel.setPosition(WORLD_WIDTH/3-inputLabel.getWidth()/2, WORLD_HEIGHT/2-inputLabel.getHeight()/2);
+        inputLabel.setPosition(WORLD_WIDTH/3-50, WORLD_HEIGHT/2-inputLabel.getHeight()/2);
 
 
         ceroButtonTexture = new Texture(Gdx.files.internal("shop/0.png"));
@@ -556,6 +554,17 @@ class ShopScreen extends ScreenAdapter {
         nineButtonTexture = new Texture(Gdx.files.internal("shop/9.png"));
         eraseButtonTexture = new Texture(Gdx.files.internal("shop/back.png"));
 
+        okButtonTexture = new Texture(Gdx.files.internal("shop/ok.png"));
+        okButtonPressedTexture = new Texture(Gdx.files.internal("shop/okPress.png"));
+        ImageButton ok = new ImageButton(new TextureRegionDrawable(new TextureRegion(okButtonTexture)), new TextureRegionDrawable(new TextureRegion(okButtonPressedTexture)));
+        ok.setPosition(WORLD_WIDTH/3-75, WORLD_HEIGHT/3-50);
+        ok.addListener(new ActorGestureListener() {
+            @Override
+            public void tap(InputEvent event, float x, float y, int count, int button) {
+                state = STATE.NORMAL;
+            }
+        });
+
         Image codePanel = new Image(codePanelTexture);
         Image number0 = new Image(ceroButtonTexture);
         number0.setPosition(2*WORLD_WIDTH/3, WORLD_HEIGHT/3-80);
@@ -593,6 +602,7 @@ class ShopScreen extends ScreenAdapter {
         stageCode.addActor(number8);
         stageCode.addActor(number9);
         stageCode.addActor(erase);
+        stageCode.addActor(ok);
     }
 
     private void eraseCode() {
