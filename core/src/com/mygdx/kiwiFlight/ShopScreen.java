@@ -251,13 +251,13 @@ class ShopScreen extends ScreenAdapter {
             crownSkinButtonTexture = new Texture(Gdx.files.internal("shop/crownKiwiSold.png"));
             crownSkinButtonPressTexture = new Texture(Gdx.files.internal("shop/crownKiwiSold.png"));
             ImageButton crown = new ImageButton(new TextureRegionDrawable(new TextureRegion(crownSkinButtonTexture)), new TextureRegionDrawable(new TextureRegion(crownSkinButtonPressTexture)));
-            crown.setPosition(WORLD_WIDTH / 2 + 350, WORLD_HEIGHT / 2 - 180);
+            crown.setPosition(WORLD_WIDTH / 2 + 350, WORLD_HEIGHT / 2 - 200);
             stage.addActor(crown);
         }else {
             crownSkinButtonTexture = new Texture(Gdx.files.internal("shop/crownKiwi.png"));
             crownSkinButtonPressTexture = new Texture(Gdx.files.internal("shop/crownKiwiPress.png"));
             ImageButton crown = new ImageButton(new TextureRegionDrawable(new TextureRegion(crownSkinButtonTexture)), new TextureRegionDrawable(new TextureRegion(crownSkinButtonPressTexture)));
-            crown.setPosition(WORLD_WIDTH / 2 + 350, WORLD_HEIGHT / 2 - 180);
+            crown.setPosition(WORLD_WIDTH / 2 + 350, WORLD_HEIGHT / 2 - 200);
             crown.addListener(new ActorGestureListener() {
                 @Override
                 public void tap(InputEvent event, float x, float y, int count, int button) {
