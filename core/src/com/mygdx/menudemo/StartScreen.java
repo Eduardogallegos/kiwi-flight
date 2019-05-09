@@ -53,6 +53,11 @@ class StartScreen extends ScreenAdapter {
     private Texture noQuitPressTexture;
     private Stage quitStage;
 
+    private enum STATE {
+        NORMAL, QUIT
+    }
+
+    private STATE state = STATE.NORMAL;
 
     public StartScreen(MenuDemo menuDemo) {
         this.menuDemo =menuDemo;
@@ -77,9 +82,6 @@ class StartScreen extends ScreenAdapter {
 
         titleTexture = new Texture(Gdx.files.internal("principal/MenuLogo.png"));
         Image title = new Image(titleTexture);
-
-        panelTexture= new Texture(Gdx.files.internal("principal/panel.png"));
-        Image panel = new Image(panelTexture);
 
         kiwiTexture= new Texture(Gdx.files.internal("principal/kiwi.png"));
         Image kiwi = new Image(kiwiTexture);
@@ -144,14 +146,15 @@ class StartScreen extends ScreenAdapter {
             }
         });
 
-        //quitStage = new Stage(new FitViewport(WORLD_WIDTH, WORLD_HEIGHT));
+        quitStage = new Stage(new FitViewport(WORLD_WIDTH, WORLD_HEIGHT));
 
-        /*quitPanelTexture = new Texture(Gdx.files.internal("back/quitpanel.png"));
+        quitPanelTexture = new Texture(Gdx.files.internal("back/quitpanel.png"));
         Image quitPanel = new Image(quitPanelTexture);
 
         yesQuitTexture = new Texture(Gdx.files.internal("back/yes.png"));
         yesQuitPressTexture = new Texture(Gdx.files.internal("back/yesPress.png"));
         ImageButton yesQuit = new ImageButton(new TextureRegionDrawable(new TextureRegion(yesQuitTexture)), new TextureRegionDrawable(new TextureRegion(yesQuitPressTexture)));
+        yesQuit.setPosition(WORLD_WIDTH/3, WORLD_HEIGHT/3);
         yesQuit.addListener(new ActorGestureListener(){
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
@@ -162,16 +165,17 @@ class StartScreen extends ScreenAdapter {
         noQuitTexture = new Texture(Gdx.files.internal("back/no.png"));
         noQuitPressTexture = new Texture(Gdx.files.internal("back/noPress.png"));
         ImageButton noQuit = new ImageButton(new TextureRegionDrawable(new TextureRegion(noQuitTexture)), new TextureRegionDrawable(new TextureRegion(noQuitPressTexture)));
+        noQuit.setPosition(2*WORLD_WIDTH/3, 2*WORLD_HEIGHT/3);
         noQuit.addListener(new ActorGestureListener(){
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
-                quitStage.clear();
+                state = STATE.NORMAL;
             }
         });
 
         quitStage.addActor(quitPanel);
         quitStage.addActor(yesQuit);
-        quitStage.addActor(noQuit);*/
+        quitStage.addActor(noQuit);
 
         table = new Table();
         //table.debug(); //Enables debug
@@ -211,16 +215,20 @@ class StartScreen extends ScreenAdapter {
     public void render(float delta) {
         super.render(delta);
         clearScreen();
-        //backKey();
+        if(state == STATE.QUIT){
+            quitStage.draw();
+            Gdx.input.setInputProcessor(quitStage);
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.BACK)){
+            state = STATE.QUIT;
+        }
         updateVolume();
         stage.act(delta);
         stage.draw();
     }
 
     private void backKey() {
-        if(Gdx.input.isKeyPressed(Input.Keys.BACK)){
-            quitStage.draw();
-        }
+
     }
 
     private void loadPreferences() {
