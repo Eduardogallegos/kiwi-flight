@@ -170,6 +170,7 @@ public class level extends ScreenAdapter {
     private Texture yesQuitPressTexture;
     private Texture noQuitTexture;
     private Texture noQuitPressTexture;
+    private float hawkX;
 
     private enum STATE {
         PLAYING, PAUSED, GAMEOVER, WIN, PANELS, TUTORIAL, QUIT, SETTINGS
@@ -804,7 +805,7 @@ public class level extends ScreenAdapter {
 
     private void updateKiiwWinAnimation() {
         winingKiiwX += 3.8;
-        winingKiiwY += 0.9;
+        if(!bossLevel) winingKiiwY += 0.9;
     }
 
 
@@ -840,9 +841,6 @@ public class level extends ScreenAdapter {
         batch.setProjectionMatrix(camera.projection);
         batch.setTransformMatrix(camera.view);
         batch.begin();
-        if(bossLevel){
-            hawk.draw(batch);
-        }
         if(!finish) kiiw.draw(batch);
         if(state == STATE.WIN) {
             winningKiiw = (TextureRegion) winningAnimation.getKeyFrame(animationTimer);
@@ -850,6 +848,11 @@ public class level extends ScreenAdapter {
         }else if(state == STATE.GAMEOVER){
             loosingKiiw = (TextureRegion) loosingAnimation.getKeyFrame(animationTimer);
             batch.draw(loosingKiiw, kiiw.getX(), kiiw.getY());
+            if(bossLevel)updateHawkAnimation();
+
+        }
+        if(bossLevel){
+            hawk.draw(batch);
         }
         drawCoin();
         drawObstacle();
@@ -907,6 +910,13 @@ public class level extends ScreenAdapter {
         }else if( state == STATE.SETTINGS){
             stageSettings.draw();
             Gdx.input.setInputProcessor(stageSettings);
+        }
+    }
+
+    private void updateHawkAnimation() {
+        if(hawk.getX() < kiiw.getX()){
+            hawkX += 5;
+            hawk.setPosition(hawkX-50, kiiw.getY());
         }
     }
 
@@ -1052,6 +1062,7 @@ public class level extends ScreenAdapter {
             loseMusic.play();
             state = STATE.GAMEOVER;
             finish = true;
+            if(bossLevel)hawkX = hawk.getX();
         }
         else{
             lifes--;
@@ -1066,6 +1077,7 @@ public class level extends ScreenAdapter {
             music.stop();
             state = STATE.GAMEOVER;
             finish = true;
+            if(bossLevel)hawkX = hawk.getX();
         }else {
             actualSpeed--;
         }
@@ -1124,6 +1136,8 @@ public class level extends ScreenAdapter {
         coinsCollected = coinsAtBegining;
         if(bossLevel){
             actualSpeed = 15;
+            hawkX = 0;
+
         }else{
             actualSpeed = 0;
         }

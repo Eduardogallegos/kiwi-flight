@@ -34,4 +34,8 @@ class Hawk {
     public void update(float delta) {
         animationTimer += delta;
     }
+
+    public float getX() {
+        return x;
+    }
 }
