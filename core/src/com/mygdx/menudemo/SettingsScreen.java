@@ -72,7 +72,6 @@ class SettingsScreen extends ScreenAdapter {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 music.stop();
-                super.tap(event, x, y, count, button);
                 savePreferences();
                 menuDemo.setScreen(new StartScreen(menuDemo));
                 dispose();
