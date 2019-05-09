@@ -1,8 +1,8 @@
-package com.mygdx.kiwiFlight.desktop;
+package mx.tec.kiwiFlight.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.mygdx.kiwiFlight.kiwiFlight;
+import mx.tec.kiwiFlight.kiwiFlight;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {

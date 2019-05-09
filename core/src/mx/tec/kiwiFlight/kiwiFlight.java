@@ -1,4 +1,4 @@
-package com.mygdx.kiwiFlight;
+package mx.tec.kiwiFlight;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;

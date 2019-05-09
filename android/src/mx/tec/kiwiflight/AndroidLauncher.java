@@ -1,4 +1,4 @@
-package com.mygdx.kiwiFlight;
+package mx.tec.kiwiFlight;
 
 import android.os.Bundle;
 
