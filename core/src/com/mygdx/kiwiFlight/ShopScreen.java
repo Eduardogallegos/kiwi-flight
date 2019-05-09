@@ -107,6 +107,7 @@ class ShopScreen extends ScreenAdapter {
     private Texture eraseButtonTexture;
 
     private Label inputLabel;
+    private Label outputLabel;
     private Stage quitStage;
     private Texture quitPanelTexture;
     private Texture yesQuitTexture;
@@ -409,7 +410,8 @@ class ShopScreen extends ScreenAdapter {
         labelStyle.font = bitmapFont;
         inputLabel = new Label("", labelStyle);
         inputLabel.setPosition(WORLD_WIDTH/3-50, WORLD_HEIGHT/2-inputLabel.getHeight()/2);
-
+        outputLabel = new Label("", labelStyle);
+        outputLabel.setPosition(WORLD_WIDTH/3-50, WORLD_HEIGHT/2-outputLabel.getHeight());
 
         ceroButtonTexture = new Texture(Gdx.files.internal("shop/0.png"));
         ceroButtonPressedTexture = new Texture(Gdx.files.internal("shop/0Press.png"));
@@ -554,12 +556,12 @@ class ShopScreen extends ScreenAdapter {
         if (code.compareTo("1234") == 0 && !hulkBought){
             createCodeValidationPanel(true);
             costo = 150;
-            skinDecode = "Hulk";
+            skinDecode = "hulk";
             savePreferences();
         }else if (code.compareTo("4928") == 0 && !ricardoBought){
             createCodeValidationPanel(true);
             costo = 400;
-            skinDecode = "Ricardo";
+            skinDecode = "ricardo";
             savePreferences();
         }else{
             createCodeValidationPanel(false);
@@ -572,10 +574,8 @@ class ShopScreen extends ScreenAdapter {
             codePanelTexture = new Texture(Gdx.files.internal("shop/validCode.png"));
             Label.LabelStyle labelStyle = new Label.LabelStyle();
             labelStyle.font = bitmapFont;
-            inputLabel = new Label("", labelStyle);
-            inputLabel.setPosition(WORLD_WIDTH/3-50, WORLD_HEIGHT/2-inputLabel.getHeight()/2);
-            inputLabel.setText(skinDecode);
-
+            outputLabel = new Label("", labelStyle);
+            outputLabel.setPosition(WORLD_WIDTH/3-80, WORLD_HEIGHT/2-42);
         }else{
             codePanelTexture = new Texture(Gdx.files.internal("shop/invalidCode.png"));
         }
@@ -641,7 +641,7 @@ class ShopScreen extends ScreenAdapter {
 
         stageCode.addActor(codePanel);
         stageCode.addActor(cross);
-        stageCode.addActor(inputLabel);
+        stageCode.addActor(outputLabel);
         stageCode.addActor(number0);
         stageCode.addActor(number1);
         stageCode.addActor(number2);
@@ -736,7 +736,10 @@ class ShopScreen extends ScreenAdapter {
         batch.setTransformMatrix(camera.view);
         batch.begin();
         if(state == STATE.NORMAL) drawCoinsCounter();
-        else if (state == STATE.CODE)drawCodeInput();
+        else if (state == STATE.CODE) {
+            drawCodeInput();
+            drawCodeOutout();
+        }
         batch.end();
         if(state == STATE.NORMAL){
             Gdx.input.setInputProcessor(stage);
@@ -750,6 +753,10 @@ class ShopScreen extends ScreenAdapter {
             stageCode.draw();
             Gdx.input.setInputProcessor(stageCode);
         }
+    }
+
+    private void drawCodeOutout() {
+        outputLabel.setText(skinDecode);
     }
 
     private void updateVolume() {
