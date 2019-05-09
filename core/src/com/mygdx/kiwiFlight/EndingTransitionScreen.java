@@ -91,9 +91,9 @@ public class EndingTransitionScreen extends ScreenAdapter {
 
 
 
-        story11.addAction(sequence(delay(0), fadeIn(2),delay(4), fadeOut(1)));
+        story11.addAction(sequence(delay(0), fadeIn(4),delay(4), fadeOut(1)));
 
-        ending.addAction(sequence(delay(7), fadeIn(1),delay(2), fadeOut(1), run(new Runnable() {
+        ending.addAction(sequence(delay(9), fadeIn(1),delay(2), fadeOut(1), run(new Runnable() {
             @Override
             public void run() {
                 kiwiFlight.setScreen(new StartScreen(kiwiFlight));

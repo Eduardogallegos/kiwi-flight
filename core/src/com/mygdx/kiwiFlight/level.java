@@ -45,12 +45,12 @@ public class level extends ScreenAdapter {
     private static final float EFFECTS_VOLUME_DEFAULT = 1;
     private static final int COINS_DEFAULT = 0;
     private static final String ACTUAL_SKIN = "default";
-    private static final float FRAME_DURATION = 0.4f;
+    private static final float FRAME_DURATION = 0.1f;
     private static final int WINNING_TILE_HEIGHT = 133;
     private static final int WINNING_TILE_WIDTH = 200;
     private static final int LOOSING_TILE_HEIGHT = 140;
     private static final int LOOSING_TILE_WIDTH = 237;
-    private static final float LOOSE_FRAME_DURATION = 0.2F;
+    private static final float LOOSE_FRAME_DURATION = 0.1F;
     private static int LEVEL;
     private static final float DEFAULT_CHUNCK_SIZE = 11 ;
 
@@ -280,12 +280,12 @@ public class level extends ScreenAdapter {
         kiiw.setPosition(WORLD_WIDTH/4,97*padCounter+kiiw.RADIUS);
 
         TextureRegion [][] kiwiWinningTextures = new TextureRegion(kiiwWinningTexture).split(WINNING_TILE_WIDTH, WINNING_TILE_HEIGHT);
-        winningAnimation = new Animation(FRAME_DURATION, kiwiWinningTextures[0][0], kiwiWinningTextures[0][1],kiwiWinningTextures[0][2],kiwiWinningTextures[0][3],kiwiWinningTextures[0][4],kiwiWinningTextures[0][5],kiwiWinningTextures[0][6],kiwiWinningTextures[0][7],kiwiWinningTextures[0][8],kiwiWinningTextures[0][9],kiwiWinningTextures[0][10],kiwiWinningTextures[0][11],kiwiWinningTextures[0][12],kiwiWinningTextures[0][13],kiwiWinningTextures[0][14],kiwiWinningTextures[0][15]);
-        winningAnimation.setPlayMode(Animation.PlayMode.LOOP);
+        winningAnimation = new Animation(FRAME_DURATION, kiwiWinningTextures[0][0], kiwiWinningTextures[0][1],kiwiWinningTextures[0][2],kiwiWinningTextures[0][3],kiwiWinningTextures[0][4],kiwiWinningTextures[0][5],kiwiWinningTextures[0][6],kiwiWinningTextures[0][7],kiwiWinningTextures[0][8],kiwiWinningTextures[0][9],kiwiWinningTextures[0][10],kiwiWinningTextures[0][11],kiwiWinningTextures[0][12],kiwiWinningTextures[0][13],kiwiWinningTextures[0][14],kiwiWinningTextures[0][15],kiwiWinningTextures[0][16],kiwiWinningTextures[0][17],kiwiWinningTextures[0][18],kiwiWinningTextures[0][19]);
+        winningAnimation.setPlayMode(Animation.PlayMode.NORMAL);
 
         TextureRegion [][] kiwiLoosingTextures = new TextureRegion(kiiwLoosingTexture).split(LOOSING_TILE_WIDTH, LOOSING_TILE_HEIGHT);
-        loosingAnimation = new Animation(LOOSE_FRAME_DURATION, kiwiLoosingTextures[0][0], kiwiLoosingTextures[0][1],kiwiLoosingTextures[0][2],kiwiLoosingTextures[0][3],kiwiLoosingTextures[0][4],kiwiLoosingTextures[0][5],kiwiLoosingTextures[0][6],kiwiLoosingTextures[0][7],kiwiLoosingTextures[0][8],kiwiLoosingTextures[0][9],kiwiLoosingTextures[0][10],kiwiLoosingTextures[0][11],kiwiLoosingTextures[0][12],kiwiLoosingTextures[0][13],kiwiLoosingTextures[0][14],kiwiLoosingTextures[0][15]);
-        loosingAnimation.setPlayMode(Animation.PlayMode.LOOP);
+        loosingAnimation = new Animation(LOOSE_FRAME_DURATION, kiwiLoosingTextures[0][0], kiwiLoosingTextures[0][1],kiwiLoosingTextures[0][2],kiwiLoosingTextures[0][3],kiwiLoosingTextures[0][4],kiwiLoosingTextures[0][5],kiwiLoosingTextures[0][6],kiwiLoosingTextures[0][7],kiwiLoosingTextures[0][8],kiwiLoosingTextures[0][9],kiwiLoosingTextures[0][10],kiwiLoosingTextures[0][11],kiwiLoosingTextures[0][12],kiwiLoosingTextures[0][13],kiwiLoosingTextures[0][14],kiwiLoosingTextures[0][15],kiwiLoosingTextures[0][16],kiwiLoosingTextures[0][17],kiwiLoosingTextures[0][18],kiwiLoosingTextures[0][19]);
+        loosingAnimation.setPlayMode(Animation.PlayMode.NORMAL);
 
         Array<Texture> textures = new Array<Texture>();
 
@@ -319,7 +319,7 @@ public class level extends ScreenAdapter {
         if(LEVEL == 1)speedNeeded = 25;
         else if( LEVEL == 2)speedNeeded = 30;
         else if (LEVEL == 3)speedNeeded = 35;
-        else speedNeeded = 40;
+        else speedNeeded = 65;
 
         speedBarTexture = kiwiFlight.getAssetManager().get("defaultLevels/Barra.png");
         Image speedBar = new Image(speedBarTexture);
@@ -803,8 +803,8 @@ public class level extends ScreenAdapter {
     }
 
     private void updateKiiwWinAnimation() {
-        winingKiiwX += 3;
-        winingKiiwY += 0.7;
+        winingKiiwX += 3.8;
+        winingKiiwY += 0.9;
     }
 
 
