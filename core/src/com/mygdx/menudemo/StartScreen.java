@@ -33,7 +33,6 @@ class StartScreen extends ScreenAdapter {
     private Texture playPressTexture;
     private Texture settingsTexture;
     private Texture settingsPressTexture;
-    private Texture panelTexture;
     private Texture creditsPressTexture;
     private Texture creditsTexture;
     private Texture shopTexture;
@@ -154,7 +153,7 @@ class StartScreen extends ScreenAdapter {
         yesQuitTexture = new Texture(Gdx.files.internal("back/yes.png"));
         yesQuitPressTexture = new Texture(Gdx.files.internal("back/yesPress.png"));
         ImageButton yesQuit = new ImageButton(new TextureRegionDrawable(new TextureRegion(yesQuitTexture)), new TextureRegionDrawable(new TextureRegion(yesQuitPressTexture)));
-        yesQuit.setPosition(WORLD_WIDTH/3, WORLD_HEIGHT/3);
+        yesQuit.setPosition(WORLD_WIDTH/3+20, WORLD_HEIGHT/3-20);
         yesQuit.addListener(new ActorGestureListener(){
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
@@ -165,7 +164,7 @@ class StartScreen extends ScreenAdapter {
         noQuitTexture = new Texture(Gdx.files.internal("back/no.png"));
         noQuitPressTexture = new Texture(Gdx.files.internal("back/noPress.png"));
         ImageButton noQuit = new ImageButton(new TextureRegionDrawable(new TextureRegion(noQuitTexture)), new TextureRegionDrawable(new TextureRegion(noQuitPressTexture)));
-        noQuit.setPosition(2*WORLD_WIDTH/3, 2*WORLD_HEIGHT/3);
+        noQuit.setPosition(2*WORLD_WIDTH/3-170, WORLD_HEIGHT/3-20);
         noQuit.addListener(new ActorGestureListener(){
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
@@ -213,22 +212,19 @@ class StartScreen extends ScreenAdapter {
 
     @Override
     public void render(float delta) {
-        super.render(delta);
         clearScreen();
-        if(state == STATE.QUIT){
-            quitStage.draw();
-            Gdx.input.setInputProcessor(quitStage);
-        }
+        stage.act(delta);
+        stage.draw();
         if(Gdx.input.isKeyPressed(Input.Keys.BACK)){
             state = STATE.QUIT;
         }
+        if(state == STATE.QUIT){
+            quitStage.draw();
+            Gdx.input.setInputProcessor(quitStage);
+        }else{
+            Gdx.input.setInputProcessor(stage);
+        }
         updateVolume();
-        stage.act(delta);
-        stage.draw();
-    }
-
-    private void backKey() {
-
     }
 
     private void loadPreferences() {

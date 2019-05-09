@@ -14,7 +14,7 @@ public class MenuDemo extends Game {
 
 	@Override
 	public void create(){
-		//Gdx.input.setCatchBackKey(true);
+		Gdx.input.setCatchBackKey(true);
 		preferences = Gdx.app.getPreferences(MenuDemo.class.getName());
 		this.setScreen(new TransitionScreen(this));
 	}
