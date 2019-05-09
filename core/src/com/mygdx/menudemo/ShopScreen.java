@@ -114,6 +114,7 @@ class ShopScreen extends ScreenAdapter {
     private Texture yesQuitPressTexture;
     private Texture noQuitTexture;
     private Texture noQuitPressTexture;
+    private String skinDecode;
 
     private enum STATE{
         NORMAL, RUSURE, NOCOINS, CODE, QUIT
@@ -554,10 +555,12 @@ class ShopScreen extends ScreenAdapter {
         if (code.compareTo("1234") == 0 && !hulkBought){
             createCodeValidationPanel(true);
             costo = 150;
+            skinDecode = "Hulk";
             savePreferences();
         }else if (code.compareTo("4928") == 0 && !ricardoBought){
             createCodeValidationPanel(true);
             costo = 400;
+            skinDecode = "Ricardo";
             savePreferences();
         }else{
             createCodeValidationPanel(false);
@@ -568,6 +571,11 @@ class ShopScreen extends ScreenAdapter {
         stageCode.clear();
         if(validation){
             codePanelTexture = new Texture(Gdx.files.internal("shop/validCode.png"));
+            Label.LabelStyle labelStyle = new Label.LabelStyle();
+            labelStyle.font = bitmapFont;
+            inputLabel = new Label("", labelStyle);
+            inputLabel.setPosition(WORLD_WIDTH/3-50, WORLD_HEIGHT/2-inputLabel.getHeight()/2);
+            inputLabel.setText(skinDecode);
 
         }else{
             codePanelTexture = new Texture(Gdx.files.internal("shop/invalidCode.png"));
@@ -583,6 +591,7 @@ class ShopScreen extends ScreenAdapter {
                 state = STATE.NORMAL;
             }
         });
+
 
         ceroButtonTexture = new Texture(Gdx.files.internal("shop/0.png"));
         oneButtonTexture = new Texture(Gdx.files.internal("shop/1.png"));
@@ -633,6 +642,7 @@ class ShopScreen extends ScreenAdapter {
 
         stageCode.addActor(codePanel);
         stageCode.addActor(cross);
+        stageCode.addActor(inputLabel);
         stageCode.addActor(number0);
         stageCode.addActor(number1);
         stageCode.addActor(number2);
@@ -754,8 +764,6 @@ class ShopScreen extends ScreenAdapter {
     }
 
     private void drawCodeInput() {
-        //glyphLayout.setText(bitmapFont,code);
-        //bitmapFont.draw(batch, code, WORLD_WIDTH/4, 80);
         inputLabel.setText(code);
     }
 

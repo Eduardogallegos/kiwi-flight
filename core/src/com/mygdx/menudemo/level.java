@@ -1105,8 +1105,7 @@ public class level extends ScreenAdapter {
 
     private void restart() {
         loseMusic.stop();
-        menuDemo.setScreen(new level(menuDemo, LEVEL));
-        /*music.play();
+        music.play();
         padCounter = 2;
         levelTimer = 0;
         secondsTimer = 60;
@@ -1125,7 +1124,11 @@ public class level extends ScreenAdapter {
         }
         nonCollisionTimer = 0;
         updateLifesIndicator();
-        finish = false;*/
+        finish = false;
+        animationTimer = 0;
+        looseKiiwX = 20;
+        winingKiiwY = 0;
+        winingKiiwX = WORLD_WIDTH/4;
         }
 
     private void updateObstacles(float delta) {
