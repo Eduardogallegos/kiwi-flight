@@ -165,9 +165,15 @@ public class level extends ScreenAdapter {
     private Texture lifesBarTexture0;
     private Texture skipButtonTexture;
     private Texture buttonPressTexture;
+    private Stage quitStage;
+    private Texture quitPanelTexture;
+    private Texture yesQuitTexture;
+    private Texture yesQuitPressTexture;
+    private Texture noQuitTexture;
+    private Texture noQuitPressTexture;
 
     private enum STATE {
-        PLAYING, PAUSED, GAMEOVER, WIN, PANELS, TUTORIAL, SETTINGS
+        PLAYING, PAUSED, GAMEOVER, WIN, PANELS, TUTORIAL, QUIT, SETTINGS
     }
     private STATE state = STATE.PANELS;
 
@@ -481,6 +487,8 @@ public class level extends ScreenAdapter {
             }
         });
 
+        createQuitPanel();
+
         stageGameOver.addActor(gameOverPanel);
         stageGameOver.addActor(retry);
         stageGameOver.addActor(noRetry);
@@ -497,6 +505,39 @@ public class level extends ScreenAdapter {
         multiplexer.addProcessor(stageUI);
         multiplexer.addProcessor(stage);
         multiplexer.addProcessor(new GestureDetector(new GestureHandler()));
+    }
+
+    private void createQuitPanel() {
+        quitStage = new Stage(new FitViewport(WORLD_WIDTH, WORLD_HEIGHT));
+
+        quitPanelTexture = new Texture(Gdx.files.internal("back/quitpanel.png"));
+        Image quitPanel = new Image(quitPanelTexture);
+
+        yesQuitTexture = new Texture(Gdx.files.internal("back/yes.png"));
+        yesQuitPressTexture = new Texture(Gdx.files.internal("back/yesPress.png"));
+        ImageButton yesQuit = new ImageButton(new TextureRegionDrawable(new TextureRegion(yesQuitTexture)), new TextureRegionDrawable(new TextureRegion(yesQuitPressTexture)));
+        yesQuit.setPosition(WORLD_WIDTH/3+20, WORLD_HEIGHT/3-20);
+        yesQuit.addListener(new ActorGestureListener(){
+            @Override
+            public void tap(InputEvent event, float x, float y, int count, int button) {
+                Gdx.app.exit();
+            }
+        });
+
+        noQuitTexture = new Texture(Gdx.files.internal("back/no.png"));
+        noQuitPressTexture = new Texture(Gdx.files.internal("back/noPress.png"));
+        ImageButton noQuit = new ImageButton(new TextureRegionDrawable(new TextureRegion(noQuitTexture)), new TextureRegionDrawable(new TextureRegion(noQuitPressTexture)));
+        noQuit.setPosition(2*WORLD_WIDTH/3-170, WORLD_HEIGHT/3-20);
+        noQuit.addListener(new ActorGestureListener(){
+            @Override
+            public void tap(InputEvent event, float x, float y, int count, int button) {
+                state = STATE.PAUSED;
+            }
+        });
+
+        quitStage.addActor(quitPanel);
+        quitStage.addActor(yesQuit);
+        quitStage.addActor(noQuit);
     }
 
     private void updateTutorial(int tutorialIndex) {
@@ -728,6 +769,13 @@ public class level extends ScreenAdapter {
         clearScreen();
         updateVolume();
         draw();
+        if(Gdx.input.isKeyPressed(Input.Keys.BACK)){
+            state = STATE.QUIT;
+        }
+        if(state == STATE.QUIT){
+            quitStage.draw();
+            Gdx.input.setInputProcessor(quitStage);
+        }
     }
 
     private void updateKiiwWinAnimation() {

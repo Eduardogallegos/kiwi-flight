@@ -71,7 +71,6 @@ public class TransitionScreen extends ScreenAdapter {
 
        music = Gdx.audio.newMusic(Gdx.files.internal("loading/intro.mp3"));
        updateVolume();
-       music.setLooping(false);
        music.play();
 
        ImageButton skipButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(buttonTexture)), new TextureRegionDrawable(new TextureRegion(buttonPressTexture)));

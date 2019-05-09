@@ -1,6 +1,7 @@
 package com.mygdx.menudemo;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.ScreenAdapter;
@@ -73,6 +74,18 @@ class ClosetScreen extends ScreenAdapter {
     private Texture ricardoSkinButtonPressedTexture;
     private Stage stageSkinButtons;
     private InputMultiplexer multiplexer = new InputMultiplexer();
+    private Stage quitStage;
+    private Texture quitPanelTexture;
+    private Texture yesQuitTexture;
+    private Texture yesQuitPressTexture;
+    private Texture noQuitTexture;
+    private Texture noQuitPressTexture;
+
+    private enum STATE {
+        NORMAL, QUIT
+    }
+
+    private STATE state = STATE.NORMAL;
 
     public ClosetScreen(MenuDemo menuDemo) {
         this.menuDemo = menuDemo;
@@ -140,6 +153,8 @@ class ClosetScreen extends ScreenAdapter {
         multiplexer.addProcessor(stage);
         multiplexer.addProcessor(stageSkinButtons);
         Gdx.input.setInputProcessor(multiplexer);
+
+        createQuitPanel();
     }
 
     private void updateSkinButton() {
@@ -296,6 +311,39 @@ class ClosetScreen extends ScreenAdapter {
 
     }
 
+    private void createQuitPanel() {
+        quitStage = new Stage(new FitViewport(WORLD_WIDTH, WORLD_HEIGHT));
+
+        quitPanelTexture = new Texture(Gdx.files.internal("back/quitpanel.png"));
+        Image quitPanel = new Image(quitPanelTexture);
+
+        yesQuitTexture = new Texture(Gdx.files.internal("back/yes.png"));
+        yesQuitPressTexture = new Texture(Gdx.files.internal("back/yesPress.png"));
+        ImageButton yesQuit = new ImageButton(new TextureRegionDrawable(new TextureRegion(yesQuitTexture)), new TextureRegionDrawable(new TextureRegion(yesQuitPressTexture)));
+        yesQuit.setPosition(WORLD_WIDTH/3+20, WORLD_HEIGHT/3-20);
+        yesQuit.addListener(new ActorGestureListener(){
+            @Override
+            public void tap(InputEvent event, float x, float y, int count, int button) {
+                Gdx.app.exit();
+            }
+        });
+
+        noQuitTexture = new Texture(Gdx.files.internal("back/no.png"));
+        noQuitPressTexture = new Texture(Gdx.files.internal("back/noPress.png"));
+        ImageButton noQuit = new ImageButton(new TextureRegionDrawable(new TextureRegion(noQuitTexture)), new TextureRegionDrawable(new TextureRegion(noQuitPressTexture)));
+        noQuit.setPosition(2*WORLD_WIDTH/3-170, WORLD_HEIGHT/3-20);
+        noQuit.addListener(new ActorGestureListener(){
+            @Override
+            public void tap(InputEvent event, float x, float y, int count, int button) {
+                state = STATE.NORMAL;
+            }
+        });
+
+        quitStage.addActor(quitPanel);
+        quitStage.addActor(yesQuit);
+        quitStage.addActor(noQuit);
+    }
+
     private void updateKiiwAnimation(String actualSkin) {
         if(actualSkin.compareTo("default") == 0){
             kiiwTexture = new Texture(Gdx.files.internal("closet/DefaultKiwi.png"));
@@ -352,6 +400,15 @@ class ClosetScreen extends ScreenAdapter {
         updateVolume();
         stage.act(delta);
         draw();
+        if(Gdx.input.isKeyPressed(Input.Keys.BACK)){
+            state = STATE.QUIT;
+        }
+        if(state == STATE.QUIT){
+            quitStage.draw();
+            Gdx.input.setInputProcessor(quitStage);
+        }else{
+            Gdx.input.setInputProcessor(stage);
+        }
 
     }
 

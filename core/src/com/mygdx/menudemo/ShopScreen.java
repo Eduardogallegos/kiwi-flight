@@ -1,6 +1,7 @@
 package com.mygdx.menudemo;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.audio.Music;
@@ -107,6 +108,12 @@ class ShopScreen extends ScreenAdapter {
     private Texture eraseButtonTexture;
 
     private Label inputLabel;
+    private Stage quitStage;
+    private Texture quitPanelTexture;
+    private Texture yesQuitTexture;
+    private Texture yesQuitPressTexture;
+    private Texture noQuitTexture;
+    private Texture noQuitPressTexture;
 
     private enum STATE{
         NORMAL, RUSURE, NOCOINS, CODE, QUIT
@@ -173,6 +180,8 @@ class ShopScreen extends ScreenAdapter {
                 state = STATE.CODE;
             }
         });
+
+        createQuitPanel();
 
         if(partyBought){
             partySkinButtonTexture = new Texture(Gdx.files.internal("shop/partyKiwiSold.png"));
@@ -330,6 +339,39 @@ class ShopScreen extends ScreenAdapter {
         stage.addActor(codeButton);
         stage.addActor(retur);
         stage.addActor(background);
+    }
+
+    private void createQuitPanel() {
+        quitStage = new Stage(new FitViewport(WORLD_WIDTH, WORLD_HEIGHT));
+
+        quitPanelTexture = new Texture(Gdx.files.internal("back/quitpanel.png"));
+        Image quitPanel = new Image(quitPanelTexture);
+
+        yesQuitTexture = new Texture(Gdx.files.internal("back/yes.png"));
+        yesQuitPressTexture = new Texture(Gdx.files.internal("back/yesPress.png"));
+        ImageButton yesQuit = new ImageButton(new TextureRegionDrawable(new TextureRegion(yesQuitTexture)), new TextureRegionDrawable(new TextureRegion(yesQuitPressTexture)));
+        yesQuit.setPosition(WORLD_WIDTH/3+20, WORLD_HEIGHT/3-20);
+        yesQuit.addListener(new ActorGestureListener(){
+            @Override
+            public void tap(InputEvent event, float x, float y, int count, int button) {
+                Gdx.app.exit();
+            }
+        });
+
+        noQuitTexture = new Texture(Gdx.files.internal("back/no.png"));
+        noQuitPressTexture = new Texture(Gdx.files.internal("back/noPress.png"));
+        ImageButton noQuit = new ImageButton(new TextureRegionDrawable(new TextureRegion(noQuitTexture)), new TextureRegionDrawable(new TextureRegion(noQuitPressTexture)));
+        noQuit.setPosition(2*WORLD_WIDTH/3-170, WORLD_HEIGHT/3-20);
+        noQuit.addListener(new ActorGestureListener(){
+            @Override
+            public void tap(InputEvent event, float x, float y, int count, int button) {
+                state = STATE.NORMAL;
+            }
+        });
+
+        quitStage.addActor(quitPanel);
+        quitStage.addActor(yesQuit);
+        quitStage.addActor(noQuit);
     }
 
     private void createStageCode() {
@@ -670,6 +712,13 @@ class ShopScreen extends ScreenAdapter {
         updateVolume();
         stage.act();
         draw();
+        if(Gdx.input.isKeyPressed(Input.Keys.BACK)){
+            state = STATE.QUIT;
+        }
+        if(state == STATE.QUIT){
+            quitStage.draw();
+            Gdx.input.setInputProcessor(quitStage);
+        }
     }
 
     private void draw() {

@@ -1,6 +1,7 @@
 package com.mygdx.menudemo;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.audio.Music;
@@ -14,6 +15,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
@@ -59,6 +61,18 @@ class LevelsScreen extends ScreenAdapter {
     private boolean level3Blocked;
     private boolean level4Blocked;
     private FitViewport viewport;
+    private Stage quitStage;
+    private Texture quitPanelTexture;
+    private Texture yesQuitTexture;
+    private Texture yesQuitPressTexture;
+    private Texture noQuitTexture;
+    private Texture noQuitPressTexture;
+
+    private enum STATE {
+        NORMAL, QUIT
+    }
+
+    private STATE state = STATE.NORMAL;
 
     public LevelsScreen(MenuDemo menuDemo) {
         this.menuDemo =menuDemo;
@@ -197,7 +211,41 @@ class LevelsScreen extends ScreenAdapter {
         table.pack();
         stage.addActor(table);
 
+        createQuitPanel();
 
+    }
+
+    private void createQuitPanel() {
+        quitStage = new Stage(new FitViewport(WORLD_WIDTH, WORLD_HEIGHT));
+
+        quitPanelTexture = new Texture(Gdx.files.internal("back/quitpanel.png"));
+        Image quitPanel = new Image(quitPanelTexture);
+
+        yesQuitTexture = new Texture(Gdx.files.internal("back/yes.png"));
+        yesQuitPressTexture = new Texture(Gdx.files.internal("back/yesPress.png"));
+        ImageButton yesQuit = new ImageButton(new TextureRegionDrawable(new TextureRegion(yesQuitTexture)), new TextureRegionDrawable(new TextureRegion(yesQuitPressTexture)));
+        yesQuit.setPosition(WORLD_WIDTH/3+20, WORLD_HEIGHT/3-20);
+        yesQuit.addListener(new ActorGestureListener(){
+            @Override
+            public void tap(InputEvent event, float x, float y, int count, int button) {
+                Gdx.app.exit();
+            }
+        });
+
+        noQuitTexture = new Texture(Gdx.files.internal("back/no.png"));
+        noQuitPressTexture = new Texture(Gdx.files.internal("back/noPress.png"));
+        ImageButton noQuit = new ImageButton(new TextureRegionDrawable(new TextureRegion(noQuitTexture)), new TextureRegionDrawable(new TextureRegion(noQuitPressTexture)));
+        noQuit.setPosition(2*WORLD_WIDTH/3-170, WORLD_HEIGHT/3-20);
+        noQuit.addListener(new ActorGestureListener(){
+            @Override
+            public void tap(InputEvent event, float x, float y, int count, int button) {
+                state = STATE.NORMAL;
+            }
+        });
+
+        quitStage.addActor(quitPanel);
+        quitStage.addActor(yesQuit);
+        quitStage.addActor(noQuit);
     }
 
     private void loadPreferences() {
@@ -231,8 +279,17 @@ class LevelsScreen extends ScreenAdapter {
         background = (TextureRegion) animation.getKeyFrame(animationTimer);
         batch.draw(background, 0, 0);
         batch.end();
-
         stage.draw();
+
+        if(Gdx.input.isKeyPressed(Input.Keys.BACK)){
+            state = STATE.QUIT;
+        }
+        if(state == STATE.QUIT){
+            quitStage.draw();
+            Gdx.input.setInputProcessor(quitStage);
+        }else{
+            Gdx.input.setInputProcessor(stage);
+        }
     }
 
     private void updateVolume() {
