@@ -133,7 +133,7 @@ class LevelsScreen extends ScreenAdapter {
             levelTwoTexture = new Texture(Gdx.files.internal("levels/2Blocked.png"));
             levelTwoPressTexture = new Texture(Gdx.files.internal("levels/2Blocked.png"));
             ImageButton level2 = new ImageButton(new TextureRegionDrawable(new TextureRegion(levelTwoTexture)), new TextureRegionDrawable(new TextureRegion(levelTwoPressTexture)));
-            level2.setPosition(400,200);
+            level2.setPosition(450,150);
             stage.addActor(level2);
         }else{
             levelTwoTexture = new Texture(Gdx.files.internal("levels/2.png"));
@@ -148,7 +148,7 @@ class LevelsScreen extends ScreenAdapter {
                     dispose();
                 }
             });
-            level2.setPosition(400,200);
+            level2.setPosition(450,150);
             stage.addActor(level2);
         }
 
@@ -156,7 +156,7 @@ class LevelsScreen extends ScreenAdapter {
             levelThreeTexture = new Texture(Gdx.files.internal("levels/3Blocked.png"));
             levelThreePressTexture = new Texture(Gdx.files.internal("levels/3Blocked.png"));
             ImageButton level3 = new ImageButton(new TextureRegionDrawable(new TextureRegion(levelThreeTexture)), new TextureRegionDrawable(new TextureRegion(levelThreePressTexture)));
-            level3.setPosition(730,200);
+            level3.setPosition(730,150);
             stage.addActor(level3);
         }else{
             levelThreeTexture = new Texture(Gdx.files.internal("levels/3.png"));
@@ -170,7 +170,7 @@ class LevelsScreen extends ScreenAdapter {
                     dispose();
                 }
             });
-            level3.setPosition(730,200);
+            level3.setPosition(730,150);
             stage.addActor(level3);
         }
 
@@ -196,7 +196,7 @@ class LevelsScreen extends ScreenAdapter {
             stage.addActor(boss);
         }
 
-        levelOne.setPosition(100,200);
+        levelOne.setPosition(150,150);
 
         stage.addActor(levelOne);
 
