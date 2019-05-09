@@ -67,6 +67,7 @@ class LevelsScreen extends ScreenAdapter {
     private Texture yesQuitPressTexture;
     private Texture noQuitTexture;
     private Texture noQuitPressTexture;
+    private Texture tituleTexture;
 
     private enum STATE {
         NORMAL, QUIT
@@ -102,6 +103,11 @@ class LevelsScreen extends ScreenAdapter {
         TextureRegion [][] bgTextures = new TextureRegion(backgroundTexture).split(TILE_WIDTH, TILE_HEIGHT);
         animation = new Animation(FRAME_DURATION, bgTextures[0][0], bgTextures[0][1],bgTextures[0][2],bgTextures[0][3]);
         animation.setPlayMode(Animation.PlayMode.LOOP);
+
+        tituleTexture = new Texture(Gdx.files.internal("levels/titulo.png"));
+        Image titulo = new Image(tituleTexture);
+        titulo.setPosition(WORLD_WIDTH/2-titulo.getWidth()/2, WORLD_HEIGHT-180);
+
 
         returnTexture = new Texture(Gdx.files.internal("levels/return.png"));
         returnPressTexture = new Texture(Gdx.files.internal("levels/returnPress.png"));
@@ -210,6 +216,7 @@ class LevelsScreen extends ScreenAdapter {
         table.setFillParent(true);
         table.pack();
         stage.addActor(table);
+        stage.addActor(titulo);
 
         createQuitPanel();
 
