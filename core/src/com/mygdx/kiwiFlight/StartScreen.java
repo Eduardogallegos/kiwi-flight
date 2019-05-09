@@ -1,4 +1,4 @@
-package com.mygdx.menudemo;
+package com.mygdx.kiwiFlight;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -21,7 +21,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 class StartScreen extends ScreenAdapter {
 
     private static final float MUSIC_VOLUME_DEFAULT = 1;
-    private final MenuDemo menuDemo;
+    private final kiwiFlight kiwiFlight;
     private static final float WORLD_WIDTH = 1280;
     private static final float WORLD_HEIGHT = 720;
 
@@ -58,9 +58,9 @@ class StartScreen extends ScreenAdapter {
 
     private STATE state = STATE.NORMAL;
 
-    public StartScreen(MenuDemo menuDemo) {
-        this.menuDemo =menuDemo;
-        this.preferencias = menuDemo.getPreferences();
+    public StartScreen(kiwiFlight kiwiFlight) {
+        this.kiwiFlight = kiwiFlight;
+        this.preferencias = kiwiFlight.getPreferences();
     }
 
     @Override
@@ -92,7 +92,7 @@ class StartScreen extends ScreenAdapter {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 music.stop();
-                menuDemo.setScreen(new LevelsScreen(menuDemo));
+                kiwiFlight.setScreen(new LevelsScreen(kiwiFlight));
                 dispose();
             }
         });
@@ -104,7 +104,7 @@ class StartScreen extends ScreenAdapter {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 music.stop();
-                menuDemo.setScreen(new SettingsScreen(menuDemo));
+                kiwiFlight.setScreen(new SettingsScreen(kiwiFlight));
                 dispose();
             }
         });
@@ -116,7 +116,7 @@ class StartScreen extends ScreenAdapter {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 music.stop();
-                menuDemo.setScreen(new CreditsScreen(menuDemo));
+                kiwiFlight.setScreen(new CreditsScreen(kiwiFlight));
                 dispose();
             }
         });
@@ -128,7 +128,7 @@ class StartScreen extends ScreenAdapter {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 music.stop();
-                menuDemo.setScreen(new ClosetScreen(menuDemo));
+                kiwiFlight.setScreen(new ClosetScreen(kiwiFlight));
                 dispose();
             }
         });
@@ -140,7 +140,7 @@ class StartScreen extends ScreenAdapter {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 music.stop();
-                menuDemo.setScreen(new ShopScreen(menuDemo));
+                kiwiFlight.setScreen(new ShopScreen(kiwiFlight));
                 dispose();
             }
         });

@@ -1,4 +1,4 @@
-package com.mygdx.menudemo;
+package com.mygdx.kiwiFlight;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;

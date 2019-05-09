@@ -1,10 +1,9 @@
-package com.mygdx.menudemo;
+package com.mygdx.kiwiFlight;
 
 import android.os.Bundle;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
-import com.mygdx.menudemo.MenuDemo;
 
 public class AndroidLauncher extends AndroidApplication {
 	@Override
@@ -12,6 +11,6 @@ public class AndroidLauncher extends AndroidApplication {
 		super.onCreate(savedInstanceState);
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 		config.useImmersiveMode = true;
-		initialize(new MenuDemo(), config);
+		initialize(new kiwiFlight(), config);
 	}
 }

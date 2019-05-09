@@ -1,4 +1,4 @@
-package com.mygdx.menudemo;
+package com.mygdx.kiwiFlight;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -61,7 +61,7 @@ public class level extends ScreenAdapter {
     private Viewport viewport;
     private Camera camera;
     private Stage stage;
-    private MenuDemo menuDemo;
+    private kiwiFlight kiwiFlight;
     private SpriteBatch batch;
     private Kiiw kiiw;
     private Hawk hawk;
@@ -83,7 +83,7 @@ public class level extends ScreenAdapter {
     private Texture speedBarTexture;
     private Texture coinsIndicatorTexture;
     private Texture pausePanelTexture;
-    private Texture hawkTexture = menuDemo.getAssetManager().get("level4/hawk.png");
+    private Texture hawkTexture = kiwiFlight.getAssetManager().get("level4/hawk.png");
 
     private BitmapFont bitmapFont;
     private GlyphLayout glyphLayout;
@@ -176,10 +176,10 @@ public class level extends ScreenAdapter {
     }
     private STATE state = STATE.PANELS;
 
-    public level(MenuDemo menuDemo, int level) {
-        this.menuDemo = menuDemo;
+    public level(kiwiFlight kiwiFlight, int level) {
+        this.kiwiFlight = kiwiFlight;
         this.LEVEL = level;
-        this.preferencias = menuDemo.getPreferences();
+        this.preferencias = kiwiFlight.getPreferences();
     }
 
     @Override
@@ -211,33 +211,33 @@ public class level extends ScreenAdapter {
             bgImagesNumber = 3;
             bossLevel = true;
             if(skin.compareTo("default") == 0){
-                kiiwTexture = menuDemo.getAssetManager().get("level4/FlyingKiwi.png");
-                kiiwWinningTexture = menuDemo.getAssetManager().get("defaultLevels/WinningKiwi.png");
-                kiiwLoosingTexture = menuDemo.getAssetManager().get("defaultLevels/LosingKiwi.png");
+                kiiwTexture = kiwiFlight.getAssetManager().get("level4/FlyingKiwi.png");
+                kiiwWinningTexture = kiwiFlight.getAssetManager().get("defaultLevels/WinningKiwi.png");
+                kiiwLoosingTexture = kiwiFlight.getAssetManager().get("defaultLevels/LosingKiwi.png");
             }else if(skin.compareTo("party") == 0){
-                kiiwTexture = menuDemo.getAssetManager().get("level4/FlyingPartyHatKiwi.png");
-                kiiwWinningTexture = menuDemo.getAssetManager().get("defaultLevels/WinningPartyHatKiwi.png");
-                kiiwLoosingTexture = menuDemo.getAssetManager().get("defaultLevels/LosingPartyHatKiwi.png");
+                kiiwTexture = kiwiFlight.getAssetManager().get("level4/FlyingPartyHatKiwi.png");
+                kiiwWinningTexture = kiwiFlight.getAssetManager().get("defaultLevels/WinningPartyHatKiwi.png");
+                kiiwLoosingTexture = kiwiFlight.getAssetManager().get("defaultLevels/LosingPartyHatKiwi.png");
             }else if(skin.compareTo("hat") == 0){
-                kiiwTexture = menuDemo.getAssetManager().get("level4/FlyingTopHatKiwi.png");
-                kiiwWinningTexture = menuDemo.getAssetManager().get("defaultLevels/WinningTopHatKiwi.png");
-                kiiwLoosingTexture = menuDemo.getAssetManager().get("defaultLevels/LosingTopHatKiwi.png");
+                kiiwTexture = kiwiFlight.getAssetManager().get("level4/FlyingTopHatKiwi.png");
+                kiiwWinningTexture = kiwiFlight.getAssetManager().get("defaultLevels/WinningTopHatKiwi.png");
+                kiiwLoosingTexture = kiwiFlight.getAssetManager().get("defaultLevels/LosingTopHatKiwi.png");
             }else if(skin.compareTo("tie") == 0){
-                kiiwTexture = menuDemo.getAssetManager().get("level4/FlyingTieKiwi.png");
-                kiiwWinningTexture = menuDemo.getAssetManager().get("defaultLevels/WinningTieKiwi.png");
-                kiiwLoosingTexture = menuDemo.getAssetManager().get("defaultLevels/LosingTieKiwi.png");
+                kiiwTexture = kiwiFlight.getAssetManager().get("level4/FlyingTieKiwi.png");
+                kiiwWinningTexture = kiwiFlight.getAssetManager().get("defaultLevels/WinningTieKiwi.png");
+                kiiwLoosingTexture = kiwiFlight.getAssetManager().get("defaultLevels/LosingTieKiwi.png");
             }else if(skin.compareTo("crown") == 0){
-                kiiwTexture = menuDemo.getAssetManager().get("level4/FlyingCrownKiwi.png");
-                kiiwWinningTexture = menuDemo.getAssetManager().get("defaultLevels/WinningCrownKiwi.png");
-                kiiwLoosingTexture = menuDemo.getAssetManager().get("defaultLevels/LosingCrownKiwi.png");
+                kiiwTexture = kiwiFlight.getAssetManager().get("level4/FlyingCrownKiwi.png");
+                kiiwWinningTexture = kiwiFlight.getAssetManager().get("defaultLevels/WinningCrownKiwi.png");
+                kiiwLoosingTexture = kiwiFlight.getAssetManager().get("defaultLevels/LosingCrownKiwi.png");
             }else if(skin.compareTo("hulk") == 0){
-                kiiwTexture = menuDemo.getAssetManager().get("level4/FlyingHulkKiwi.png");
-                kiiwWinningTexture = menuDemo.getAssetManager().get("defaultLevels/WinningHulkKiwi.png");
-                kiiwLoosingTexture = menuDemo.getAssetManager().get("defaultLevels/LosingHulkKiwi.png");
+                kiiwTexture = kiwiFlight.getAssetManager().get("level4/FlyingHulkKiwi.png");
+                kiiwWinningTexture = kiwiFlight.getAssetManager().get("defaultLevels/WinningHulkKiwi.png");
+                kiiwLoosingTexture = kiwiFlight.getAssetManager().get("defaultLevels/LosingHulkKiwi.png");
             }else if(skin.compareTo("ricardo") == 0){
-                kiiwTexture = menuDemo.getAssetManager().get("level4/FlyingDancingKiwi.png");
-                kiiwWinningTexture = menuDemo.getAssetManager().get("defaultLevels/WinningDancingKiwi.png");
-                kiiwLoosingTexture = menuDemo.getAssetManager().get("defaultLevels/LosingDancingKiwi.png");
+                kiiwTexture = kiwiFlight.getAssetManager().get("level4/FlyingDancingKiwi.png");
+                kiiwWinningTexture = kiwiFlight.getAssetManager().get("defaultLevels/WinningDancingKiwi.png");
+                kiiwLoosingTexture = kiwiFlight.getAssetManager().get("defaultLevels/LosingDancingKiwi.png");
             }
             hawk = new Hawk(hawkTexture);
             actualSpeed = 15;
@@ -245,33 +245,33 @@ public class level extends ScreenAdapter {
         }else{
             actualSpeed = 0;
             if(skin.compareTo("default") == 0){
-                kiiwTexture = menuDemo.getAssetManager().get("defaultLevels/RunningKiwi.png");
-                kiiwWinningTexture = menuDemo.getAssetManager().get("defaultLevels/WinningKiwi.png");
-                kiiwLoosingTexture = menuDemo.getAssetManager().get("defaultLevels/LosingKiwi.png");
+                kiiwTexture = kiwiFlight.getAssetManager().get("defaultLevels/RunningKiwi.png");
+                kiiwWinningTexture = kiwiFlight.getAssetManager().get("defaultLevels/WinningKiwi.png");
+                kiiwLoosingTexture = kiwiFlight.getAssetManager().get("defaultLevels/LosingKiwi.png");
             }else if(skin.compareTo("party") == 0){
-                kiiwTexture = menuDemo.getAssetManager().get("defaultLevels/partyKiwi.png");
-                kiiwWinningTexture = menuDemo.getAssetManager().get("defaultLevels/WinningPartyHatKiwi.png");
-                kiiwLoosingTexture = menuDemo.getAssetManager().get("defaultLevels/LosingPartyHatKiwi.png");
+                kiiwTexture = kiwiFlight.getAssetManager().get("defaultLevels/partyKiwi.png");
+                kiiwWinningTexture = kiwiFlight.getAssetManager().get("defaultLevels/WinningPartyHatKiwi.png");
+                kiiwLoosingTexture = kiwiFlight.getAssetManager().get("defaultLevels/LosingPartyHatKiwi.png");
             }else if(skin.compareTo("hat") == 0){
-                kiiwTexture = menuDemo.getAssetManager().get("defaultLevels/HatKiwi.png");
-                kiiwWinningTexture = menuDemo.getAssetManager().get("defaultLevels/WinningTopHatKiwi.png");
-                kiiwLoosingTexture = menuDemo.getAssetManager().get("defaultLevels/LosingTopHatKiwi.png");
+                kiiwTexture = kiwiFlight.getAssetManager().get("defaultLevels/HatKiwi.png");
+                kiiwWinningTexture = kiwiFlight.getAssetManager().get("defaultLevels/WinningTopHatKiwi.png");
+                kiiwLoosingTexture = kiwiFlight.getAssetManager().get("defaultLevels/LosingTopHatKiwi.png");
             }else if(skin.compareTo("tie") == 0){
-                kiiwTexture = menuDemo.getAssetManager().get("defaultLevels/TieKiwi.png");
-                kiiwWinningTexture = menuDemo.getAssetManager().get("defaultLevels/WinningTieKiwi.png");
-                kiiwLoosingTexture = menuDemo.getAssetManager().get("defaultLevels/LosingTieKiwi.png");
+                kiiwTexture = kiwiFlight.getAssetManager().get("defaultLevels/TieKiwi.png");
+                kiiwWinningTexture = kiwiFlight.getAssetManager().get("defaultLevels/WinningTieKiwi.png");
+                kiiwLoosingTexture = kiwiFlight.getAssetManager().get("defaultLevels/LosingTieKiwi.png");
             }else if(skin.compareTo("crown") == 0){
-                kiiwTexture = menuDemo.getAssetManager().get("defaultLevels/CrownKiwi.png");
-                kiiwWinningTexture = menuDemo.getAssetManager().get("defaultLevels/WinningCrownKiwi.png");
-                kiiwLoosingTexture = menuDemo.getAssetManager().get("defaultLevels/LosingCrownKiwi.png");
+                kiiwTexture = kiwiFlight.getAssetManager().get("defaultLevels/CrownKiwi.png");
+                kiiwWinningTexture = kiwiFlight.getAssetManager().get("defaultLevels/WinningCrownKiwi.png");
+                kiiwLoosingTexture = kiwiFlight.getAssetManager().get("defaultLevels/LosingCrownKiwi.png");
             }else if(skin.compareTo("hulk") == 0){
-                kiiwTexture = menuDemo.getAssetManager().get("defaultLevels/HulkKiwi.png");
-                kiiwWinningTexture = menuDemo.getAssetManager().get("defaultLevels/WinningHulkKiwi.png");
-                kiiwLoosingTexture = menuDemo.getAssetManager().get("defaultLevels/LosingHulkKiwi.png");
+                kiiwTexture = kiwiFlight.getAssetManager().get("defaultLevels/HulkKiwi.png");
+                kiiwWinningTexture = kiwiFlight.getAssetManager().get("defaultLevels/WinningHulkKiwi.png");
+                kiiwLoosingTexture = kiwiFlight.getAssetManager().get("defaultLevels/LosingHulkKiwi.png");
             }else if(skin.compareTo("ricardo") == 0){
-                kiiwTexture = menuDemo.getAssetManager().get("defaultLevels/ricardoKiwi.png");
-                kiiwWinningTexture = menuDemo.getAssetManager().get("defaultLevels/WinningDancingKiwi.png");
-                kiiwLoosingTexture = menuDemo.getAssetManager().get("defaultLevels/LosingDancingKiwi.png");
+                kiiwTexture = kiwiFlight.getAssetManager().get("defaultLevels/ricardoKiwi.png");
+                kiiwWinningTexture = kiwiFlight.getAssetManager().get("defaultLevels/WinningDancingKiwi.png");
+                kiiwLoosingTexture = kiwiFlight.getAssetManager().get("defaultLevels/LosingDancingKiwi.png");
             }
 
         }
@@ -303,8 +303,8 @@ public class level extends ScreenAdapter {
         cameraHUD.update();
 
         stageUI = new Stage(viewportHUD);
-        playButtonTexture = menuDemo.getAssetManager().get("defaultLevels/pausa.png");
-        playPressedButtonTexture = menuDemo.getAssetManager().get("defaultLevels/pausaPress.png");
+        playButtonTexture = kiwiFlight.getAssetManager().get("defaultLevels/pausa.png");
+        playPressedButtonTexture = kiwiFlight.getAssetManager().get("defaultLevels/pausaPress.png");
         ImageButton pause = new ImageButton(new TextureRegionDrawable(new TextureRegion(playButtonTexture)), new TextureRegionDrawable(new TextureRegion(playPressedButtonTexture)));
         pause.setPosition(WORLD_WIDTH - pause.getWidth()*1.1f, WORLD_HEIGHT- pause.getHeight()*1.1f);
         pause.addListener(new ClickListener() {
@@ -321,7 +321,7 @@ public class level extends ScreenAdapter {
         else if (LEVEL == 3)speedNeeded = 35;
         else speedNeeded = 40;
 
-        speedBarTexture = menuDemo.getAssetManager().get("defaultLevels/Barra.png");
+        speedBarTexture = kiwiFlight.getAssetManager().get("defaultLevels/Barra.png");
         Image speedBar = new Image(speedBarTexture);
         speedBar.setPosition(30, WORLD_HEIGHT - speedBar.getHeight()*1.5f);
         speedBarChunkSize = 275 / speedNeeded;
@@ -333,15 +333,15 @@ public class level extends ScreenAdapter {
         speedBarRectangle.width = 0;
 
         stageLifes = new Stage(viewportHUD);
-        lifesBarTexture3 = menuDemo.getAssetManager().get("defaultLevels/lifes2.png");
-        lifesBarTexture2 = menuDemo.getAssetManager().get("defaultLevels/lifes1.png");
-        lifesBarTexture1 = menuDemo.getAssetManager().get("defaultLevels/lifes0.png");
-        lifesBarTexture0 = menuDemo.getAssetManager().get("defaultLevels/lifesNull.png");
+        lifesBarTexture3 = kiwiFlight.getAssetManager().get("defaultLevels/lifes2.png");
+        lifesBarTexture2 = kiwiFlight.getAssetManager().get("defaultLevels/lifes1.png");
+        lifesBarTexture1 = kiwiFlight.getAssetManager().get("defaultLevels/lifes0.png");
+        lifesBarTexture0 = kiwiFlight.getAssetManager().get("defaultLevels/lifesNull.png");
         lifesBar = new Image(lifesBarTexture3);
         lifesBar.setPosition(1*WORLD_WIDTH/3+80, WORLD_HEIGHT-lifesBar.getHeight()*1.1f);
         stageLifes.addActor(lifesBar);
 
-        coinsIndicatorTexture = menuDemo.getAssetManager().get("defaultLevels/Coins.png");
+        coinsIndicatorTexture = kiwiFlight.getAssetManager().get("defaultLevels/Coins.png");
         Image coins = new Image(coinsIndicatorTexture);
         coins.setPosition(3*WORLD_WIDTH/5+70, WORLD_HEIGHT-coins.getHeight()-10);
 
@@ -351,11 +351,11 @@ public class level extends ScreenAdapter {
 
         stagePause = new Stage(viewportHUD);
 
-        pausePanelTexture = menuDemo.getAssetManager().get("defaultLevels/pausepanel.png");
+        pausePanelTexture = kiwiFlight.getAssetManager().get("defaultLevels/pausepanel.png");
         Image pausePanel = new Image(pausePanelTexture);
 
-        resumeButtonTexture = menuDemo.getAssetManager().get("defaultLevels/resume.png");
-        resumePressedButtonTexture = menuDemo.getAssetManager().get("defaultLevels/resumePressed.png");
+        resumeButtonTexture = kiwiFlight.getAssetManager().get("defaultLevels/resume.png");
+        resumePressedButtonTexture = kiwiFlight.getAssetManager().get("defaultLevels/resumePressed.png");
         ImageButton resume = new ImageButton(new TextureRegionDrawable(new TextureRegion(resumeButtonTexture)), new TextureRegionDrawable(new TextureRegion(resumePressedButtonTexture)));
         resume.setPosition(WORLD_WIDTH/2-resume.getWidth()/2+15, WORLD_HEIGHT/2+resume.getHeight()-20);
         resume.addListener(new ClickListener() {
@@ -365,8 +365,8 @@ public class level extends ScreenAdapter {
             }
         });
 
-        settingsButtonTexture = menuDemo.getAssetManager().get("defaultLevels/settings.png");
-        settingsPressedButtonTexture = menuDemo.getAssetManager().get("defaultLevels/settingsPressed.png");
+        settingsButtonTexture = kiwiFlight.getAssetManager().get("defaultLevels/settings.png");
+        settingsPressedButtonTexture = kiwiFlight.getAssetManager().get("defaultLevels/settingsPressed.png");
         ImageButton settings = new ImageButton(new TextureRegionDrawable(new TextureRegion(settingsButtonTexture)), new TextureRegionDrawable(new TextureRegion(settingsPressedButtonTexture)));
         settings.setPosition(WORLD_WIDTH/2-settings.getWidth()/2+15, WORLD_HEIGHT/2-30);
         settings.addListener(new ClickListener() {
@@ -376,8 +376,8 @@ public class level extends ScreenAdapter {
             }
         });
 
-        restartButtonTexture = menuDemo.getAssetManager().get("defaultLevels/restart.png");
-        restartPressedButtonTexture = menuDemo.getAssetManager().get("defaultLevels/restartPressed.png");
+        restartButtonTexture = kiwiFlight.getAssetManager().get("defaultLevels/restart.png");
+        restartPressedButtonTexture = kiwiFlight.getAssetManager().get("defaultLevels/restartPressed.png");
         final ImageButton restart = new ImageButton(new TextureRegionDrawable(new TextureRegion(restartButtonTexture)), new TextureRegionDrawable(new TextureRegion(restartPressedButtonTexture)));
         restart.setPosition(WORLD_WIDTH/2-restart.getWidth()/2+15, WORLD_HEIGHT/2-(2*restart.getHeight())+20);
         restart.addListener(new ClickListener() {
@@ -389,25 +389,25 @@ public class level extends ScreenAdapter {
             }
         });
 
-        exitButtonTexture = menuDemo.getAssetManager().get("defaultLevels/exit.png");
-        exitPressedButtonTexture = menuDemo.getAssetManager().get("defaultLevels/exitPressed.png");
+        exitButtonTexture = kiwiFlight.getAssetManager().get("defaultLevels/exit.png");
+        exitPressedButtonTexture = kiwiFlight.getAssetManager().get("defaultLevels/exitPressed.png");
         ImageButton exit = new ImageButton(new TextureRegionDrawable(new TextureRegion(exitButtonTexture)), new TextureRegionDrawable(new TextureRegion(exitPressedButtonTexture)));
         exit.setPosition(WORLD_WIDTH/2-exit.getWidth()/2+15, WORLD_HEIGHT/2-(3*exit.getHeight()));
         exit.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 music.stop();
-                menuDemo.setScreen(new LevelsScreen(menuDemo));
+                kiwiFlight.setScreen(new LevelsScreen(kiwiFlight));
             }
         });
 
         stageSettings = new Stage(viewportHUD);
 
-        settingsPanelTexture = menuDemo.getAssetManager().get("defaultLevels/settingsPanel.png");
+        settingsPanelTexture = kiwiFlight.getAssetManager().get("defaultLevels/settingsPanel.png");
         Image settingsPanel = new Image(settingsPanelTexture);
 
-        returnTexture = menuDemo.getAssetManager().get("defaultLevels/flecha.png");
-        returnPressTexture = menuDemo.getAssetManager().get("defaultLevels/flechaPress.png");
+        returnTexture = kiwiFlight.getAssetManager().get("defaultLevels/flecha.png");
+        returnPressTexture = kiwiFlight.getAssetManager().get("defaultLevels/flechaPress.png");
         ImageButton retur = new ImageButton(new TextureRegionDrawable(new TextureRegion(returnTexture)), new TextureRegionDrawable(new TextureRegion(returnPressTexture)));
         retur.setPosition(20, 20);
         retur.addListener(new ActorGestureListener() {
@@ -455,19 +455,19 @@ public class level extends ScreenAdapter {
 
         if(LEVEL==1) {
             stageTutorial = new Stage(viewportHUD);
-            obstaclesTutorialTexture = menuDemo.getAssetManager().get("level1/obstacles.png");
-            speedTutorialTexture = menuDemo.getAssetManager().get("level1/speed.png");
-            timeTutorialTexture = menuDemo.getAssetManager().get("level1/time.png");
-            coinsTutorialTexture = menuDemo.getAssetManager().get("level1/coins.png");
+            obstaclesTutorialTexture = kiwiFlight.getAssetManager().get("level1/obstacles.png");
+            speedTutorialTexture = kiwiFlight.getAssetManager().get("level1/speed.png");
+            timeTutorialTexture = kiwiFlight.getAssetManager().get("level1/time.png");
+            coinsTutorialTexture = kiwiFlight.getAssetManager().get("level1/coins.png");
             updateTutorial(0);
         }
 
         stageBegin = new Stage(viewportHUD);
-        beginPanelTexture = menuDemo.getAssetManager().get("level"+LEVEL+"/panel.png");
+        beginPanelTexture = kiwiFlight.getAssetManager().get("level"+LEVEL+"/panel.png");
         Image beginPanel = new Image(beginPanelTexture);
 
-        okButtonTexture = menuDemo.getAssetManager().get("defaultLevels/ok.png");
-        okPressedButtonTexture = menuDemo.getAssetManager().get("defaultLevels/okPressed.png");
+        okButtonTexture = kiwiFlight.getAssetManager().get("defaultLevels/ok.png");
+        okPressedButtonTexture = kiwiFlight.getAssetManager().get("defaultLevels/okPressed.png");
         ImageButton ok = new ImageButton(new TextureRegionDrawable(new TextureRegion(okButtonTexture)), new TextureRegionDrawable(new TextureRegion(okPressedButtonTexture)));
         ok.setPosition(WORLD_WIDTH-1.2f*ok.getWidth(), ok.getHeight()/2);
         ok.addListener(new ClickListener(){
@@ -482,11 +482,11 @@ public class level extends ScreenAdapter {
         });
 
         stageGameOver = new Stage(viewportHUD);
-        gameOverPanelTexture = menuDemo.getAssetManager().get("defaultLevels/gameOverPanel.png");
+        gameOverPanelTexture = kiwiFlight.getAssetManager().get("defaultLevels/gameOverPanel.png");
         Image gameOverPanel = new Image(gameOverPanelTexture);
 
-        yesButtonTexture = menuDemo.getAssetManager().get("defaultLevels/yes.png");
-        yesPressedButtonTexture = menuDemo.getAssetManager().get("defaultLevels/yesPressed.png");
+        yesButtonTexture = kiwiFlight.getAssetManager().get("defaultLevels/yes.png");
+        yesPressedButtonTexture = kiwiFlight.getAssetManager().get("defaultLevels/yesPressed.png");
         ImageButton retry = new ImageButton(new TextureRegionDrawable(new TextureRegion(yesButtonTexture)), new TextureRegionDrawable(new TextureRegion(yesPressedButtonTexture)));
         retry.setPosition(WORLD_WIDTH/2-290, WORLD_HEIGHT/2-75);
         retry.addListener(new ClickListener(){
@@ -499,8 +499,8 @@ public class level extends ScreenAdapter {
            }
         });
 
-        noButtonTexture = menuDemo.getAssetManager().get("defaultLevels/no.png");
-        noPressedButtonTexture = menuDemo.getAssetManager().get("defaultLevels/noPressed.png");
+        noButtonTexture = kiwiFlight.getAssetManager().get("defaultLevels/no.png");
+        noPressedButtonTexture = kiwiFlight.getAssetManager().get("defaultLevels/noPressed.png");
         ImageButton noRetry = new ImageButton(new TextureRegionDrawable(new TextureRegion(noButtonTexture)), new TextureRegionDrawable(new TextureRegion(noPressedButtonTexture)));
         noRetry.setPosition(WORLD_WIDTH/2+30, WORLD_HEIGHT/2-75);
         noRetry.addListener(new ClickListener(){
@@ -508,7 +508,7 @@ public class level extends ScreenAdapter {
             public void clicked(InputEvent event, float x, float y){
                 loseMusic.stop();
                 loseEffect.stop();
-                menuDemo.setScreen(new LevelsScreen(menuDemo));
+                kiwiFlight.setScreen(new LevelsScreen(kiwiFlight));
             }
         });
 
@@ -570,8 +570,8 @@ public class level extends ScreenAdapter {
         if(tutorialIndex == 0){
             tutorialPanel = new Image(obstaclesTutorialTexture);
 
-            nextButtonTexture = menuDemo.getAssetManager().get("level1/next.png");
-            nextPressedButtonTexture = menuDemo.getAssetManager().get("level1/nextPressed.png");
+            nextButtonTexture = kiwiFlight.getAssetManager().get("level1/next.png");
+            nextPressedButtonTexture = kiwiFlight.getAssetManager().get("level1/nextPressed.png");
             ImageButton nextButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(nextButtonTexture)), new TextureRegionDrawable(new TextureRegion(nextPressedButtonTexture)));
             nextButton.setPosition(WORLD_WIDTH-1.2f*nextButton.getWidth(), nextButton.getHeight()/2);
             nextButton.addListener(new ClickListener(){
@@ -581,8 +581,8 @@ public class level extends ScreenAdapter {
                 }
             });
 
-            backButtonTexture = menuDemo.getAssetManager().get("level1/back.png");
-            backPressedButtonTexture = menuDemo.getAssetManager().get("level1/backPressed.png");
+            backButtonTexture = kiwiFlight.getAssetManager().get("level1/back.png");
+            backPressedButtonTexture = kiwiFlight.getAssetManager().get("level1/backPressed.png");
             ImageButton backButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(backButtonTexture)), new TextureRegionDrawable(new TextureRegion(backPressedButtonTexture)));
             backButton.setPosition(backButton.getWidth()*.2f, nextButton.getHeight()/2);
             backButton.addListener(new ClickListener(){
@@ -592,8 +592,8 @@ public class level extends ScreenAdapter {
                 }
             });
 
-            skipButtonTexture=menuDemo.getAssetManager().get("defaultLevels/panelSkip.png");
-            buttonPressTexture=menuDemo.getAssetManager().get("defaultLevels/skipPress.png");
+            skipButtonTexture= kiwiFlight.getAssetManager().get("defaultLevels/panelSkip.png");
+            buttonPressTexture= kiwiFlight.getAssetManager().get("defaultLevels/skipPress.png");
 
             ImageButton skipButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(skipButtonTexture)), new TextureRegionDrawable(new TextureRegion(buttonPressTexture)));
             skipButton.setPosition(WORLD_WIDTH-1.1f*skipButton.getWidth(),WORLD_HEIGHT-1.1f*skipButton.getHeight());
@@ -610,8 +610,8 @@ public class level extends ScreenAdapter {
             stageTutorial.addActor(skipButton);
         }else if(tutorialIndex == 1){
             tutorialPanel = new Image(speedTutorialTexture);
-            nextButtonTexture = menuDemo.getAssetManager().get("level1/next.png");
-            nextPressedButtonTexture = menuDemo.getAssetManager().get("level1/nextPressed.png");
+            nextButtonTexture = kiwiFlight.getAssetManager().get("level1/next.png");
+            nextPressedButtonTexture = kiwiFlight.getAssetManager().get("level1/nextPressed.png");
             ImageButton nextButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(nextButtonTexture)), new TextureRegionDrawable(new TextureRegion(nextPressedButtonTexture)));
             nextButton.setPosition(WORLD_WIDTH-1.2f*nextButton.getWidth(), nextButton.getHeight()/2);
             nextButton.addListener(new ClickListener(){
@@ -620,8 +620,8 @@ public class level extends ScreenAdapter {
                     updateTutorial(2);
                 }
             });
-            backButtonTexture = menuDemo.getAssetManager().get("level1/back.png");
-            backPressedButtonTexture = menuDemo.getAssetManager().get("level1/backPressed.png");
+            backButtonTexture = kiwiFlight.getAssetManager().get("level1/back.png");
+            backPressedButtonTexture = kiwiFlight.getAssetManager().get("level1/backPressed.png");
             ImageButton backButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(backButtonTexture)), new TextureRegionDrawable(new TextureRegion(backPressedButtonTexture)));
             backButton.setPosition(backButton.getWidth()*.2f, nextButton.getHeight()/2);
             backButton.addListener(new ClickListener(){
@@ -630,8 +630,8 @@ public class level extends ScreenAdapter {
                     updateTutorial(0);
                 }
             });
-            skipButtonTexture=menuDemo.getAssetManager().get("defaultLevels/panelSkip.png");
-            buttonPressTexture=menuDemo.getAssetManager().get("defaultLevels/skipPress.png");
+            skipButtonTexture= kiwiFlight.getAssetManager().get("defaultLevels/panelSkip.png");
+            buttonPressTexture= kiwiFlight.getAssetManager().get("defaultLevels/skipPress.png");
 
             ImageButton skipButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(skipButtonTexture)), new TextureRegionDrawable(new TextureRegion(buttonPressTexture)));
             skipButton.setPosition(WORLD_WIDTH-1.1f*skipButton.getWidth(),WORLD_HEIGHT-1.1f*skipButton.getHeight());
@@ -648,8 +648,8 @@ public class level extends ScreenAdapter {
         }else if(tutorialIndex == 2){
             tutorialPanel = new Image(timeTutorialTexture);
 
-            nextButtonTexture = menuDemo.getAssetManager().get("level1/next.png");
-            nextPressedButtonTexture = menuDemo.getAssetManager().get("level1/nextPressed.png");
+            nextButtonTexture = kiwiFlight.getAssetManager().get("level1/next.png");
+            nextPressedButtonTexture = kiwiFlight.getAssetManager().get("level1/nextPressed.png");
             ImageButton nextButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(nextButtonTexture)), new TextureRegionDrawable(new TextureRegion(nextPressedButtonTexture)));
             nextButton.setPosition(WORLD_WIDTH-1.2f*nextButton.getWidth(), nextButton.getHeight()/2);
             nextButton.addListener(new ClickListener(){
@@ -659,8 +659,8 @@ public class level extends ScreenAdapter {
                 }
             });
 
-            backButtonTexture = menuDemo.getAssetManager().get("level1/back.png");
-            backPressedButtonTexture = menuDemo.getAssetManager().get("level1/backPressed.png");
+            backButtonTexture = kiwiFlight.getAssetManager().get("level1/back.png");
+            backPressedButtonTexture = kiwiFlight.getAssetManager().get("level1/backPressed.png");
             ImageButton backButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(backButtonTexture)), new TextureRegionDrawable(new TextureRegion(backPressedButtonTexture)));
             backButton.setPosition(backButton.getWidth()*.2f, nextButton.getHeight()/2);
             backButton.addListener(new ClickListener(){
@@ -669,8 +669,8 @@ public class level extends ScreenAdapter {
                     updateTutorial(1);
                 }
             });
-            skipButtonTexture=menuDemo.getAssetManager().get("defaultLevels/panelSkip.png");
-            buttonPressTexture=menuDemo.getAssetManager().get("defaultLevels/skipPress.png");
+            skipButtonTexture= kiwiFlight.getAssetManager().get("defaultLevels/panelSkip.png");
+            buttonPressTexture= kiwiFlight.getAssetManager().get("defaultLevels/skipPress.png");
 
             ImageButton skipButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(skipButtonTexture)), new TextureRegionDrawable(new TextureRegion(buttonPressTexture)));
             skipButton.setPosition(WORLD_WIDTH-1.1f*skipButton.getWidth(),WORLD_HEIGHT-1.1f*skipButton.getHeight());
@@ -687,8 +687,8 @@ public class level extends ScreenAdapter {
         }else if(tutorialIndex == 3){
             tutorialPanel = new Image(coinsTutorialTexture);
 
-            nextButtonTexture = menuDemo.getAssetManager().get("level1/got.png");
-            nextPressedButtonTexture = menuDemo.getAssetManager().get("level1/gotPressed.png");
+            nextButtonTexture = kiwiFlight.getAssetManager().get("level1/got.png");
+            nextPressedButtonTexture = kiwiFlight.getAssetManager().get("level1/gotPressed.png");
             ImageButton nextButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(nextButtonTexture)), new TextureRegionDrawable(new TextureRegion(nextPressedButtonTexture)));
             nextButton.setPosition(WORLD_WIDTH-1.2f*nextButton.getWidth(), nextButton.getHeight()/2);
             nextButton.addListener(new ClickListener(){
@@ -698,8 +698,8 @@ public class level extends ScreenAdapter {
                 }
             });
 
-            backButtonTexture = menuDemo.getAssetManager().get("level1/back.png");
-            backPressedButtonTexture = menuDemo.getAssetManager().get("level1/backPressed.png");
+            backButtonTexture = kiwiFlight.getAssetManager().get("level1/back.png");
+            backPressedButtonTexture = kiwiFlight.getAssetManager().get("level1/backPressed.png");
             ImageButton backButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(backButtonTexture)), new TextureRegionDrawable(new TextureRegion(backPressedButtonTexture)));
             backButton.setPosition(backButton.getWidth()*.2f, nextButton.getHeight()/2);
             backButton.addListener(new ClickListener(){
@@ -709,8 +709,8 @@ public class level extends ScreenAdapter {
                 }
             });
 
-            skipButtonTexture=menuDemo.getAssetManager().get("defaultLevels/panelSkip.png");
-            buttonPressTexture=menuDemo.getAssetManager().get("defaultLevels/skipPress.png");
+            skipButtonTexture= kiwiFlight.getAssetManager().get("defaultLevels/panelSkip.png");
+            buttonPressTexture= kiwiFlight.getAssetManager().get("defaultLevels/skipPress.png");
             ImageButton skipButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(skipButtonTexture)), new TextureRegionDrawable(new TextureRegion(buttonPressTexture)));
             skipButton.setPosition(WORLD_WIDTH-1.1f*skipButton.getWidth(),WORLD_HEIGHT-1.1f*skipButton.getHeight());
             skipButton.addListener(new ActorGestureListener() {
@@ -727,12 +727,12 @@ public class level extends ScreenAdapter {
     }
 
     private void loadMusic() {
-        hitEffect = menuDemo.getAssetManager().get("defaultLevels/hit.mp3");
-        coinEffect = menuDemo.getAssetManager().get("defaultLevels/coin.mp3");
-        loseEffect = menuDemo.getAssetManager().get("defaultLevels/Kiwhine.mp3");
-        loseMusic = menuDemo.getAssetManager().get("defaultLevels/KiiwLose.mp3");
-        winEffect = menuDemo.getAssetManager().get("defaultLevels/KiiwWin.mp3");
-        music = menuDemo.getAssetManager().get("level"+LEVEL+"/song.mp3");
+        hitEffect = kiwiFlight.getAssetManager().get("defaultLevels/hit.mp3");
+        coinEffect = kiwiFlight.getAssetManager().get("defaultLevels/coin.mp3");
+        loseEffect = kiwiFlight.getAssetManager().get("defaultLevels/Kiwhine.mp3");
+        loseMusic = kiwiFlight.getAssetManager().get("defaultLevels/KiiwLose.mp3");
+        winEffect = kiwiFlight.getAssetManager().get("defaultLevels/KiiwWin.mp3");
+        music = kiwiFlight.getAssetManager().get("level"+LEVEL+"/song.mp3");
         updateVolume();
         music.setLooping(true);
         music.play();
@@ -897,10 +897,10 @@ public class level extends ScreenAdapter {
             coins.clear();
             if(animationTimer>=4.5){
                 if(bossLevel){
-                    menuDemo.setScreen(new EndingTransitionScreen(menuDemo));
+                    kiwiFlight.setScreen(new EndingTransitionScreen(kiwiFlight));
                     music.stop();
                 }else {
-                    menuDemo.setScreen(new LevelsScreen(menuDemo));
+                    kiwiFlight.setScreen(new LevelsScreen(kiwiFlight));
                     music.stop();
                 }
             }
@@ -1150,7 +1150,7 @@ public class level extends ScreenAdapter {
     }
 
     private void createNewCoin(){
-        coinTexture = MenuDemo.getAssetManager().get("defaultLevels/gamecoin.png");
+        coinTexture = kiwiFlight.getAssetManager().get("defaultLevels/gamecoin.png");
         Coin newCoin = new Coin(coinTexture);
         Random random = new Random();
         int RandomPad1 = random.nextInt(5);

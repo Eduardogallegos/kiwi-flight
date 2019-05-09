@@ -1,4 +1,4 @@
-package com.mygdx.menudemo;
+package com.mygdx.kiwiFlight;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -18,7 +18,6 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -31,7 +30,7 @@ class ClosetScreen extends ScreenAdapter {
     private static final int TILE_WIDTH = 473;
     private static final int TILE_HEIGHT = 387;
     private static final float FRAME_DURATION = 0.1f;
-    private final MenuDemo menuDemo;
+    private final kiwiFlight kiwiFlight;
     private static final float WORLD_WIDTH = 1280;
     private static final float WORLD_HEIGHT = 720;
 
@@ -87,9 +86,9 @@ class ClosetScreen extends ScreenAdapter {
 
     private STATE state = STATE.NORMAL;
 
-    public ClosetScreen(MenuDemo menuDemo) {
-        this.menuDemo = menuDemo;
-        this.preferencias = menuDemo.getPreferences();
+    public ClosetScreen(kiwiFlight kiwiFlight) {
+        this.kiwiFlight = kiwiFlight;
+        this.preferencias = kiwiFlight.getPreferences();
     }
 
     public void show() {
@@ -125,7 +124,7 @@ class ClosetScreen extends ScreenAdapter {
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 music.stop();
                 savePreferences();
-                menuDemo.setScreen(new StartScreen(menuDemo));
+                kiwiFlight.setScreen(new StartScreen(kiwiFlight));
                 dispose();
             }
         });

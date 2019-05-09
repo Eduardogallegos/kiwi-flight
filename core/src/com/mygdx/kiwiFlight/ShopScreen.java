@@ -1,4 +1,4 @@
-package com.mygdx.menudemo;
+package com.mygdx.kiwiFlight;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -20,7 +20,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
@@ -29,7 +28,7 @@ class ShopScreen extends ScreenAdapter {
     private static final float MUSIC_VOLUME_DEFAULT = 1;
     private static  final int COINS_DEFAULT = 0;
     private static final boolean SKIN_BOUGHT = false;
-    private final MenuDemo menuDemo;
+    private final kiwiFlight kiwiFlight;
     private static final float WORLD_WIDTH = 1280;
     private static final float WORLD_HEIGHT = 720;
 
@@ -122,9 +121,9 @@ class ShopScreen extends ScreenAdapter {
 
     private STATE state = STATE.NORMAL;
 
-    public ShopScreen(MenuDemo menuDemo) {
-        this.menuDemo =menuDemo;
-        this.preferencias = menuDemo.getPreferences();
+    public ShopScreen(kiwiFlight kiwiFlight) {
+        this.kiwiFlight = kiwiFlight;
+        this.preferencias = kiwiFlight.getPreferences();
     }
 
     public void show() {
@@ -163,7 +162,7 @@ class ShopScreen extends ScreenAdapter {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 music.stop();
-                menuDemo.setScreen(new StartScreen(menuDemo));
+                kiwiFlight.setScreen(new StartScreen(kiwiFlight));
                 dispose();
             }
         });
@@ -296,7 +295,7 @@ class ShopScreen extends ScreenAdapter {
                 buySkin(costo);
                 dispose();
                 music.stop();
-                menuDemo.setScreen(new ShopScreen(menuDemo));
+                kiwiFlight.setScreen(new ShopScreen(kiwiFlight));
             }
         });
 

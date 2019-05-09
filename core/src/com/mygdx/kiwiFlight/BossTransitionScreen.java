@@ -1,4 +1,4 @@
-package com.mygdx.menudemo;
+package com.mygdx.kiwiFlight;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
@@ -23,7 +23,7 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.run;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 
 public class BossTransitionScreen extends ScreenAdapter {
-    private final MenuDemo menuDemo;
+    private final kiwiFlight kiwiFlight;
     private static final float WORLD_WIDTH=1280;
     private static final float WORLD_HEIGHT=720;
     private static final float MUSIC_VOLUME_DEFAULT = 1;
@@ -42,10 +42,10 @@ public class BossTransitionScreen extends ScreenAdapter {
 
 
 
-    public BossTransitionScreen(MenuDemo menuDemo){
+    public BossTransitionScreen(kiwiFlight kiwiFlight){
 
-        this.menuDemo =menuDemo;
-        this.preferencias = menuDemo.getPreferences();
+        this.kiwiFlight = kiwiFlight;
+        this.preferencias = kiwiFlight.getPreferences();
     }
 
     public void show(){
@@ -72,7 +72,7 @@ public class BossTransitionScreen extends ScreenAdapter {
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 super.tap(event, x, y, count, button);
                 music.stop();
-                menuDemo.setScreen(new LoadingScreen( menuDemo,4));
+                kiwiFlight.setScreen(new LoadingScreen(kiwiFlight,4));
                 dispose();
             }
         });
@@ -99,7 +99,7 @@ public class BossTransitionScreen extends ScreenAdapter {
         story10.addAction(sequence(delay(5), fadeIn(1),delay(3), fadeOut(1), run(new Runnable() {
             @Override
             public void run() {
-                menuDemo.setScreen(new LoadingScreen( menuDemo,4));
+                kiwiFlight.setScreen(new LoadingScreen(kiwiFlight,4));
                 music.stop();
                 dispose();
             }

@@ -1,4 +1,4 @@
-package com.mygdx.menudemo;
+package com.mygdx.kiwiFlight;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -29,7 +29,7 @@ class LevelsScreen extends ScreenAdapter {
     private static final int TILE_WIDTH = 1280;
     private static final int TILE_HEIGHT = 720;
     private static final boolean LEVEL_DEFAULT = true;
-    private final MenuDemo menuDemo;
+    private final kiwiFlight kiwiFlight;
     private static final float WORLD_WIDTH = 1280;
     private static final float WORLD_HEIGHT = 720;
 
@@ -74,9 +74,9 @@ class LevelsScreen extends ScreenAdapter {
 
     private STATE state = STATE.NORMAL;
 
-    public LevelsScreen(MenuDemo menuDemo) {
-        this.menuDemo =menuDemo;
-        this.preferencias = menuDemo.getPreferences();
+    public LevelsScreen(kiwiFlight kiwiFlight) {
+        this.kiwiFlight = kiwiFlight;
+        this.preferencias = kiwiFlight.getPreferences();
     }
 
     @Override
@@ -111,7 +111,7 @@ class LevelsScreen extends ScreenAdapter {
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 music.stop();
                 super.tap(event, x, y, count, button);
-                menuDemo.setScreen(new StartScreen(menuDemo));
+                kiwiFlight.setScreen(new StartScreen(kiwiFlight));
                 dispose();
             }
         });
@@ -124,7 +124,7 @@ class LevelsScreen extends ScreenAdapter {
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 music.stop();
                 super.tap(event, x, y, count, button);
-                menuDemo.setScreen(new LoadingScreen(menuDemo, 1));
+                kiwiFlight.setScreen(new LoadingScreen(kiwiFlight, 1));
                 dispose();
             }
         });
@@ -144,7 +144,7 @@ class LevelsScreen extends ScreenAdapter {
                 public void tap(InputEvent event, float x, float y, int count, int button) {
                     music.stop();
                     super.tap(event, x, y, count, button);
-                    menuDemo.setScreen(new LoadingScreen( menuDemo, 2));
+                    kiwiFlight.setScreen(new LoadingScreen(kiwiFlight, 2));
                     dispose();
                 }
             });
@@ -166,7 +166,7 @@ class LevelsScreen extends ScreenAdapter {
                 @Override
                 public void tap(InputEvent event, float x, float y, int count, int button) {
                     music.stop();
-                    menuDemo.setScreen(new LoadingScreen(menuDemo, 3));
+                    kiwiFlight.setScreen(new LoadingScreen(kiwiFlight, 3));
                     dispose();
                 }
             });
@@ -188,7 +188,7 @@ class LevelsScreen extends ScreenAdapter {
                 @Override
                 public void tap(InputEvent event, float x, float y, int count, int button) {
                     music.stop();
-                    menuDemo.setScreen(new BossTransitionScreen(menuDemo));
+                    kiwiFlight.setScreen(new BossTransitionScreen(kiwiFlight));
                     dispose();
                 }
             });

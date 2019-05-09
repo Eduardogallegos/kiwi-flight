@@ -1,4 +1,4 @@
-package com.mygdx.menudemo;
+package com.mygdx.kiwiFlight;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -6,7 +6,7 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.assets.AssetManager;
 
 
-public class MenuDemo extends Game {
+public class kiwiFlight extends Game {
 
 	private static final AssetManager assetManager = new AssetManager();
 	private static Preferences preferences;
@@ -15,7 +15,7 @@ public class MenuDemo extends Game {
 	@Override
 	public void create(){
 		Gdx.input.setCatchBackKey(true);
-		preferences = Gdx.app.getPreferences(MenuDemo.class.getName());
+		preferences = Gdx.app.getPreferences(kiwiFlight.class.getName());
 		this.setScreen(new TransitionScreen(this));
 	}
 

@@ -1,4 +1,4 @@
-package com.mygdx.menudemo;
+package com.mygdx.kiwiFlight;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
@@ -23,7 +23,7 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.run;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 
 public class TransitionScreen extends ScreenAdapter {
-   private final MenuDemo menuDemo;
+   private final kiwiFlight kiwiFlight;
    private static final float WORLD_WIDTH=1280;
    private static final float WORLD_HEIGHT=720;
    private static final float MUSIC_VOLUME_DEFAULT = 1;
@@ -46,9 +46,9 @@ public class TransitionScreen extends ScreenAdapter {
     private Preferences preferencias;
 
 
-   public TransitionScreen(MenuDemo menuDemo){
-       this.menuDemo =menuDemo;
-       this.preferencias = menuDemo.getPreferences();
+   public TransitionScreen(kiwiFlight kiwiFlight){
+       this.kiwiFlight = kiwiFlight;
+       this.preferencias = kiwiFlight.getPreferences();
    }
 
    public void show(){
@@ -80,7 +80,7 @@ public class TransitionScreen extends ScreenAdapter {
            public void tap(InputEvent event, float x, float y, int count, int button) {
                super.tap(event, x, y, count, button);
                music.stop();
-               menuDemo.setScreen(new StartScreen(menuDemo));
+               kiwiFlight.setScreen(new StartScreen(kiwiFlight));
                dispose();
            }
        });
@@ -130,7 +130,7 @@ public class TransitionScreen extends ScreenAdapter {
            @Override
            public void run() {
                music.stop();
-               menuDemo.setScreen(new StartScreen(menuDemo));
+               kiwiFlight.setScreen(new StartScreen(kiwiFlight));
                dispose();
            }
        })));
