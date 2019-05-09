@@ -23,7 +23,7 @@ class Hawk {
 
     public void draw(SpriteBatch batch) {
         hawkTexture = (TextureRegion) animation.getKeyFrame(animationTimer);
-        batch.draw(hawkTexture, 0, 420);
+        batch.draw(hawkTexture, 0, 250);
     }
 
     public void setPosition(float x, float y) {

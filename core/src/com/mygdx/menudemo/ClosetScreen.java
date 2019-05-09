@@ -407,7 +407,7 @@ class ClosetScreen extends ScreenAdapter {
             quitStage.draw();
             Gdx.input.setInputProcessor(quitStage);
         }else{
-            Gdx.input.setInputProcessor(stage);
+            Gdx.input.setInputProcessor(multiplexer);
         }
 
     }

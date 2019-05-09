@@ -104,7 +104,6 @@ public class level extends ScreenAdapter {
 
     private Rectangle speedBarRectangle;
     private float speedBarChunkSize = DEFAULT_CHUNCK_SIZE;
-    private Stage stageWin;
     private Stage stageGameOver;
     private Texture gameOverPanelTexture;
     private Texture yesButtonTexture;
@@ -158,7 +157,7 @@ public class level extends ScreenAdapter {
     private TextureRegion winningKiiw;
     private TextureRegion loosingKiiw;
     private float winingKiiwX = WORLD_WIDTH/4;
-    private float winingKiiwY = WORLD_HEIGHT/2;
+    private float winingKiiwY;
     private Animation loosingAnimation;
     private float looseKiiwX = 20;
     private boolean finish = false;
@@ -211,9 +210,35 @@ public class level extends ScreenAdapter {
         if (LEVEL == 4){
             bgImagesNumber = 3;
             bossLevel = true;
-            kiiwTexture = menuDemo.getAssetManager().get("level4/FlyingKiwi.png");
-            kiiwWinningTexture = menuDemo.getAssetManager().get("defaultLevels/WinningKiwi.png");
-            kiiwLoosingTexture = menuDemo.getAssetManager().get("defaultLevels/LosingKiwi.png");
+            if(skin.compareTo("default") == 0){
+                kiiwTexture = menuDemo.getAssetManager().get("level4/FlyingKiwi.png");
+                kiiwWinningTexture = menuDemo.getAssetManager().get("defaultLevels/WinningKiwi.png");
+                kiiwLoosingTexture = menuDemo.getAssetManager().get("defaultLevels/LosingKiwi.png");
+            }else if(skin.compareTo("party") == 0){
+                kiiwTexture = menuDemo.getAssetManager().get("level4/FlyingPartyHatKiwi.png");
+                kiiwWinningTexture = menuDemo.getAssetManager().get("defaultLevels/WinningPartyHatKiwi.png");
+                kiiwLoosingTexture = menuDemo.getAssetManager().get("defaultLevels/LosingPartyHatKiwi.png");
+            }else if(skin.compareTo("hat") == 0){
+                kiiwTexture = menuDemo.getAssetManager().get("level4/FlyingTopHatKiwi.png");
+                kiiwWinningTexture = menuDemo.getAssetManager().get("defaultLevels/WinningTopHatKiwi.png");
+                kiiwLoosingTexture = menuDemo.getAssetManager().get("defaultLevels/LosingTopHatKiwi.png");
+            }else if(skin.compareTo("tie") == 0){
+                kiiwTexture = menuDemo.getAssetManager().get("level4/FlyingTieKiwi.png");
+                kiiwWinningTexture = menuDemo.getAssetManager().get("defaultLevels/WinningTieKiwi.png");
+                kiiwLoosingTexture = menuDemo.getAssetManager().get("defaultLevels/LosingTieKiwi.png");
+            }else if(skin.compareTo("crown") == 0){
+                kiiwTexture = menuDemo.getAssetManager().get("level4/FlyingCrownKiwi.png");
+                kiiwWinningTexture = menuDemo.getAssetManager().get("defaultLevels/WinningCrownKiwi.png");
+                kiiwLoosingTexture = menuDemo.getAssetManager().get("defaultLevels/LosingCrownKiwi.png");
+            }else if(skin.compareTo("hulk") == 0){
+                kiiwTexture = menuDemo.getAssetManager().get("level4/FlyingHulkKiwi.png");
+                kiiwWinningTexture = menuDemo.getAssetManager().get("defaultLevels/WinningHulkKiwi.png");
+                kiiwLoosingTexture = menuDemo.getAssetManager().get("defaultLevels/LosingHulkKiwi.png");
+            }else if(skin.compareTo("ricardo") == 0){
+                kiiwTexture = menuDemo.getAssetManager().get("level4/FlyingDancingKiwi.png");
+                kiiwWinningTexture = menuDemo.getAssetManager().get("defaultLevels/WinningDancingKiwi.png");
+                kiiwLoosingTexture = menuDemo.getAssetManager().get("defaultLevels/LosingDancingKiwi.png");
+            }
             hawk = new Hawk(hawkTexture);
             actualSpeed = 15;
             //hawk.setPosition(20, WORLD_HEIGHT/2);
@@ -225,28 +250,28 @@ public class level extends ScreenAdapter {
                 kiiwLoosingTexture = menuDemo.getAssetManager().get("defaultLevels/LosingKiwi.png");
             }else if(skin.compareTo("party") == 0){
                 kiiwTexture = menuDemo.getAssetManager().get("defaultLevels/partyKiwi.png");
-                kiiwWinningTexture = menuDemo.getAssetManager().get("defaultLevels/WinningKiwi.png");
-                kiiwLoosingTexture = menuDemo.getAssetManager().get("defaultLevels/LosingKiwi.png");
+                kiiwWinningTexture = menuDemo.getAssetManager().get("defaultLevels/WinningPartyHatKiwi.png");
+                kiiwLoosingTexture = menuDemo.getAssetManager().get("defaultLevels/LosingPartyHatKiwi.png");
             }else if(skin.compareTo("hat") == 0){
                 kiiwTexture = menuDemo.getAssetManager().get("defaultLevels/HatKiwi.png");
-                kiiwWinningTexture = menuDemo.getAssetManager().get("defaultLevels/WinningKiwi.png");
-                kiiwLoosingTexture = menuDemo.getAssetManager().get("defaultLevels/LosingKiwi.png");
+                kiiwWinningTexture = menuDemo.getAssetManager().get("defaultLevels/WinningTopHatKiwi.png");
+                kiiwLoosingTexture = menuDemo.getAssetManager().get("defaultLevels/LosingTopHatKiwi.png");
             }else if(skin.compareTo("tie") == 0){
                 kiiwTexture = menuDemo.getAssetManager().get("defaultLevels/TieKiwi.png");
-                kiiwWinningTexture = menuDemo.getAssetManager().get("defaultLevels/WinningKiwi.png");
-                kiiwLoosingTexture = menuDemo.getAssetManager().get("defaultLevels/LosingKiwi.png");
+                kiiwWinningTexture = menuDemo.getAssetManager().get("defaultLevels/WinningTieKiwi.png");
+                kiiwLoosingTexture = menuDemo.getAssetManager().get("defaultLevels/LosingTieKiwi.png");
             }else if(skin.compareTo("crown") == 0){
                 kiiwTexture = menuDemo.getAssetManager().get("defaultLevels/CrownKiwi.png");
-                kiiwWinningTexture = menuDemo.getAssetManager().get("defaultLevels/WinningKiwi.png");
-                kiiwLoosingTexture = menuDemo.getAssetManager().get("defaultLevels/LosingKiwi.png");
+                kiiwWinningTexture = menuDemo.getAssetManager().get("defaultLevels/WinningCrownKiwi.png");
+                kiiwLoosingTexture = menuDemo.getAssetManager().get("defaultLevels/LosingCrownKiwi.png");
             }else if(skin.compareTo("hulk") == 0){
                 kiiwTexture = menuDemo.getAssetManager().get("defaultLevels/HulkKiwi.png");
-                kiiwWinningTexture = menuDemo.getAssetManager().get("defaultLevels/WinningKiwi.png");
-                kiiwLoosingTexture = menuDemo.getAssetManager().get("defaultLevels/LosingKiwi.png");
+                kiiwWinningTexture = menuDemo.getAssetManager().get("defaultLevels/WinningHulkKiwi.png");
+                kiiwLoosingTexture = menuDemo.getAssetManager().get("defaultLevels/LosingHulkKiwi.png");
             }else if(skin.compareTo("ricardo") == 0){
                 kiiwTexture = menuDemo.getAssetManager().get("defaultLevels/ricardoKiwi.png");
-                kiiwWinningTexture = menuDemo.getAssetManager().get("defaultLevels/WinningKiwi.png");
-                kiiwLoosingTexture = menuDemo.getAssetManager().get("defaultLevels/LosingKiwi.png");
+                kiiwWinningTexture = menuDemo.getAssetManager().get("defaultLevels/WinningDancingKiwi.png");
+                kiiwLoosingTexture = menuDemo.getAssetManager().get("defaultLevels/LosingDancingKiwi.png");
             }
 
         }
@@ -428,14 +453,14 @@ public class level extends ScreenAdapter {
         stageSettings.addActor(musicSlider);
         stageSettings.addActor(retur);
 
-        stageWin = new Stage(viewportHUD);
-
-        stageTutorial = new Stage(viewportHUD);
-        obstaclesTutorialTexture = menuDemo.getAssetManager().get("level1/obstacles.png");
-        speedTutorialTexture = menuDemo.getAssetManager().get("level1/speed.png");
-        timeTutorialTexture = menuDemo.getAssetManager().get("level1/time.png");
-        coinsTutorialTexture = menuDemo.getAssetManager().get("level1/coins.png");
-        updateTutorial(0);
+        if(LEVEL==1) {
+            stageTutorial = new Stage(viewportHUD);
+            obstaclesTutorialTexture = menuDemo.getAssetManager().get("level1/obstacles.png");
+            speedTutorialTexture = menuDemo.getAssetManager().get("level1/speed.png");
+            timeTutorialTexture = menuDemo.getAssetManager().get("level1/time.png");
+            coinsTutorialTexture = menuDemo.getAssetManager().get("level1/coins.png");
+            updateTutorial(0);
+        }
 
         stageBegin = new Stage(viewportHUD);
         beginPanelTexture = menuDemo.getAssetManager().get("level"+LEVEL+"/panel.png");
@@ -764,7 +789,6 @@ public class level extends ScreenAdapter {
             animationTimer += delta;
             stage.act();
             updateKiiwWinAnimation();
-            updtaeKiiwLooseAnimation();
         }
         clearScreen();
         updateVolume();
@@ -779,13 +803,10 @@ public class level extends ScreenAdapter {
     }
 
     private void updateKiiwWinAnimation() {
-        winingKiiwX += 4;
+        winingKiiwX += 3;
         winingKiiwY += 0.7;
     }
 
-    private void updtaeKiiwLooseAnimation() {
-       looseKiiwX -= 2;
-    }
 
     private void updateVolume() {
         music.setVolume(musicVolume);
@@ -801,6 +822,7 @@ public class level extends ScreenAdapter {
             winEffect.play();
             state = STATE.WIN;
             finish = true;
+            winingKiiwY = kiiw.getY();
         }
     }
 
@@ -1168,55 +1190,59 @@ public class level extends ScreenAdapter {
         }
     }
 
-    private void createNewObstacle(){
+    private void createNewObstacle() {
         Random rnd = new Random();
         int RandomPad = rnd.nextInt(5);
-        int obstacleWidth=168;
+        int obstacleWidth = 168;
         int obstacleHeight = 107;
         int obstacleType = rnd.nextInt(3);
         boolean isGrass = false;
-        switch (obstacleType){
+        switch (obstacleType) {
             case 0:
-                obstacleTexture = new Texture(Gdx.files.internal("level"+LEVEL+"/roca.png"));
-                if(bossLevel){
-                    obstacleWidth = 168;
-                    obstacleHeight = 107;
+                obstacleTexture = new Texture(Gdx.files.internal("level" + LEVEL + "/roca.png"));
+                if (bossLevel) {
+                    obstacleWidth = 150;
+                    obstacleHeight = 150;
                 }
                 break;
             case 1:
-                obstacleTexture = new Texture(Gdx.files.internal("level"+LEVEL+"/arbol.png"));
-                if(LEVEL==1) {
+                obstacleTexture = new Texture(Gdx.files.internal("level" + LEVEL + "/arbol.png"));
+                if (LEVEL == 1) {
                     obstacleWidth = 212;
                     obstacleHeight = 272;
-                }else if(LEVEL == 2) {
+                } else if (LEVEL == 2) {
                     obstacleWidth = 137;
                     obstacleHeight = 265;
-                }else if(LEVEL == 3){
+                } else if (LEVEL == 3) {
                     obstacleWidth = 482;
-                    obstacleHeight=258;
-                }else{
-                    obstacleWidth = 170;
-                    obstacleHeight = 170;
+                    obstacleHeight = 258;
+                } else {
+                    obstacleWidth = 150;
+                    obstacleHeight = 150;
                 }
                 break;
             case 2:
-                obstacleTexture = new Texture(Gdx.files.internal("level"+LEVEL+"/pasto.png"));
-                if(bossLevel){
-                    obstacleWidth = 170;
-                    obstacleHeight = 102;
-                }else{
+                obstacleTexture = new Texture(Gdx.files.internal("level" + LEVEL + "/pasto.png"));
+                if (bossLevel) {
+                    obstacleWidth = 149;
+                    obstacleHeight = 89;
+                } else {
                     obstacleWidth = 118;
-                    obstacleHeight=171;
+                    obstacleHeight = 171;
                 }
-                isGrass=true;
+                isGrass = true;
                 break;
         }
         Obstacle newObstacle = new Obstacle(bossLevel, isGrass, obstacleTexture, obstacleWidth, obstacleHeight);
         float y = PADS[RandomPad];
         if(LEVEL == 4){
-            newObstacle.setPosition(WORLD_WIDTH + Obstacle.WIDTH,  y-newObstacle.WIDTH);
-        }else{
-            newObstacle.setPosition(WORLD_WIDTH + Obstacle.WIDTH,  y + newObstacle.WIDTH/2);
+            if(newObstacle.isGrass()){
+                newObstacle.setPosition(WORLD_WIDTH + Obstacle.WIDTH,  y+newObstacle.WIDTH/2);
+            }else {
+                newObstacle.setPosition(WORLD_WIDTH + Obstacle.WIDTH,  y-newObstacle.WIDTH/2);
+            }
+        }else {
+            newObstacle.setPosition(WORLD_WIDTH + Obstacle.WIDTH, y + newObstacle.WIDTH / 2);
         }
         obstacles.add(newObstacle);
     }

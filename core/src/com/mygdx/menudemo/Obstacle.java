@@ -14,7 +14,7 @@ public class Obstacle {
     private static final float COLLISION_SQUARE_WIDTH = 50F;
 
     public static final float WIDTH = COLLISION_SQUARE_WIDTH;
-    private static final float FRAME_DURATION = 0.1F;
+    private static final float FRAME_DURATION = 0.07F;
 
     private static int TILE_WIDTH;
     private static  int TILE_HEIGHT;
