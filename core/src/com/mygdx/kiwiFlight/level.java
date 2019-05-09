@@ -241,7 +241,7 @@ public class level extends ScreenAdapter {
             }
             hawk = new Hawk(hawkTexture);
             actualSpeed = 15;
-            //hawk.setPosition(20, WORLD_HEIGHT/2);
+
         }else{
             actualSpeed = 0;
             if(skin.compareTo("default") == 0){
@@ -973,7 +973,7 @@ public class level extends ScreenAdapter {
 
     private void update(float delta){
         updateKiiw(delta);
-        if(bossLevel) hawk.update(delta);
+        if(bossLevel) updateHawk(delta);
         updateObstacles(delta);
         updateCoins(delta);
         updateMinuteTimer();
@@ -981,6 +981,11 @@ public class level extends ScreenAdapter {
         updateActualSpeed();
         handleCollisions();
         updateSpeedBarRectangle();
+    }
+
+    private void updateHawk(float delta) {
+        hawk.update(delta);
+        hawk.setPosition(-60, kiiw.getY());
     }
 
     private void handleCollisions() {

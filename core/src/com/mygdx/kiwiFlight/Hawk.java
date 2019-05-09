@@ -12,8 +12,8 @@ class Hawk {
     private final Animation animation;
     private TextureRegion hawkTexture;
     private float animationTimer = 0;
-    private float x;
-    private float y;
+    private float x = -60;
+    private float y = 450;
 
     public Hawk(Texture hawkTexture) {
         TextureRegion[][] hawkTextures = new TextureRegion(hawkTexture).split(TILE_WIDTH, TILE_HEIGHT);
@@ -23,7 +23,7 @@ class Hawk {
 
     public void draw(SpriteBatch batch) {
         hawkTexture = (TextureRegion) animation.getKeyFrame(animationTimer);
-        batch.draw(hawkTexture, 0, 250);
+        batch.draw(hawkTexture, x, y);
     }
 
     public void setPosition(float x, float y) {
