@@ -72,7 +72,6 @@ class StartScreen extends ScreenAdapter {
         music.play();
 
         backgroundTexture = new Texture(Gdx.files.internal("principal/MenuBackground.png"));
-        //backgroundTexture = new Texture(Gdx.files.internal("principal/menu fondo.png"));
         Image background = new Image(backgroundTexture);
         stage.addActor(background);
 
@@ -92,7 +91,6 @@ class StartScreen extends ScreenAdapter {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 music.stop();
-                super.tap(event, x, y, count, button);
                 menuDemo.setScreen(new LevelsScreen(menuDemo));
                 dispose();
             }
@@ -105,7 +103,6 @@ class StartScreen extends ScreenAdapter {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 music.stop();
-                super.tap(event, x, y, count, button);
                 menuDemo.setScreen(new SettingsScreen(menuDemo));
                 dispose();
             }
@@ -118,7 +115,6 @@ class StartScreen extends ScreenAdapter {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 music.stop();
-                super.tap(event, x, y, count, button);
                 menuDemo.setScreen(new CreditsScreen(menuDemo));
                 dispose();
             }
@@ -131,7 +127,6 @@ class StartScreen extends ScreenAdapter {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 music.stop();
-                super.tap(event, x, y, count, button);
                 menuDemo.setScreen(new ClosetScreen(menuDemo));
                 dispose();
             }
@@ -144,13 +139,12 @@ class StartScreen extends ScreenAdapter {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 music.stop();
-                super.tap(event, x, y, count, button);
                 menuDemo.setScreen(new ShopScreen(menuDemo));
                 dispose();
             }
         });
 
-        quitStage = new Stage(new FitViewport(WORLD_WIDTH, WORLD_HEIGHT));
+        //quitStage = new Stage(new FitViewport(WORLD_WIDTH, WORLD_HEIGHT));
 
         /*quitPanelTexture = new Texture(Gdx.files.internal("back/quitpanel.png"));
         Image quitPanel = new Image(quitPanelTexture);
@@ -205,7 +199,6 @@ class StartScreen extends ScreenAdapter {
         stage.addActor(table);
 
         Gdx.input.setInputProcessor(stage);
-        Gdx.input.setCatchBackKey(true);
     }
 
     @Override

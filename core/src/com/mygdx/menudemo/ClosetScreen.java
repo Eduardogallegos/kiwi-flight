@@ -1,6 +1,7 @@
 package com.mygdx.menudemo;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.audio.Music;
@@ -64,6 +65,14 @@ class ClosetScreen extends ScreenAdapter {
     private float animationTimer = 0;
     private Texture defaultSkinButtonTexture;
     private Texture defaultSkinPressedButtonTexture;
+    private Texture partySkinPressedButtonTexture;
+    private Texture hatSkinButtonPressedTexture;
+    private Texture tieSkinButtonPressedTexture;
+    private Texture crownSkinButtonPressedTexture;
+    private Texture hulkSkinButtonPressedTexture;
+    private Texture ricardoSkinButtonPressedTexture;
+    private Stage stageSkinButtons;
+    private InputMultiplexer multiplexer = new InputMultiplexer();
 
     public ClosetScreen(MenuDemo menuDemo) {
         this.menuDemo = menuDemo;
@@ -118,115 +127,173 @@ class ClosetScreen extends ScreenAdapter {
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 actualSkin = "default";
                 updateKiiwAnimation(actualSkin);
+                updateSkinButton();
             }
         });
         stage.addActor(defaultSkin);
 
+        stageSkinButtons = new Stage(viewport);
+
+        updateSkinButton();
+
+
+        multiplexer.addProcessor(stage);
+        multiplexer.addProcessor(stageSkinButtons);
+        Gdx.input.setInputProcessor(multiplexer);
+    }
+
+    private void updateSkinButton() {
+        stageSkinButtons.clear();
         if(partyBought){
-            partySkinButtonTexture = new Texture(Gdx.files.internal("closet/partyButton.png"));
-            ImageButton partySkin = new ImageButton(new TextureRegionDrawable(new TextureRegion(partySkinButtonTexture)), new TextureRegionDrawable(new TextureRegion(partySkinButtonTexture)));
-            partySkin.setPosition(115, WORLD_HEIGHT/2+25);
-            partySkin.addListener(new ActorGestureListener() {
-                @Override
-                public void tap(InputEvent event, float x, float y, int count, int button) {
-                    actualSkin = "party";
-                    updateKiiwAnimation(actualSkin);
-                }
-            });
-            stage.addActor(partySkin);
+            if(actualSkin.compareTo("party") == 0) {
+                partySkinButtonTexture = new Texture(Gdx.files.internal("closet/partySelected.png"));
+                partySkinPressedButtonTexture = new Texture(Gdx.files.internal("closet/partySelected.png"));
+                ImageButton partySkin = new ImageButton(new TextureRegionDrawable(new TextureRegion(partySkinButtonTexture)), new TextureRegionDrawable(new TextureRegion(partySkinPressedButtonTexture)));
+                partySkin.setPosition(115, WORLD_HEIGHT / 2 + 25);
+                stageSkinButtons.addActor(partySkin);
+            }else {
+                partySkinButtonTexture = new Texture(Gdx.files.internal("closet/partyButton.png"));
+                partySkinPressedButtonTexture = new Texture(Gdx.files.internal("closet/partyButtonPress.png"));
+                ImageButton partySkin = new ImageButton(new TextureRegionDrawable(new TextureRegion(partySkinButtonTexture)), new TextureRegionDrawable(new TextureRegion(partySkinPressedButtonTexture)));
+                partySkin.setPosition(115, WORLD_HEIGHT / 2 + 25);
+                partySkin.addListener(new ActorGestureListener() {
+                    @Override
+                    public void tap(InputEvent event, float x, float y, int count, int button) {
+                        actualSkin = "party";
+                        updateKiiwAnimation(actualSkin);
+                        savePreferences();
+                        updateSkinButton();
+                    }
+                });
+                stageSkinButtons.addActor(partySkin);
+            }
         }
 
         if(hatBought){
-            hatSkinButtonTexture = new Texture(Gdx.files.internal("closet/hatButton.png"));
-            ImageButton hatSkin = new ImageButton(new TextureRegionDrawable(new TextureRegion(hatSkinButtonTexture)), new TextureRegionDrawable(new TextureRegion(hatSkinButtonTexture)));
-            hatSkin.setPosition(275, WORLD_HEIGHT/2+25);
-            hatSkin.addListener(new ActorGestureListener() {
-                @Override
-                public void tap(InputEvent event, float x, float y, int count, int button) {
-                    actualSkin = "hat";
-                    updateKiiwAnimation(actualSkin);
-                    updateButton(actualSkin);
-                }
-            });
-            stage.addActor(hatSkin);
+            if(actualSkin.compareTo("hat") == 0){
+                hatSkinButtonTexture = new Texture(Gdx.files.internal("closet/hatButtonSelected.png"));
+                hatSkinButtonPressedTexture = new Texture(Gdx.files.internal("closet/hatButtonSelected.png"));
+                ImageButton hatSkin = new ImageButton(new TextureRegionDrawable(new TextureRegion(hatSkinButtonTexture)), new TextureRegionDrawable(new TextureRegion(hatSkinButtonPressedTexture)));
+                hatSkin.setPosition(275, WORLD_HEIGHT/2+25);
+                stageSkinButtons.addActor(hatSkin);
+            }else {
+                hatSkinButtonTexture = new Texture(Gdx.files.internal("closet/hatButton.png"));
+                hatSkinButtonPressedTexture = new Texture(Gdx.files.internal("closet/hatButtonPress.png"));
+                ImageButton hatSkin = new ImageButton(new TextureRegionDrawable(new TextureRegion(hatSkinButtonTexture)), new TextureRegionDrawable(new TextureRegion(hatSkinButtonPressedTexture)));
+                hatSkin.setPosition(275, WORLD_HEIGHT / 2 + 25);
+                hatSkin.addListener(new ActorGestureListener() {
+                    @Override
+                    public void tap(InputEvent event, float x, float y, int count, int button) {
+                        actualSkin = "hat";
+                        updateKiiwAnimation(actualSkin);
+                        savePreferences();
+                        updateSkinButton();
+                    }
+                });
+                stageSkinButtons.addActor(hatSkin);
+            }
         }
 
         if(tieBought){
-            tieSkinButtonTexture = new Texture(Gdx.files.internal("closet/tieButton.png"));
-            ImageButton tieSkin = new ImageButton(new TextureRegionDrawable(new TextureRegion(tieSkinButtonTexture)), new TextureRegionDrawable(new TextureRegion(tieSkinButtonTexture)));
-            tieSkin.setPosition(435, WORLD_HEIGHT/2+25);
-            tieSkin.addListener(new ActorGestureListener() {
-                @Override
-                public void tap(InputEvent event, float x, float y, int count, int button) {
-                    actualSkin = "tie";
-                    updateKiiwAnimation(actualSkin);
-                }
-            });
-            stage.addActor(tieSkin);
+            if(actualSkin.compareTo("tie") == 0){
+                tieSkinButtonTexture = new Texture(Gdx.files.internal("closet/tieSelected.png"));
+                tieSkinButtonPressedTexture = new Texture(Gdx.files.internal("closet/tieSelected.png"));
+                ImageButton tieSkin = new ImageButton(new TextureRegionDrawable(new TextureRegion(tieSkinButtonTexture)), new TextureRegionDrawable(new TextureRegion(tieSkinButtonPressedTexture)));
+                tieSkin.setPosition(435, WORLD_HEIGHT / 2 + 25);
+                stageSkinButtons.addActor(tieSkin);
+            }else {
+                tieSkinButtonTexture = new Texture(Gdx.files.internal("closet/tieButton.png"));
+                tieSkinButtonPressedTexture = new Texture(Gdx.files.internal("closet/tieButtonPress.png"));
+                ImageButton tieSkin = new ImageButton(new TextureRegionDrawable(new TextureRegion(tieSkinButtonTexture)), new TextureRegionDrawable(new TextureRegion(tieSkinButtonPressedTexture)));
+                tieSkin.setPosition(435, WORLD_HEIGHT / 2 + 25);
+                tieSkin.addListener(new ActorGestureListener() {
+                    @Override
+                    public void tap(InputEvent event, float x, float y, int count, int button) {
+                        actualSkin = "tie";
+                        updateKiiwAnimation(actualSkin);
+                        savePreferences();
+                        updateSkinButton();
+                    }
+                });
+                stageSkinButtons.addActor(tieSkin);
+            }
         }
 
         if(crownBought){
-            crownSkinButtonTexture = new Texture(Gdx.files.internal("closet/crownButton.png"));
-            ImageButton crownSkin = new ImageButton(new TextureRegionDrawable(new TextureRegion(crownSkinButtonTexture)), new TextureRegionDrawable(new TextureRegion(crownSkinButtonTexture)));
-            crownSkin.setPosition(115, WORLD_HEIGHT/2-crownSkin.getHeight()+15);
-            crownSkin.addListener(new ActorGestureListener() {
-                @Override
-                public void tap(InputEvent event, float x, float y, int count, int button) {
-                    actualSkin = "crown";
-                    updateKiiwAnimation(actualSkin);
-                }
-            });
-            stage.addActor(crownSkin);
+            if(actualSkin.compareTo("crown") == 0){
+                crownSkinButtonTexture = new Texture(Gdx.files.internal("closet/crownSelected.png"));
+                crownSkinButtonPressedTexture = new Texture(Gdx.files.internal("closet/crownSelected.png"));
+                ImageButton crownSkin = new ImageButton(new TextureRegionDrawable(new TextureRegion(crownSkinButtonTexture)), new TextureRegionDrawable(new TextureRegion(crownSkinButtonPressedTexture)));
+                crownSkin.setPosition(115, WORLD_HEIGHT / 2 - crownSkin.getHeight() + 15);
+                stageSkinButtons.addActor(crownSkin);
+            }else {
+                crownSkinButtonTexture = new Texture(Gdx.files.internal("closet/crownButton.png"));
+                crownSkinButtonPressedTexture = new Texture(Gdx.files.internal("closet/crownButtonPress.png"));
+                ImageButton crownSkin = new ImageButton(new TextureRegionDrawable(new TextureRegion(crownSkinButtonTexture)), new TextureRegionDrawable(new TextureRegion(crownSkinButtonPressedTexture)));
+                crownSkin.setPosition(115, WORLD_HEIGHT / 2 - crownSkin.getHeight() + 15);
+                crownSkin.addListener(new ActorGestureListener() {
+                    @Override
+                    public void tap(InputEvent event, float x, float y, int count, int button) {
+                        actualSkin = "crown";
+                        updateKiiwAnimation(actualSkin);
+                        savePreferences();
+                        updateSkinButton();
+                    }
+                });
+                stageSkinButtons.addActor(crownSkin);
+            }
         }
 
         if(hulkBought){
-            hulkSkinButtonTexture = new Texture(Gdx.files.internal("closet/hulkButton.png"));
-            ImageButton hulkSkin = new ImageButton(new TextureRegionDrawable(new TextureRegion(hulkSkinButtonTexture)), new TextureRegionDrawable(new TextureRegion(hulkSkinButtonTexture)));
-            hulkSkin.setPosition(275, WORLD_HEIGHT/2-hulkSkin.getWidth()+15);
-            hulkSkin.addListener(new ActorGestureListener() {
-                @Override
-                public void tap(InputEvent event, float x, float y, int count, int button) {
-                    actualSkin = "hulk";
-                    updateKiiwAnimation(actualSkin);
-                }
-            });
-            stage.addActor(hulkSkin);
+            if(actualSkin.compareTo("hulk") == 0){
+                hulkSkinButtonTexture = new Texture(Gdx.files.internal("closet/hulkSelected.png"));
+                hulkSkinButtonPressedTexture = new Texture(Gdx.files.internal("closet/hulkSelected.png"));
+                ImageButton hulkSkin = new ImageButton(new TextureRegionDrawable(new TextureRegion(hulkSkinButtonTexture)), new TextureRegionDrawable(new TextureRegion(hulkSkinButtonPressedTexture)));
+                hulkSkin.setPosition(275, WORLD_HEIGHT / 2 - hulkSkin.getWidth() + 15);
+                stageSkinButtons.addActor(hulkSkin);
+            }else {
+                hulkSkinButtonTexture = new Texture(Gdx.files.internal("closet/hulkButton.png"));
+                hulkSkinButtonPressedTexture = new Texture(Gdx.files.internal("closet/hulkButtonPress.png"));
+                ImageButton hulkSkin = new ImageButton(new TextureRegionDrawable(new TextureRegion(hulkSkinButtonTexture)), new TextureRegionDrawable(new TextureRegion(hulkSkinButtonPressedTexture)));
+                hulkSkin.setPosition(275, WORLD_HEIGHT / 2 - hulkSkin.getWidth() + 15);
+                hulkSkin.addListener(new ActorGestureListener() {
+                    @Override
+                    public void tap(InputEvent event, float x, float y, int count, int button) {
+                        actualSkin = "hulk";
+                        updateKiiwAnimation(actualSkin);
+                        savePreferences();
+                        updateSkinButton();
+                    }
+                });
+                stageSkinButtons.addActor(hulkSkin);
+            }
         }
 
         if (ricardoBought){
-            ricardoSkinButtonTexture = new Texture(Gdx.files.internal("closet/ricardoButton.png"));
-            ImageButton ricardoSkin = new ImageButton(new TextureRegionDrawable(new TextureRegion(ricardoSkinButtonTexture)), new TextureRegionDrawable(new TextureRegion(ricardoSkinButtonTexture)));
-            ricardoSkin.setPosition(435, WORLD_HEIGHT/2-ricardoSkin.getWidth()+15);
-            ricardoSkin.addListener(new ActorGestureListener() {
-                @Override
-                public void tap(InputEvent event, float x, float y, int count, int button) {
-                    actualSkin = "ricardo";
-                    updateKiiwAnimation(actualSkin);
-                }
-            });
-            stage.addActor(ricardoSkin);
+            if(actualSkin.compareTo("ricardo") == 0){
+                ricardoSkinButtonTexture = new Texture(Gdx.files.internal("closet/ricardoSelected.png"));
+                ricardoSkinButtonPressedTexture = new Texture(Gdx.files.internal("closet/ricardoSelected.png"));
+                ImageButton ricardoSkin = new ImageButton(new TextureRegionDrawable(new TextureRegion(ricardoSkinButtonTexture)), new TextureRegionDrawable(new TextureRegion(ricardoSkinButtonPressedTexture)));
+                ricardoSkin.setPosition(435, WORLD_HEIGHT / 2 - ricardoSkin.getWidth() + 15);
+                stageSkinButtons.addActor(ricardoSkin);
+            }else {
+                ricardoSkinButtonTexture = new Texture(Gdx.files.internal("closet/ricardoButton.png"));
+                ricardoSkinButtonPressedTexture = new Texture(Gdx.files.internal("closet/ricardoButtonPress.png"));
+                ImageButton ricardoSkin = new ImageButton(new TextureRegionDrawable(new TextureRegion(ricardoSkinButtonTexture)), new TextureRegionDrawable(new TextureRegion(ricardoSkinButtonPressedTexture)));
+                ricardoSkin.setPosition(435, WORLD_HEIGHT / 2 - ricardoSkin.getWidth() + 15);
+                ricardoSkin.addListener(new ActorGestureListener() {
+                    @Override
+                    public void tap(InputEvent event, float x, float y, int count, int button) {
+                        actualSkin = "ricardo";
+                        updateKiiwAnimation(actualSkin);
+                        savePreferences();
+                        updateSkinButton();
+                    }
+                });
+                stageSkinButtons.addActor(ricardoSkin);
+            }
         }
 
-    }
-
-    private void updateButton(String actualSkin) {
-        if(actualSkin.compareTo("party") == 0){
-            partySkinButtonTexture = new Texture(Gdx.files.internal("closet/partyButton.png"));
-            ImageButton partySkin = new ImageButton(new TextureRegionDrawable(new TextureRegion(partySkinButtonTexture)), new TextureRegionDrawable(new TextureRegion(partySkinButtonTexture)));
-            partySkin.setPosition(115, WORLD_HEIGHT/2+25);
-        }else if(actualSkin.compareTo("hat") == 0){
-            hatSkinButtonTexture = new Texture(Gdx.files.internal("closet/hatButton.png"));
-            ImageButton hatSkin = new ImageButton(new TextureRegionDrawable(new TextureRegion(hatSkinButtonTexture)), new TextureRegionDrawable(new TextureRegion(hatSkinButtonTexture)));
-            hatSkin.setPosition(275, WORLD_HEIGHT/2+25);
-        }else if(actualSkin.compareTo("tie") == 0){
-            kiiwTexture = new Texture(Gdx.files.internal("closet/TieKiwiStill.png"));
-        }else if(actualSkin.compareTo("crown") == 0){
-            kiiwTexture = new Texture(Gdx.files.internal("closet/CrownKiwiStill.png"));
-        }else if(actualSkin.compareTo("hulk") == 0){
-            kiiwTexture = new Texture(Gdx.files.internal("closet/HulkKiwiStill.png"));
-        }else if(actualSkin.compareTo("ricardo") == 0){
-            kiiwTexture = new Texture(Gdx.files.internal("closet/DancingKiwiStill.png"));
-        }
     }
 
     private void updateKiiwAnimation(String actualSkin) {
@@ -290,6 +357,7 @@ class ClosetScreen extends ScreenAdapter {
 
     private void draw() {
         stage.draw();
+        stageSkinButtons.draw();
         batch.setProjectionMatrix(camera.projection);
         batch.setTransformMatrix(camera.view);
         batch.begin();
