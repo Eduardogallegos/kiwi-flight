@@ -15,6 +15,7 @@ public class Obstacle {
 
     public static final float WIDTH = COLLISION_SQUARE_WIDTH;
     private static final float FRAME_DURATION = 0.07F;
+    private static final float CLOUD_FRAME_DURATION = 0.01F;
 
     private static int TILE_WIDTH;
     private static  int TILE_HEIGHT;
@@ -41,7 +42,7 @@ public class Obstacle {
             animation.setPlayMode(Animation.PlayMode.LOOP);
         }else{
             TextureRegion[][] obstacleTextures = new TextureRegion(obstacleTexture).split(TILE_WIDTH, TILE_HEIGHT);
-            animation = new Animation(FRAME_DURATION, obstacleTextures[0][0], obstacleTextures[0][1],obstacleTextures[0][2],obstacleTextures[0][3],obstacleTextures[0][4],obstacleTextures[0][5],obstacleTextures[0][6],obstacleTextures[0][7],obstacleTextures[0][8],obstacleTextures[0][9],obstacleTextures[0][10],obstacleTextures[0][11]);
+            animation = new Animation(CLOUD_FRAME_DURATION, obstacleTextures[0][0], obstacleTextures[0][1],obstacleTextures[0][2],obstacleTextures[0][3],obstacleTextures[0][4],obstacleTextures[0][5],obstacleTextures[0][6],obstacleTextures[0][7],obstacleTextures[0][8],obstacleTextures[0][9],obstacleTextures[0][10],obstacleTextures[0][11],obstacleTextures[0][12],obstacleTextures[0][13],obstacleTextures[0][14],obstacleTextures[0][15],obstacleTextures[0][16],obstacleTextures[0][17],obstacleTextures[0][18]);
             animation.setPlayMode(Animation.PlayMode.LOOP);
         }
 

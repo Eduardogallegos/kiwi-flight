@@ -172,6 +172,7 @@ public class level extends ScreenAdapter {
     private Texture noQuitPressTexture;
     private float hawkX;
 
+
     private enum STATE {
         PLAYING, PAUSED, GAMEOVER, WIN, PANELS, TUTORIAL, QUIT, SETTINGS
     }
@@ -847,8 +848,9 @@ public class level extends ScreenAdapter {
             batch.draw(winningKiiw, winingKiiwX, winingKiiwY);
         }else if(state == STATE.GAMEOVER){
             loosingKiiw = (TextureRegion) loosingAnimation.getKeyFrame(animationTimer);
-            batch.draw(loosingKiiw, kiiw.getX(), kiiw.getY());
             if(bossLevel)updateHawkAnimation();
+            batch.draw(loosingKiiw, kiiw.getX(), kiiw.getY());
+
 
         }
         if(bossLevel){

@@ -72,7 +72,7 @@ public class EndingTransitionScreen extends ScreenAdapter {
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 super.tap(event, x, y, count, button);
                 music.stop();
-                kiwiFlight.setScreen(new StartScreen(kiwiFlight));
+                kiwiFlight.setScreen(new CreditsScreen(kiwiFlight));
                 dispose();
             }
         });
@@ -96,7 +96,7 @@ public class EndingTransitionScreen extends ScreenAdapter {
         ending.addAction(sequence(delay(9), fadeIn(1),delay(2), fadeOut(1), run(new Runnable() {
             @Override
             public void run() {
-                kiwiFlight.setScreen(new StartScreen(kiwiFlight));
+                kiwiFlight.setScreen(new CreditsScreen(kiwiFlight));
                 music.stop();
                 dispose();
             }
