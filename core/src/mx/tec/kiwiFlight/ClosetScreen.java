@@ -434,18 +434,30 @@ class ClosetScreen extends ScreenAdapter {
         backgroundTexture.dispose();
         flecha.dispose();
         flechaPress.dispose();
-        partySkinButtonTexture.dispose();
-        partySkinPressedButtonTexture.dispose();
-        hatSkinButtonPressedTexture.dispose();
-        hatSkinButtonTexture.dispose();
-        tieSkinButtonPressedTexture.dispose();
-        tieSkinButtonTexture.dispose();
-        crownSkinButtonPressedTexture.dispose();
-        crownSkinButtonTexture.dispose();
-        hulkSkinButtonPressedTexture.dispose();
-        hulkSkinButtonTexture.dispose();
-        ricardoSkinButtonPressedTexture.dispose();
-        ricardoSkinButtonTexture.dispose();
+        if(partyBought) {
+            partySkinButtonTexture.dispose();
+            partySkinPressedButtonTexture.dispose();
+        }
+        if(hatBought) {
+            hatSkinButtonPressedTexture.dispose();
+            hatSkinButtonTexture.dispose();
+        }
+        if(tieBought) {
+            tieSkinButtonPressedTexture.dispose();
+            tieSkinButtonTexture.dispose();
+        }
+        if (crownBought) {
+            crownSkinButtonPressedTexture.dispose();
+            crownSkinButtonTexture.dispose();
+        }
+        if(hulkBought) {
+            hulkSkinButtonPressedTexture.dispose();
+            hulkSkinButtonTexture.dispose();
+        }
+        if(ricardoBought) {
+            ricardoSkinButtonPressedTexture.dispose();
+            ricardoSkinButtonTexture.dispose();
+        }
         batch.dispose();
         kiiwTexture.dispose();
         defaultSkinButtonTexture.dispose();
