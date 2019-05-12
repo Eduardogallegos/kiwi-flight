@@ -1123,8 +1123,14 @@ public class level extends ScreenAdapter {
         kiiw.update(delta);
         if (Gdx.input.isKeyJustPressed(Input.Keys.UP))
             kiiw.setPosition(WORLD_WIDTH / 4, (97 * ++padCounter) + kiiw.RADIUS);
+            if(padCounter>5){
+            padCounter=4;
+            }
         if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN))
             kiiw.setPosition(WORLD_WIDTH / 4, (97 * --padCounter) + kiiw.RADIUS);
+            if(padCounter<0){
+            padCounter=1;
+            }
         blockKiiwLeavingTheWorld();
     }
 

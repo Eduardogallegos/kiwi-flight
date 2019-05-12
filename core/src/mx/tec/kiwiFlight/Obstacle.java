@@ -87,6 +87,10 @@ public class Obstacle {
         animationTimer+=delta/4;
     }
 
+    public float getY() {
+        return y;
+    }
+
     public float getX() {
         return x;
     }
