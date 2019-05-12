@@ -49,7 +49,6 @@ public class BossTransitionScreen extends ScreenAdapter {
     }
 
     public void show(){
-        super.show();
         loadPreferences();
         stage=new Stage(new FitViewport(WORLD_WIDTH,WORLD_HEIGHT));
         Gdx.input.setInputProcessor(stage);
@@ -115,13 +114,11 @@ public class BossTransitionScreen extends ScreenAdapter {
 
     @Override
     public void resize(int width, int height) {
-        super.resize(width, height);
         stage.getViewport().update(width, height, true);
     }
 
     @Override
     public void render(float delta) {
-        super.render(delta);
         clearScreen();
         stage.act(delta);
         stage.draw();
@@ -129,7 +126,6 @@ public class BossTransitionScreen extends ScreenAdapter {
 
     @Override
     public void dispose() {
-        super.dispose();
         stage.dispose();
         story8Texture.dispose();
         story9Texture.dispose();

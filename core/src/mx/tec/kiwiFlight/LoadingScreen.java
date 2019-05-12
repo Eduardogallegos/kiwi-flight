@@ -28,7 +28,6 @@ public class LoadingScreen extends ScreenAdapter {
     private final kiwiFlight kiwiFlight;
     private final int LEVEL;
     private String skin;
-    //private final Game game;
 
     public LoadingScreen(kiwiFlight kiwiFlight, int level) {
         this.kiwiFlight = kiwiFlight;
@@ -55,15 +54,6 @@ public class LoadingScreen extends ScreenAdapter {
         kiwiFlight.getAssetManager().load("defaultLevels/KiiwLose.mp3", Music.class);
         kiwiFlight.getAssetManager().load("defaultLevels/KiiwWin.mp3", Music.class);
         kiwiFlight.getAssetManager().load("defaultLevels/Kiwhine.mp3", Music.class);
-        if(LEVEL!=4) {
-            kiwiFlight.getAssetManager().load("defaultLevels/RunningKiwi.png", Texture.class);
-            kiwiFlight.getAssetManager().load("defaultLevels/CrownKiwi.png", Texture.class);
-            kiwiFlight.getAssetManager().load("defaultLevels/HatKiwi.png", Texture.class);
-            kiwiFlight.getAssetManager().load("defaultLevels/HulkKiwi.png", Texture.class);
-            kiwiFlight.getAssetManager().load("defaultLevels/partyKiwi.png", Texture.class);
-            kiwiFlight.getAssetManager().load("defaultLevels/TieKiwi.png", Texture.class);
-            kiwiFlight.getAssetManager().load("defaultLevels/ricardoKiwi.png", Texture.class);
-        }
         kiwiFlight.getAssetManager().load("defaultLevels/pausa.png", Texture.class);
         kiwiFlight.getAssetManager().load("defaultLevels/Barra.png", Texture.class);
         kiwiFlight.getAssetManager().load("defaultLevels/lifes0.png", Texture.class);
@@ -88,20 +78,78 @@ public class LoadingScreen extends ScreenAdapter {
         kiwiFlight.getAssetManager().load("defaultLevels/yesPressed.png", Texture.class);
         kiwiFlight.getAssetManager().load("defaultLevels/no.png", Texture.class);
         kiwiFlight.getAssetManager().load("defaultLevels/noPressed.png", Texture.class);
-        if(LEVEL == 4) {
-            kiwiFlight.getAssetManager().load("level4/FlyingKiwi.png", Texture.class);
-            kiwiFlight.getAssetManager().load("level4/FlyingPartyHatKiwi.png", Texture.class);
-            kiwiFlight.getAssetManager().load("level4/FlyingTopHatKiwi.png", Texture.class);
-            kiwiFlight.getAssetManager().load("level4/FlyingTieKiwi.png", Texture.class);
-            kiwiFlight.getAssetManager().load("level4/FlyingCrownKiwi.png", Texture.class);
-            kiwiFlight.getAssetManager().load("level4/FlyingHulkKiwi.png", Texture.class);
-            kiwiFlight.getAssetManager().load("level4/FlyingDancingKiwi.png", Texture.class);
-
-        }
         kiwiFlight.getAssetManager().load("defaultLevels/ok.png", Texture.class);
         kiwiFlight.getAssetManager().load("level"+LEVEL+"/panel.png", Texture.class);
         kiwiFlight.getAssetManager().load("defaultLevels/okPressed.png", Texture.class);
         kiwiFlight.getAssetManager().load("level4/hawk.png", Texture.class);
+        kiwiFlight.getAssetManager().load("defaultLevels/settingsPanel.png", Texture.class);
+        kiwiFlight.getAssetManager().load("defaultLevels/pausaPress.png", Texture.class);
+        kiwiFlight.getAssetManager().load("defaultLevels/flecha.png", Texture.class);
+        kiwiFlight.getAssetManager().load("defaultLevels/flechaPress.png", Texture.class);
+        kiwiFlight.getAssetManager().load("defaultLevels/lifesNull.png", Texture.class);
+        if(LEVEL!=4) {
+            if(skin.compareTo("default") == 0) {
+                kiwiFlight.getAssetManager().load("defaultLevels/RunningKiwi.png", Texture.class);
+                kiwiFlight.getAssetManager().load("defaultLevels/WinningKiwi.png", Texture.class);
+                kiwiFlight.getAssetManager().load("defaultLevels/LosingKiwi.png", Texture.class);
+            }else if(skin.compareTo("crown") == 0) {
+                kiwiFlight.getAssetManager().load("defaultLevels/CrownKiwi.png", Texture.class);
+                kiwiFlight.getAssetManager().load("defaultLevels/WinningCrownKiwi.png", Texture.class);
+                kiwiFlight.getAssetManager().load("defaultLevels/LosingCrownKiwi.png", Texture.class);
+            }else if(skin.compareTo("hat") == 0) {
+                kiwiFlight.getAssetManager().load("defaultLevels/HatKiwi.png", Texture.class);
+                kiwiFlight.getAssetManager().load("defaultLevels/WinningTopHatKiwi.png", Texture.class);
+                kiwiFlight.getAssetManager().load("defaultLevels/LosingTopHatKiwi.png", Texture.class);
+            }else if(skin.compareTo("hulk") == 0) {
+                kiwiFlight.getAssetManager().load("defaultLevels/HulkKiwi.png", Texture.class);
+                kiwiFlight.getAssetManager().load("defaultLevels/WinningHulkKiwi.png", Texture.class);
+                kiwiFlight.getAssetManager().load("defaultLevels/LosingHulkKiwi.png", Texture.class);
+            }else if(skin.compareTo("party") == 0) {
+                kiwiFlight.getAssetManager().load("defaultLevels/partyKiwi.png", Texture.class);
+                kiwiFlight.getAssetManager().load("defaultLevels/WinningPartyHatKiwi.png", Texture.class);
+                kiwiFlight.getAssetManager().load("defaultLevels/LosingPartyHatKiwi.png", Texture.class);
+            }else if(skin.compareTo("tie") == 0) {
+                kiwiFlight.getAssetManager().load("defaultLevels/TieKiwi.png", Texture.class);
+                kiwiFlight.getAssetManager().load("defaultLevels/WinningTieKiwi.png", Texture.class);
+                kiwiFlight.getAssetManager().load("defaultLevels/LosingTieKiwi.png", Texture.class);
+            }else if(skin.compareTo("ricardo") == 0) {
+                kiwiFlight.getAssetManager().load("defaultLevels/ricardoKiwi.png", Texture.class);
+                kiwiFlight.getAssetManager().load("defaultLevels/WinningDancingKiwi.png", Texture.class);
+                kiwiFlight.getAssetManager().load("defaultLevels/LosingDancingKiwi.png", Texture.class);
+            }
+        }
+        if(LEVEL == 4) {
+            if(skin.compareTo("default") == 0) {
+                kiwiFlight.getAssetManager().load("level4/FlyingKiwi.png", Texture.class);
+                kiwiFlight.getAssetManager().load("defaultLevels/WinningKiwi.png", Texture.class);
+                kiwiFlight.getAssetManager().load("defaultLevels/LosingKiwi.png", Texture.class);
+            }else if(skin.compareTo("party") == 0) {
+                kiwiFlight.getAssetManager().load("level4/FlyingPartyHatKiwi.png", Texture.class);
+                kiwiFlight.getAssetManager().load("defaultLevels/WinningPartyHatKiwi.png", Texture.class);
+                kiwiFlight.getAssetManager().load("defaultLevels/LosingPartyHatKiwi.png", Texture.class);
+            }else if(skin.compareTo("hat") == 0) {
+                kiwiFlight.getAssetManager().load("level4/FlyingTopHatKiwi.png", Texture.class);
+                kiwiFlight.getAssetManager().load("defaultLevels/WinningTopHatKiwi.png", Texture.class);
+                kiwiFlight.getAssetManager().load("defaultLevels/LosingTopHatKiwi.png", Texture.class);
+            }else if(skin.compareTo("tie") == 0) {
+                kiwiFlight.getAssetManager().load("level4/FlyingTieKiwi.png", Texture.class);
+                kiwiFlight.getAssetManager().load("defaultLevels/WinningTieKiwi.png", Texture.class);
+                kiwiFlight.getAssetManager().load("defaultLevels/LosingTieKiwi.png", Texture.class);
+            }else if(skin.compareTo("crown") == 0) {
+                kiwiFlight.getAssetManager().load("level4/FlyingCrownKiwi.png", Texture.class);
+                kiwiFlight.getAssetManager().load("defaultLevels/WinningCrownKiwi.png", Texture.class);
+                kiwiFlight.getAssetManager().load("defaultLevels/LosingCrownKiwi.png", Texture.class);
+            }else if(skin.compareTo("hulk") == 0) {
+                kiwiFlight.getAssetManager().load("level4/FlyingHulkKiwi.png", Texture.class);
+                kiwiFlight.getAssetManager().load("defaultLevels/WinningHulkKiwi.png", Texture.class);
+                kiwiFlight.getAssetManager().load("defaultLevels/LosingHulkKiwi.png", Texture.class);
+            }else if(skin.compareTo("ricardo") == 0) {
+                kiwiFlight.getAssetManager().load("level4/FlyingDancingKiwi.png", Texture.class);
+                kiwiFlight.getAssetManager().load("defaultLevels/WinningDancingKiwi.png", Texture.class);
+                kiwiFlight.getAssetManager().load("defaultLevels/LosingDancingKiwi.png", Texture.class);
+            }
+        }
+
         if(LEVEL == 1) {
             kiwiFlight.getAssetManager().load("level1/next.png", Texture.class);
             kiwiFlight.getAssetManager().load("level1/nextPressed.png", Texture.class);
@@ -116,25 +164,7 @@ public class LoadingScreen extends ScreenAdapter {
             kiwiFlight.getAssetManager().load("defaultLevels/panelSkip.png", Texture.class);
             kiwiFlight.getAssetManager().load("defaultLevels/skipPress.png", Texture.class);
         }
-        kiwiFlight.getAssetManager().load("defaultLevels/settingsPanel.png", Texture.class);
-        kiwiFlight.getAssetManager().load("defaultLevels/pausaPress.png", Texture.class);
-        kiwiFlight.getAssetManager().load("defaultLevels/flecha.png", Texture.class);
-        kiwiFlight.getAssetManager().load("defaultLevels/flechaPress.png", Texture.class);
-        kiwiFlight.getAssetManager().load("defaultLevels/WinningKiwi.png", Texture.class);
-        kiwiFlight.getAssetManager().load("defaultLevels/WinningCrownKiwi.png", Texture.class);
-        kiwiFlight.getAssetManager().load("defaultLevels/WinningDancingKiwi.png", Texture.class);
-        kiwiFlight.getAssetManager().load("defaultLevels/WinningHulkKiwi.png", Texture.class);
-        kiwiFlight.getAssetManager().load("defaultLevels/WinningPartyHatKiwi.png", Texture.class);
-        kiwiFlight.getAssetManager().load("defaultLevels/WinningTieKiwi.png", Texture.class);
-        kiwiFlight.getAssetManager().load("defaultLevels/WinningTopHatKiwi.png", Texture.class);
-        kiwiFlight.getAssetManager().load("defaultLevels/LosingKiwi.png", Texture.class);
-        kiwiFlight.getAssetManager().load("defaultLevels/LosingCrownKiwi.png", Texture.class);
-        kiwiFlight.getAssetManager().load("defaultLevels/LosingDancingKiwi.png", Texture.class);
-        kiwiFlight.getAssetManager().load("defaultLevels/LosingHulkKiwi.png", Texture.class);
-        kiwiFlight.getAssetManager().load("defaultLevels/LosingPartyHatKiwi.png", Texture.class);
-        kiwiFlight.getAssetManager().load("defaultLevels/LosingTieKiwi.png", Texture.class);
-        kiwiFlight.getAssetManager().load("defaultLevels/LosingTopHatKiwi.png", Texture.class);
-        kiwiFlight.getAssetManager().load("defaultLevels/lifesNull.png", Texture.class);
+
     }
 
     private void loadPreferences() {

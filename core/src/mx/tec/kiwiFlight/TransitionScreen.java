@@ -160,10 +160,11 @@ public class TransitionScreen extends ScreenAdapter {
 
     @Override
     public void dispose() {
-        super.dispose();
         stage.dispose();
         backgroundTexture.dispose();
         logoTexture.dispose();
+        buttonPressTexture.dispose();
+        buttonTexture.dispose();
         story1Texture.dispose();
         story2Texture.dispose();
         story3Texture.dispose();

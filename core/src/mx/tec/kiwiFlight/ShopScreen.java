@@ -70,7 +70,6 @@ class ShopScreen extends ScreenAdapter {
     private boolean crownBought;
     private boolean hulkBought;
     private boolean ricardoBought;
-    private Stage stageNoCoins;
     private Texture noCoinsPanelTexture;
     private Texture okButtonTexture;
     private Texture okButtonPressedTexture;
@@ -117,7 +116,7 @@ class ShopScreen extends ScreenAdapter {
     private String skinDecode;
 
     private enum STATE{
-        NORMAL, RUSURE, NOCOINS, CODE, QUIT
+        NORMAL, BUYING, CODE, QUIT
     }
 
     private STATE state = STATE.NORMAL;
@@ -134,7 +133,6 @@ class ShopScreen extends ScreenAdapter {
         camera.position.set(WORLD_WIDTH / 2, WORLD_HEIGHT / 2, camera.position.z);
         viewport = new FitViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
 
-
         camera.update();
         stage = new Stage(new FitViewport(WORLD_WIDTH, WORLD_HEIGHT));
 
@@ -147,6 +145,17 @@ class ShopScreen extends ScreenAdapter {
         glyphLayout = new GlyphLayout();
         batch = new SpriteBatch();
 
+        updateMainStage();
+
+        createQuitPanel();
+
+        stageBuy = new Stage(viewport);
+
+        stageCode = new Stage(viewport);
+    }
+
+    private void updateMainStage() {
+        stage.clear();
         backgroundTexture = new Texture(Gdx.files.internal("shop/fondo.png"));
         Image background = new Image(backgroundTexture);
         stage.addActor(background);
@@ -181,8 +190,6 @@ class ShopScreen extends ScreenAdapter {
                 state = STATE.CODE;
             }
         });
-
-        createQuitPanel();
 
         if(partyBought){
             partySkinButtonTexture = new Texture(Gdx.files.internal("shop/partyKiwiSold.png"));
@@ -267,75 +274,6 @@ class ShopScreen extends ScreenAdapter {
             });
             stage.addActor(crown);
         }
-        /*
-        if(hulkBought){
-
-        }else{
-        hulkSkinButtonTexture = new Texture(Gdx.files.internal("shop/hulkKiwi.png"));
-        hulkSkinButtonPressTexture = new Texture(Gdx.files.internal("shop/hulkKiwiPress.png"));
-        ImageButton hulk = new ImageButton(new TextureRegionDrawable(new TextureRegion(hulkSkinButtonTexture)), new TextureRegionDrawable(new TextureRegion(hulkSkinButtonPressTexture)));
-        hulk.setPosition(WORLD_WIDTH/2+350, WORLD_HEIGHT/2-200);
-        }
-        crownSkinButtonTexture = new Texture(Gdx.files.internal("shop/crownKiwi.png"));
-        crownSkinButtonPressTexture = new Texture(Gdx.files.internal("shop/crownKiwiPress.png"));
-        ImageButton crown = new ImageButton(new TextureRegionDrawable(new TextureRegion(crownSkinButtonTexture)), new TextureRegionDrawable(new TextureRegion(crownSkinButtonPressTexture)));
-        crown.setPosition(WORLD_WIDTH/2+50, WORLD_HEIGHT/2+30);
-        */
-
-        stageBuy = new Stage(viewport);
-        buyPanelTexture = new Texture(Gdx.files.internal("shop/buy.png"));
-        Image buyPanel = new Image(buyPanelTexture);
-
-        yesButtonTexture = new Texture(Gdx.files.internal("shop/yes.png"));
-        yesPressedButtonTexture = new Texture(Gdx.files.internal("shop/yesPress.png"));
-        ImageButton yesBuy = new ImageButton(new TextureRegionDrawable(new TextureRegion(yesButtonTexture)), new TextureRegionDrawable(new TextureRegion(yesPressedButtonTexture)));
-        yesBuy.setPosition(WORLD_WIDTH/2-200, WORLD_HEIGHT/2-120);
-        yesBuy.addListener(new ActorGestureListener() {
-            @Override
-            public void tap(InputEvent event, float x, float y, int count, int button) {
-                buySkin(costo);
-                dispose();
-                music.stop();
-                kiwiFlight.setScreen(new ShopScreen(kiwiFlight));
-            }
-        });
-
-        noButtonTexture = new Texture(Gdx.files.internal("shop/no.png"));
-        noPressedButtonTexture = new Texture(Gdx.files.internal("shop/noPress.png"));
-        ImageButton noBuy = new ImageButton(new TextureRegionDrawable(new TextureRegion(noButtonTexture)), new TextureRegionDrawable(new TextureRegion(noPressedButtonTexture)));
-        noBuy.setPosition(WORLD_WIDTH/2+30, WORLD_HEIGHT/2-120);
-        noBuy.addListener(new ActorGestureListener() {
-            @Override
-            public void tap(InputEvent event, float x, float y, int count, int button) {
-                state = STATE.NORMAL;
-            }
-        });
-
-        stageNoCoins = new Stage(viewport);
-        noCoinsPanelTexture = new Texture(Gdx.files.internal("shop/noCoins.png"));
-        Image noCoins = new Image(noCoinsPanelTexture);
-
-        okButtonTexture = new Texture(Gdx.files.internal("shop/ok.png"));
-        okButtonPressedTexture = new Texture(Gdx.files.internal("shop/okPress.png"));
-        ImageButton ok = new ImageButton(new TextureRegionDrawable(new TextureRegion(okButtonTexture)), new TextureRegionDrawable(new TextureRegion(okButtonPressedTexture)));
-        ok.setPosition(WORLD_WIDTH/3+ok.getWidth(), WORLD_HEIGHT/3);
-        ok.addListener(new ActorGestureListener() {
-            @Override
-            public void tap(InputEvent event, float x, float y, int count, int button) {
-                state = STATE.NORMAL;
-            }
-        });
-
-        stageCode = new Stage(viewport);
-        createStageCode();
-
-        stageNoCoins.addActor(noCoins);
-        stageNoCoins.addActor(ok);
-
-        stageBuy.addActor(buyPanel);
-        stageBuy.addActor(yesBuy);
-        stageBuy.addActor(noBuy);
-
         stage.addActor(coins);
         stage.addActor(codeButton);
         stage.addActor(retur);
@@ -387,6 +325,7 @@ class ShopScreen extends ScreenAdapter {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 state = STATE.NORMAL;
+                disposeCode();
             }
         });
 
@@ -591,10 +530,9 @@ class ShopScreen extends ScreenAdapter {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 state = STATE.NORMAL;
+                disposeCode();
             }
         });
-
-
         ceroButtonTexture = new Texture(Gdx.files.internal("shop/0.png"));
         oneButtonTexture = new Texture(Gdx.files.internal("shop/1.png"));
         twoButtonTexture = new Texture(Gdx.files.internal("shop/2.png"));
@@ -615,6 +553,7 @@ class ShopScreen extends ScreenAdapter {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 state = STATE.NORMAL;
+                disposeCode();
             }
         });
 
@@ -682,9 +621,11 @@ class ShopScreen extends ScreenAdapter {
 
     private void checkIfCanAfford(int cost) {
         if (coinsCollected>= cost){
-            state = STATE.RUSURE;
+            state = STATE.BUYING;
+            buyStageGenerator(true);
         }else {
-            state = STATE.NOCOINS;
+            state = STATE.BUYING;
+            buyStageGenerator(false);
         }
     }
 
@@ -712,7 +653,6 @@ class ShopScreen extends ScreenAdapter {
 
     @Override
     public void resize(int width, int height) {
-        //super.resize(width, height);
         viewport.update(width, height);
         stage.getViewport().update(width, height, true);
     }
@@ -746,15 +686,70 @@ class ShopScreen extends ScreenAdapter {
         batch.end();
         if(state == STATE.NORMAL){
             Gdx.input.setInputProcessor(stage);
-        }else if(state == STATE.RUSURE){
+        }else if(state == STATE.BUYING){
             stageBuy.draw();
             Gdx.input.setInputProcessor(stageBuy);
-        }else if(state == STATE.NOCOINS){
-            stageNoCoins.draw();
-            Gdx.input.setInputProcessor(stageNoCoins);
         }else if(state == STATE.CODE){
             stageCode.draw();
             Gdx.input.setInputProcessor(stageCode);
+        }
+    }
+
+    private void buyStageGenerator(boolean buy) {
+        if(buy){
+            stageBuy.clear();
+            buyPanelTexture = new Texture(Gdx.files.internal("shop/buy.png"));
+            Image buyPanel = new Image(buyPanelTexture);
+            yesButtonTexture = new Texture(Gdx.files.internal("shop/yes.png"));
+            yesPressedButtonTexture = new Texture(Gdx.files.internal("shop/yesPress.png"));
+            ImageButton yesBuy = new ImageButton(new TextureRegionDrawable(new TextureRegion(yesButtonTexture)), new TextureRegionDrawable(new TextureRegion(yesPressedButtonTexture)));
+            yesBuy.setPosition(WORLD_WIDTH/2-200, WORLD_HEIGHT/2-120);
+            yesBuy.addListener(new ActorGestureListener() {
+                @Override
+                public void tap(InputEvent event, float x, float y, int count, int button) {
+                    buySkin(costo);
+                    savePreferences();
+                    loadPreferences();
+                    updateMainStage();
+                    state = STATE.NORMAL;
+                }
+            });
+
+            noButtonTexture = new Texture(Gdx.files.internal("shop/no.png"));
+            noPressedButtonTexture = new Texture(Gdx.files.internal("shop/noPress.png"));
+            ImageButton noBuy = new ImageButton(new TextureRegionDrawable(new TextureRegion(noButtonTexture)), new TextureRegionDrawable(new TextureRegion(noPressedButtonTexture)));
+            noBuy.setPosition(WORLD_WIDTH/2+30, WORLD_HEIGHT/2-120);
+            noBuy.addListener(new ActorGestureListener() {
+                @Override
+                public void tap(InputEvent event, float x, float y, int count, int button) {
+                    state = STATE.NORMAL;
+                }
+            });
+
+            stageBuy.addActor(buyPanel);
+            stageBuy.addActor(yesBuy);
+            stageBuy.addActor(noBuy);
+
+        }else {
+            stageBuy.clear();
+            noCoinsPanelTexture = new Texture(Gdx.files.internal("shop/noCoins.png"));
+            Image noCoins = new Image(noCoinsPanelTexture);
+
+            okButtonTexture = new Texture(Gdx.files.internal("shop/ok.png"));
+            okButtonPressedTexture = new Texture(Gdx.files.internal("shop/okPress.png"));
+            ImageButton ok = new ImageButton(new TextureRegionDrawable(new TextureRegion(okButtonTexture)), new TextureRegionDrawable(new TextureRegion(okButtonPressedTexture)));
+            ok.setPosition(WORLD_WIDTH / 3 + ok.getWidth(), WORLD_HEIGHT / 3);
+            ok.addListener(new ActorGestureListener() {
+                @Override
+                public void tap(InputEvent event, float x, float y, int count, int button) {
+                    state = STATE.NORMAL;
+                    /*noCoinsPanelTexture.dispose();
+                    okButtonPressedTexture.dispose();
+                    okButtonTexture.dispose();*/
+                }
+            });
+            stageBuy.addActor(noCoins);
+            stageBuy.addActor(ok);
         }
     }
 
@@ -776,9 +771,32 @@ class ShopScreen extends ScreenAdapter {
         inputLabel.setText(code);
     }
 
+    private void disposeCode(){
+        oneButtonTexture.dispose();
+        oneButtonTexture.dispose();
+        oneButtonPressedTexture.dispose();
+        twoButtonTexture.dispose();
+        twoButtonPressedTexture.dispose();
+        threeButtonTexture.dispose();
+        threeButtonPressedTexture.dispose();
+        fourButtonTexture.dispose();
+        fourButtonPressedTexture.dispose();
+        sevenButtonTexture.dispose();
+        sevenButtonPressedTexture.dispose();
+        fiveButtonTexture.dispose();
+        fiveButtonPressedTexture.dispose();
+        sixButtonTexture.dispose();
+        sixButtonPressedTexture.dispose();
+        eightButtonTexture.dispose();
+        eightButtonPressedTexture.dispose();
+        nineButtonTexture.dispose();
+        nineButtonPressedTexture.dispose();
+        eraseButtonPressedTexture.dispose();
+        eraseButtonTexture.dispose();
+    }
+
     @Override
     public void dispose() {
-        super.dispose();
         stage.dispose();
         backgroundTexture.dispose();
         returnTexture.dispose();
@@ -786,7 +804,22 @@ class ShopScreen extends ScreenAdapter {
         codeTexture.dispose();
         codePressTexture.dispose();
         music.dispose();
-        //titleTexture.dispose();
+        stageBuy.dispose();
+        stageCode.dispose();
+        crownSkinButtonTexture.dispose();
+        crownSkinButtonPressTexture.dispose();
+        tieSkinButtonTexture.dispose();
+        tieSkinButtonPressTexture.dispose();
+        hatSkinButtonTexture.dispose();
+        hatSkinButtonPressTexture.dispose();
+        partySkinButtonTexture.dispose();
+        partySkinButtonPressTexture.dispose();
+        yesQuitPressTexture.dispose();
+        yesQuitTexture.dispose();
+        noQuitPressTexture.dispose();
+        noQuitTexture.dispose();
+        quitPanelTexture.dispose();
+        quitStage.dispose();
     }
 
     private void clearScreen() {

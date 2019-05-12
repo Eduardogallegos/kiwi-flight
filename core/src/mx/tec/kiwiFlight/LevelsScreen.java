@@ -47,7 +47,6 @@ class LevelsScreen extends ScreenAdapter {
     private Texture returnPressTexture;
     private Texture bossTexture;
     private Texture bossPressTexture;
-    private Texture lockTexture;
     private Table table;
     private Music music;
     private float musicVolume;
@@ -305,7 +304,6 @@ class LevelsScreen extends ScreenAdapter {
 
     @Override
     public void dispose() {
-        super.dispose();
         stage.dispose();
         backgroundTexture.dispose();
         levelOneTexture.dispose();
@@ -314,8 +312,18 @@ class LevelsScreen extends ScreenAdapter {
         levelTwoPressTexture.dispose();
         levelThreeTexture.dispose();
         levelThreePressTexture.dispose();
-        //titleTexture.dispose();
         music.dispose();
+        yesQuitPressTexture.dispose();
+        yesQuitTexture.dispose();
+        noQuitPressTexture.dispose();
+        noQuitTexture.dispose();
+        quitPanelTexture.dispose();
+        quitStage.dispose();
+        returnTexture.dispose();
+        returnPressTexture.dispose();
+        bossTexture.dispose();
+        bossPressTexture.dispose();
+        batch.dispose();
     }
 
     private void clearScreen() {

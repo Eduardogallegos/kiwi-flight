@@ -157,6 +157,12 @@ class CreditsScreen extends ScreenAdapter {
         returnTexture.dispose();
         returnPressTexture.dispose();
         music.dispose();
+        yesQuitPressTexture.dispose();
+        yesQuitTexture.dispose();
+        noQuitPressTexture.dispose();
+        noQuitTexture.dispose();
+        quitPanelTexture.dispose();
+        quitStage.dispose();
 
     }
 

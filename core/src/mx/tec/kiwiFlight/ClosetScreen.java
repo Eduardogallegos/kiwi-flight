@@ -434,6 +434,28 @@ class ClosetScreen extends ScreenAdapter {
         backgroundTexture.dispose();
         flecha.dispose();
         flechaPress.dispose();
+        partySkinButtonTexture.dispose();
+        partySkinPressedButtonTexture.dispose();
+        hatSkinButtonPressedTexture.dispose();
+        hatSkinButtonTexture.dispose();
+        tieSkinButtonPressedTexture.dispose();
+        tieSkinButtonTexture.dispose();
+        crownSkinButtonPressedTexture.dispose();
+        crownSkinButtonTexture.dispose();
+        hulkSkinButtonPressedTexture.dispose();
+        hulkSkinButtonTexture.dispose();
+        ricardoSkinButtonPressedTexture.dispose();
+        ricardoSkinButtonTexture.dispose();
+        batch.dispose();
+        kiiwTexture.dispose();
+        defaultSkinButtonTexture.dispose();
+        defaultSkinPressedButtonTexture.dispose();
+        yesQuitPressTexture.dispose();
+        yesQuitTexture.dispose();
+        noQuitPressTexture.dispose();
+        noQuitTexture.dispose();
+        quitPanelTexture.dispose();
+        quitStage.dispose();
     }
 
     private void clearScreen() {

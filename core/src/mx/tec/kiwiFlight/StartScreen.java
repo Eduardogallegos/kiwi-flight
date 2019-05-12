@@ -157,6 +157,7 @@ class StartScreen extends ScreenAdapter {
         yesQuit.addListener(new ActorGestureListener(){
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
+                dispose();
                 Gdx.app.exit();
             }
         });
@@ -237,7 +238,6 @@ class StartScreen extends ScreenAdapter {
 
     @Override
     public void dispose() {
-        super.dispose();
         stage.dispose();
         backgroundTexture.dispose();
         playTexture.dispose();
@@ -252,6 +252,11 @@ class StartScreen extends ScreenAdapter {
         settingsTexture.dispose();
         settingsPressTexture.dispose();
         music.dispose();
+        yesQuitPressTexture.dispose();
+        yesQuitTexture.dispose();
+        noQuitPressTexture.dispose();
+        noQuitTexture.dispose();
+        quitStage.dispose();
     }
 
     private void clearScreen() {

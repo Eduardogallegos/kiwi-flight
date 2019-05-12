@@ -211,12 +211,17 @@ class SettingsScreen extends ScreenAdapter {
 
     @Override
     public void dispose() {
-        super.dispose();
         stage.dispose();
         backgroundTexture.dispose();
         music.dispose();
         returnTexture.dispose();
         returnPressTexture.dispose();
+        yesQuitPressTexture.dispose();
+        yesQuitTexture.dispose();
+        noQuitPressTexture.dispose();
+        noQuitTexture.dispose();
+        quitPanelTexture.dispose();
+        quitStage.dispose();
     }
 
     private void clearScreen() {
