@@ -95,6 +95,8 @@ public class Obstacle {
         return x;
     }
 
+    public float getWidth(){return COLLISION_SQUARE_WIDTH;}
+
     public float getSpeedPerSecond() {
         return speedPerSecond;
     }

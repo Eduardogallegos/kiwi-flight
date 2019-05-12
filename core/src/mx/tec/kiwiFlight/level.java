@@ -855,9 +855,10 @@ public class level extends ScreenAdapter {
         batch.setProjectionMatrix(camera.projection);
         batch.setTransformMatrix(camera.view);
         batch.begin();
-        if (!finish) kiiw.draw(batch);
-        drawCoin();
+        //if (!finish) kiiw.draw(batch);
+
         drawObstacle();
+        //drawCoin();
         drawTimerString();
         drawMinuteTimer();
         drawSecondtimer();
@@ -935,11 +936,11 @@ public class level extends ScreenAdapter {
         bitmapFont.draw(batch, actualSpeedAsString, 25, WORLD_HEIGHT - speedBarTexture.getHeight() - 25);
     }
 
-    private void drawCoin() {
-        for (Coin coin : coins) {
-            coin.draw(batch);
-        }
-    }
+    //private void drawCoin() {
+      //  for (Coin coin : coins) {
+        //    coin.draw(batch);
+        //}
+    //}
 
     private void drawTimerString() {
         String timerString = "time left";
@@ -979,9 +980,72 @@ public class level extends ScreenAdapter {
     }
 
     private void drawObstacle() {
-        for (Obstacle obstacle : obstacles) {
-            obstacle.draw(batch);
+        for(Coin coin: coins){
+            if(coin.getY()==388 + coin.getWidth() / 2){
+                coin.draw(batch);
+            }
         }
+        for (Obstacle obstacle : obstacles) {
+            if(obstacle.getY()==388+ obstacle.getWidth() / 2) {
+                obstacle.draw(batch);
+            }
+        }
+        if(kiiw.getY()==((97 * 4) + kiiw.RADIUS)){
+            if (!finish) kiiw.draw(batch);
+        }
+        for(Coin coin: coins){
+            if(coin.getY()==291 + coin.getWidth() / 2){
+                coin.draw(batch);
+            }
+        }
+        for (Obstacle obstacle : obstacles) {
+            if(obstacle.getY()==291+ obstacle.getWidth() / 2) {
+                obstacle.draw(batch);
+            }
+        }
+        if(kiiw.getY()==((97 * 3) + kiiw.RADIUS)){
+            if (!finish) kiiw.draw(batch);
+        }
+        for(Coin coin: coins){
+            if(coin.getY()==194 + coin.getWidth() / 2){
+                coin.draw(batch);
+            }
+        }
+        for (Obstacle obstacle : obstacles) {
+            if(obstacle.getY()==194+ obstacle.getWidth() / 2) {
+                obstacle.draw(batch);
+            }
+        }
+        if(kiiw.getY()==((97 * 2) + kiiw.RADIUS)){
+            if (!finish) kiiw.draw(batch);
+        }
+        for(Coin coin: coins){
+            if(coin.getY()==97 + coin.getWidth() / 2){
+                coin.draw(batch);
+            }
+        }
+        for (Obstacle obstacle : obstacles) {
+            if(obstacle.getY()==97+ obstacle.getWidth() / 2) {
+                obstacle.draw(batch);
+            }
+        }
+        if(kiiw.getY()==((97 * 1) + kiiw.RADIUS)){
+            if (!finish) kiiw.draw(batch);
+        }
+        for(Coin coin: coins){
+            if(coin.getY()==0 + coin.getWidth() / 2){
+                coin.draw(batch);
+            }
+        }
+        for (Obstacle obstacle : obstacles) {
+            if(obstacle.getY()==0+ obstacle.getWidth() / 2) {
+                obstacle.draw(batch);
+            }
+        }
+        if(kiiw.getY()==((97 * 0) + kiiw.RADIUS)){
+            if (!finish) kiiw.draw(batch);
+        }
+
     }
 
 

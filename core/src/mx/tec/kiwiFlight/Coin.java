@@ -78,6 +78,11 @@ public class Coin {
     public float getX() {
         return x;
     }
+    public float getY() {
+        return y;
+    }
+
+    public float getWidth(){return COLLISION_SQUARE_WIDTH;}
 
     public float getSpeedPerSecond() {
         return speedPerSecond;
