@@ -400,6 +400,7 @@ public class level extends ScreenAdapter {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 music.stop();
+                dispose();
                 kiwiFlight.setScreen(new LevelsScreen(kiwiFlight));
             }
         });
@@ -513,6 +514,7 @@ public class level extends ScreenAdapter {
             public void clicked(InputEvent event, float x, float y) {
                 loseMusic.stop();
                 loseEffect.stop();
+                dispose();
                 kiwiFlight.setScreen(new LevelsScreen(kiwiFlight));
             }
         });
@@ -904,9 +906,11 @@ public class level extends ScreenAdapter {
             coins.clear();
             if (animationTimer >= 4.5) {
                 if (bossLevel) {
+                    dispose();
                     kiwiFlight.setScreen(new EndingTransitionScreen(kiwiFlight));
                     music.stop();
                 } else {
+                    dispose();
                     kiwiFlight.setScreen(new LevelsScreen(kiwiFlight));
                     music.stop();
                 }
@@ -1226,14 +1230,14 @@ public class level extends ScreenAdapter {
         boolean isGrass = false;
         switch (obstacleType) {
             case 0:
-                obstacleTexture = new Texture(Gdx.files.internal("level" + LEVEL + "/roca.png"));
+                obstacleTexture = kiwiFlight.getAssetManager().get("level" + LEVEL + "/roca.png");
                 if (bossLevel) {
                     obstacleWidth = 150;
                     obstacleHeight = 150;
                 }
                 break;
             case 1:
-                obstacleTexture = new Texture(Gdx.files.internal("level" + LEVEL + "/arbol.png"));
+                obstacleTexture = kiwiFlight.getAssetManager().get("level" + LEVEL + "/arbol.png");
                 if (LEVEL == 1) {
                     obstacleWidth = 212;
                     obstacleHeight = 272;
@@ -1249,7 +1253,7 @@ public class level extends ScreenAdapter {
                 }
                 break;
             case 2:
-                obstacleTexture = new Texture(Gdx.files.internal("level" + LEVEL + "/pasto.png"));
+                obstacleTexture = kiwiFlight.getAssetManager().get("level" + LEVEL + "/pasto.png");
                 if (bossLevel) {
                     obstacleWidth = 149;
                     obstacleHeight = 89;
@@ -1312,6 +1316,17 @@ public class level extends ScreenAdapter {
         music.dispose();
         stageUI.dispose();
         stagePause.dispose();
+        stageBegin.dispose();
+        if(LEVEL==1)stageTutorial.dispose();
+        stageGameOver.dispose();
+        stageLifes.dispose();
+        stageSettings.dispose();
+        yesQuitPressTexture.dispose();
+        yesQuitTexture.dispose();
+        noQuitPressTexture.dispose();
+        noQuitTexture.dispose();
+        quitPanelTexture.dispose();
+        quitStage.dispose();
     }
 
 }
