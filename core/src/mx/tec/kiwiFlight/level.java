@@ -322,7 +322,7 @@ public class level extends ScreenAdapter {
         if (LEVEL == 1) speedNeeded = 25;
         else if (LEVEL == 2) speedNeeded = 30;
         else if (LEVEL == 3) speedNeeded = 35;
-        else speedNeeded = 65;
+        else speedNeeded = 60;
 
         speedBarTexture = kiwiFlight.getAssetManager().get("defaultLevels/Barra.png");
         Image speedBar = new Image(speedBarTexture);
@@ -760,6 +760,9 @@ public class level extends ScreenAdapter {
     }
 
     private void savePreferences() {
+        if(coinsCollected>999){
+            coinsCollected=999;
+        }
         preferencias.putInteger("coins", coinsCollected);
         preferencias.putString("actualSkin", skin);
         if (LEVEL == 1) {
@@ -843,21 +846,16 @@ public class level extends ScreenAdapter {
 
     private void draw() {
         stage.draw();
+        shapeRenderer.setProjectionMatrix(camera.projection);
+        shapeRenderer.setTransformMatrix(camera.view);
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.setColor(Color.CORAL);
+        shapeRenderer.rect(speedBarRectangle.x, speedBarRectangle.y, speedBarRectangle.width, speedBarRectangle.height);
+        shapeRenderer.end();
         batch.setProjectionMatrix(camera.projection);
         batch.setTransformMatrix(camera.view);
         batch.begin();
         if (!finish) kiiw.draw(batch);
-        if (state == STATE.WIN) {
-            winningKiiw = (TextureRegion) winningAnimation.getKeyFrame(animationTimer);
-            batch.draw(winningKiiw, winingKiiwX, winingKiiwY);
-        } else if (state == STATE.GAMEOVER) {
-            loosingKiiw = (TextureRegion) loosingAnimation.getKeyFrame(animationTimer);
-            if (bossLevel) updateHawkAnimation();
-            batch.draw(loosingKiiw, kiiw.getX(), kiiw.getY());
-        }
-        if (bossLevel) {
-            hawk.draw(batch);
-        }
         drawCoin();
         drawObstacle();
         drawTimerString();
@@ -866,14 +864,16 @@ public class level extends ScreenAdapter {
         drawCoinsCounter();
         drawNeededSpeedIndicator();
         drawActualSpeedIndicator();
+        if (state == STATE.WIN) {
+            winningKiiw = (TextureRegion) winningAnimation.getKeyFrame(animationTimer);
+            batch.draw(winningKiiw, winingKiiwX, winingKiiwY);
+        } else if (state == STATE.GAMEOVER) {
+            loosingKiiw = (TextureRegion) loosingAnimation.getKeyFrame(animationTimer);
+            if (bossLevel) updateHawkAnimation();
+            batch.draw(loosingKiiw, kiiw.getX(), kiiw.getY());
+        }
+        if (bossLevel)hawk.draw(batch);
         batch.end();
-        shapeRenderer.setProjectionMatrix(camera.projection);
-        shapeRenderer.setTransformMatrix(camera.view);
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.setColor(Color.CORAL);
-        shapeRenderer.rect(speedBarRectangle.x, speedBarRectangle.y, speedBarRectangle.width, speedBarRectangle.height);
-        shapeRenderer.end();
-
         stageLifes.draw();
         stageUI.draw();
 
@@ -907,12 +907,12 @@ public class level extends ScreenAdapter {
             if (animationTimer >= 4.5) {
                 if (bossLevel) {
                     dispose();
-                    kiwiFlight.setScreen(new EndingTransitionScreen(kiwiFlight));
                     music.stop();
+                    kiwiFlight.setScreen(new EndingTransitionScreen(kiwiFlight));
                 } else {
                     dispose();
-                    kiwiFlight.setScreen(new LevelsScreen(kiwiFlight));
                     music.stop();
+                    kiwiFlight.setScreen(new LevelsScreen(kiwiFlight));
                 }
             }
         } else if (state == STATE.SETTINGS) {
@@ -991,15 +991,15 @@ public class level extends ScreenAdapter {
     }
 
     private void update(float delta) {
+        updateActualSpeed();
+        updateSpeedBarRectangle();
         updateKiiw(delta);
         if (bossLevel) updateHawk(delta);
         updateObstacles(delta);
         updateCoins(delta);
         updateMinuteTimer();
         updateSecondTimer();
-        updateActualSpeed();
         handleCollisions();
-        updateSpeedBarRectangle();
     }
 
     private void updateHawk(float delta) {
@@ -1100,10 +1100,8 @@ public class level extends ScreenAdapter {
     private void updateMinuteTimer() {
         if (levelTimer > 60) {
             minutes = 0;
-        } else if (levelTimer > 1) {
+        } else if (levelTimer > 0) {
             minutes = 1;
-        } else {
-            minutes = 2;
         }
     }
 
@@ -1112,8 +1110,14 @@ public class level extends ScreenAdapter {
         public boolean fling(float velocityX, float velocityY, int button) {
             if (velocityY < 0) {
                 kiiw.setPosition(WORLD_WIDTH / 4, (97 * ++padCounter) + kiiw.RADIUS);
+                if(padCounter>4){
+                    padCounter=3;
+                }
             } else {
                 kiiw.setPosition(WORLD_WIDTH / 4, (97 * --padCounter) + kiiw.RADIUS);
+                if(padCounter<0){
+                    padCounter=0;
+                }
             }
             return false;
         }
@@ -1123,13 +1127,13 @@ public class level extends ScreenAdapter {
         kiiw.update(delta);
         if (Gdx.input.isKeyJustPressed(Input.Keys.UP))
             kiiw.setPosition(WORLD_WIDTH / 4, (97 * ++padCounter) + kiiw.RADIUS);
-            if(padCounter>5){
+            if(padCounter>4){
             padCounter=4;
             }
         if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN))
             kiiw.setPosition(WORLD_WIDTH / 4, (97 * --padCounter) + kiiw.RADIUS);
             if(padCounter<0){
-            padCounter=1;
+            padCounter=0;
             }
         blockKiiwLeavingTheWorld();
     }

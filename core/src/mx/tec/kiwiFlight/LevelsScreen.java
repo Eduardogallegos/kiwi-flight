@@ -116,8 +116,8 @@ class LevelsScreen extends ScreenAdapter {
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 music.stop();
                 super.tap(event, x, y, count, button);
-                kiwiFlight.setScreen(new StartScreen(kiwiFlight));
                 dispose();
+                kiwiFlight.setScreen(new StartScreen(kiwiFlight));
             }
         });
 
@@ -129,8 +129,8 @@ class LevelsScreen extends ScreenAdapter {
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 music.stop();
                 super.tap(event, x, y, count, button);
-                kiwiFlight.setScreen(new LoadingScreen(kiwiFlight, 1));
                 dispose();
+                kiwiFlight.setScreen(new LoadingScreen(kiwiFlight, 1));
             }
         });
 
@@ -149,8 +149,8 @@ class LevelsScreen extends ScreenAdapter {
                 public void tap(InputEvent event, float x, float y, int count, int button) {
                     music.stop();
                     super.tap(event, x, y, count, button);
-                    kiwiFlight.setScreen(new LoadingScreen(kiwiFlight, 2));
                     dispose();
+                    kiwiFlight.setScreen(new LoadingScreen(kiwiFlight, 2));
                 }
             });
             level2.setPosition(450,150);
@@ -171,8 +171,8 @@ class LevelsScreen extends ScreenAdapter {
                 @Override
                 public void tap(InputEvent event, float x, float y, int count, int button) {
                     music.stop();
-                    kiwiFlight.setScreen(new LoadingScreen(kiwiFlight, 3));
                     dispose();
+                    kiwiFlight.setScreen(new LoadingScreen(kiwiFlight, 3));
                 }
             });
             level3.setPosition(730,150);
@@ -193,8 +193,8 @@ class LevelsScreen extends ScreenAdapter {
                 @Override
                 public void tap(InputEvent event, float x, float y, int count, int button) {
                     music.stop();
-                    kiwiFlight.setScreen(new BossTransitionScreen(kiwiFlight));
                     dispose();
+                    kiwiFlight.setScreen(new BossTransitionScreen(kiwiFlight));
                 }
             });
             boss.setPosition(1030,375);

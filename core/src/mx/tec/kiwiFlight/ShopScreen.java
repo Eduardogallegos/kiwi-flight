@@ -28,6 +28,7 @@ class ShopScreen extends ScreenAdapter {
     private static final float MUSIC_VOLUME_DEFAULT = 1;
     private static  final int COINS_DEFAULT = 0;
     private static final boolean SKIN_BOUGHT = false;
+    private static final boolean LEVEL_DEFAULT = true;
     private final kiwiFlight kiwiFlight;
     private static final float WORLD_WIDTH = 1280;
     private static final float WORLD_HEIGHT = 720;
@@ -114,6 +115,10 @@ class ShopScreen extends ScreenAdapter {
     private Texture noQuitTexture;
     private Texture noQuitPressTexture;
     private String skinDecode;
+    private boolean coinsCode;
+    private boolean level2Blocked;
+    private boolean level3Blocked;
+    private boolean level4Blocked;
 
     private enum STATE{
         NORMAL, BUYING, CODE, QUIT
@@ -172,8 +177,8 @@ class ShopScreen extends ScreenAdapter {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 music.stop();
-                kiwiFlight.setScreen(new StartScreen(kiwiFlight));
                 dispose();
+                kiwiFlight.setScreen(new StartScreen(kiwiFlight));
             }
         });
 
@@ -324,8 +329,8 @@ class ShopScreen extends ScreenAdapter {
         cross.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
-                state = STATE.NORMAL;
                 disposeCode();
+                state = STATE.NORMAL;
             }
         });
 
@@ -504,6 +509,28 @@ class ShopScreen extends ScreenAdapter {
             skinDecode = "ricardo";
             savePreferences();
             loadPreferences();
+        }else if(code.compareTo("2222") == 0 && level2Blocked){
+            createCodeValidationPanel(true);
+            costo = 2222;
+            skinDecode = "level 2";
+            savePreferences();
+        }else if(code.compareTo("3333") == 0 && level3Blocked){
+            createCodeValidationPanel(true);
+            costo = 3333;
+            skinDecode = "level 3";
+            savePreferences();
+        }else if(code.compareTo("4444") == 0 && level4Blocked){
+            createCodeValidationPanel(true);
+            costo = 4444;
+            skinDecode = "level 4";
+            savePreferences();
+        }else if(code.compareTo("0150") == 0 && !coinsCode){
+            createCodeValidationPanel(true);
+            costo = 1111;
+            skinDecode = "150 coins";
+            coinsCollected+=150;
+            savePreferences();
+            loadPreferences();
         }else{
             createCodeValidationPanel(false);
             skinDecode = "";
@@ -529,8 +556,9 @@ class ShopScreen extends ScreenAdapter {
         cross.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
-                state = STATE.NORMAL;
                 disposeCode();
+                state = STATE.NORMAL;
+
             }
         });
         ceroButtonTexture = new Texture(Gdx.files.internal("shop/0.png"));
@@ -552,8 +580,9 @@ class ShopScreen extends ScreenAdapter {
         ok.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
-                state = STATE.NORMAL;
                 disposeCode();
+                state = STATE.NORMAL;
+
             }
         });
 
@@ -637,6 +666,10 @@ class ShopScreen extends ScreenAdapter {
         else if (costo == 120)preferencias.putBoolean("crownBought", true);
         else if(costo == 150)preferencias.putBoolean("hulkBought",  true);
         else if(costo == 400)preferencias.putBoolean("ricardoBought", true);
+        else if(costo == 1111)preferencias.putBoolean("coinsCode", true);
+        else if(costo == 2222)preferencias.putBoolean("level2", false);
+        else if(costo == 3333)preferencias.putBoolean("level3", false);
+        else if(costo == 4444)preferencias.putBoolean("level4", false);
         preferencias.flush();
     }
 
@@ -649,6 +682,10 @@ class ShopScreen extends ScreenAdapter {
         crownBought = preferencias.getBoolean("crownBought", SKIN_BOUGHT);
         hulkBought = preferencias.getBoolean("hulkBought", SKIN_BOUGHT);
         ricardoBought = preferencias.getBoolean("ricardoBought", SKIN_BOUGHT);
+        coinsCode = preferencias.getBoolean("coinsCode",SKIN_BOUGHT);
+        level2Blocked = preferencias.getBoolean("level2", LEVEL_DEFAULT);
+        level3Blocked = preferencias.getBoolean("level3", LEVEL_DEFAULT);
+        level4Blocked = preferencias.getBoolean("level4", LEVEL_DEFAULT);
     }
 
     @Override
