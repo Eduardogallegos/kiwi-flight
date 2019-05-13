@@ -13,7 +13,7 @@ class Hawk {
     private TextureRegion hawkTexture;
     private float animationTimer = 0;
     private float x = -60;
-    private float y = 450;
+    private float y = 224;
 
     public Hawk(Texture hawkTexture) {
         TextureRegion[][] hawkTextures = new TextureRegion(hawkTexture).split(TILE_WIDTH, TILE_HEIGHT);

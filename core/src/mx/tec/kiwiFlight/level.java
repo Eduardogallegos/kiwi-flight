@@ -986,8 +986,14 @@ public class level extends ScreenAdapter {
             }
         }
         for (Obstacle obstacle : obstacles) {
-            if(obstacle.getY()==388+ obstacle.getWidth() / 2) {
-                obstacle.draw(batch);
+            if(LEVEL==4&&(obstacle.isGrass()==false)) {
+                if (obstacle.getY() == 388 - obstacle.getWidth() / 2) {
+                    obstacle.draw(batch);
+                }
+            }else {
+                if (obstacle.getY() == 388 + obstacle.getWidth() / 2) {
+                    obstacle.draw(batch);
+                }
             }
         }
         if(kiiw.getY()==((97 * 4) + kiiw.RADIUS)){
@@ -999,8 +1005,14 @@ public class level extends ScreenAdapter {
             }
         }
         for (Obstacle obstacle : obstacles) {
-            if(obstacle.getY()==291+ obstacle.getWidth() / 2) {
-                obstacle.draw(batch);
+            if(LEVEL==4&&(obstacle.isGrass()==false)) {
+                if (obstacle.getY() == 291 - obstacle.getWidth() / 2) {
+                    obstacle.draw(batch);
+                }
+            }else {
+                if (obstacle.getY() == 291 + obstacle.getWidth() / 2) {
+                    obstacle.draw(batch);
+                }
             }
         }
         if(kiiw.getY()==((97 * 3) + kiiw.RADIUS)){
@@ -1012,8 +1024,14 @@ public class level extends ScreenAdapter {
             }
         }
         for (Obstacle obstacle : obstacles) {
-            if(obstacle.getY()==194+ obstacle.getWidth() / 2) {
-                obstacle.draw(batch);
+            if(LEVEL==4&&(obstacle.isGrass()==false)) {
+                if (obstacle.getY() == 194 - obstacle.getWidth() / 2) {
+                    obstacle.draw(batch);
+                }
+            }else {
+                if (obstacle.getY() == 194 + obstacle.getWidth() / 2) {
+                    obstacle.draw(batch);
+                }
             }
         }
         if(kiiw.getY()==((97 * 2) + kiiw.RADIUS)){
@@ -1025,8 +1043,14 @@ public class level extends ScreenAdapter {
             }
         }
         for (Obstacle obstacle : obstacles) {
-            if(obstacle.getY()==97+ obstacle.getWidth() / 2) {
-                obstacle.draw(batch);
+            if(LEVEL==4&&(obstacle.isGrass()==false)) {
+                if (obstacle.getY() == 97 - obstacle.getWidth() / 2) {
+                    obstacle.draw(batch);
+                }
+            }else {
+                if (obstacle.getY() == 97 + obstacle.getWidth() / 2) {
+                    obstacle.draw(batch);
+                }
             }
         }
         if(kiiw.getY()==((97 * 1) + kiiw.RADIUS)){
@@ -1038,8 +1062,14 @@ public class level extends ScreenAdapter {
             }
         }
         for (Obstacle obstacle : obstacles) {
-            if(obstacle.getY()==0+ obstacle.getWidth() / 2) {
-                obstacle.draw(batch);
+            if(LEVEL==4&&(obstacle.isGrass()==false)) {
+                if (obstacle.getY() == 0 - obstacle.getWidth() / 2) {
+                    obstacle.draw(batch);
+                }
+            }else {
+                if (obstacle.getY() == 0 + obstacle.getWidth() / 2) {
+                    obstacle.draw(batch);
+                }
             }
         }
         if(kiiw.getY()==((97 * 0) + kiiw.RADIUS)){
