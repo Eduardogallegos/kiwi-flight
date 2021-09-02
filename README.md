@@ -76,7 +76,7 @@ Run, fly and cheer along with Kiiw as he tries to achieve his dream! Happy kiwin
 4. Install APK on Android phone.
 
 ## Acknowledgements
-Thanks to professor [Roberto Martínez Román](https://scholar.google.com/citations?user=IbP2H98AAAAJ&hl=es) for being the tutor on this project.
+Thanks to professor [Juan Francisco García García](https://scholar.google.com/citations?user=IbP2H98AAAAJ&hl=es) for being the tutor on this project.
 
 ## Contact
 Feel free to contact us!
