@@ -11,7 +11,10 @@
 * [Contact](#contact)
 * [Social Media](#social-media)
 
-## General Information<img src="img/kiiw.png" alt="Kiiw" style="width:150px;"/>
+## General Information
+
+<img src="img/kiiw.png" alt="Kiiw" style="width:150px;"/>
+
 Kiwi Flight is a platform game about a kiwi who dreams of flying. Featuring traditional pixel art and animation, an original soundtrack and exciting gameplay. 
 Kiiw, a flightless kiwi, dreams of flying, so he does the only reasonable thing a kiwi would do: build a jetpack. Help Kiiw avoid obstacles as he builds up speed and runs across jungles, tundras and savannas. Collect coins along the way to buy skins at the Store and try them on in the Closet. Enter secret codes and get secret Kiiw skins. This game has it all. 
 Run, fly and cheer along with Kiiw as he tries to achieve his dream! Happy kiwin’!
@@ -81,5 +84,5 @@ Feel free to contact us!
 - [Mariana](mailto:a01378496@itesm.mx)
 
 ## Social Media
-[<img src="https://cdn.icon-icons.com/icons2/1584/PNG/512/3721679-youtube_108064.png" alt="Kiwi Flight Trailer" style="width:200px;"/>](http://www.youtube.com/watch?v=O4Ku4zS6ywk "Kiwi Flight Trailer")
-[<img src="https://cdn1.iconfinder.com/data/icons/the-circle-icons/513/Facebook.png" alt="Kiwi Flight Facebook" style="width:200px;"/>](https://www.facebook.com/KiwiFlight/ "Kiwi Flight Facebook")
+[<img src="https://cdn.icon-icons.com/icons2/1584/PNG/512/3721679-youtube_108064.png" alt="Kiwi Flight Trailer" style="width:50px;"/>](http://www.youtube.com/watch?v=O4Ku4zS6ywk "Kiwi Flight Trailer")
+[<img src="https://cdn1.iconfinder.com/data/icons/the-circle-icons/513/Facebook.png" alt="Kiwi Flight Facebook" style="width:50px;"/>](https://www.facebook.com/KiwiFlight/ "Kiwi Flight Facebook")
